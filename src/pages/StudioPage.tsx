@@ -27,9 +27,14 @@ export default function StudioPage() {
     try {
       const trimStart = videoPlayerRef.current?.trimStart ?? 0;
       const trimEnd = videoPlayerRef.current?.trimEnd ?? Infinity;
-      const videoScale = videoPlayerRef.current?.scale ?? 1;
-      const videoPosX = videoPlayerRef.current?.posX ?? 0;
-      const videoPosY = videoPlayerRef.current?.posY ?? 0;
+      // ── Accurate layout from live DOM measurements ──────────────────────────
+      const layout = videoPlayerRef.current?.getExportLayout() ?? {
+        scale: 1,
+        posX_frac: 0,
+        posY_frac: 0,
+        paddingX_frac: 0.05,
+        paddingY_frac: 0.05,
+      };
 
       // ── 1. Off-screen video element ──────────────────────────────────────
       const video = document.createElement("video");
@@ -105,23 +110,19 @@ export default function StudioPage() {
       });
 
       // ── 6. rAF loop: draw background + video onto canvas ──────────────────
-      // The preview renders the video with object-contain inside the padded
-      // area, then applies translate(posX, posY) scale(videoScale) around the
-      // canvas centre.  We replicate that here so the export matches.
-      const PADDING = Math.round(W * 0.08);
-
-      // Map the preview-space posX/posY (px) to canvas-space.
-      // The preview container is the full viewport; the canvas is 1280×720.
-      // We scale the offset by the ratio of canvas-width to container-width
-      // of the live preview element (best-effort; posX/posY are small offsets
-      // so proportional scaling is sufficient).
-      const previewEl = document.getElementById("studio-video-player");
-      const previewW = previewEl?.closest(".relative")?.clientWidth ?? W;
-      const previewH = previewEl?.closest(".relative")?.clientHeight ?? H;
-      const scaleX = W / previewW;
-      const scaleY = H / previewH;
-      const canvasPosX = videoPosX * scaleX;
-      const canvasPosY = videoPosY * scaleY;
+      //
+      // We replicate the preview transform exactly:
+      //   1. object-contain the video inside the padded area
+      //   2. apply the user's scale(scale) translate(posX, posY) around the canvas centre
+      //
+      // PADDING_X/Y are derived from the live DOM measurements in layout,
+      // so they match the actual CSS padding — not a hardcoded guess.
+      const PADDING_X = layout.paddingX_frac * W;
+      const PADDING_Y = layout.paddingY_frac * H;
+      // Position offsets are stored as fractions of the container size,
+      // so multiplying by canvas size gives canvas-space offsets.
+      const canvasPosX = layout.posX_frac * W;
+      const canvasPosY = layout.posY_frac * H;
 
       const renderFrame = () => {
         if (video.currentTime >= effectiveTrimEnd || video.ended) {
@@ -157,8 +158,8 @@ export default function StudioPage() {
         // Video layer: object-contain → user scale+translate
         if (video.videoWidth > 0 && video.videoHeight > 0) {
           const vR = video.videoWidth / video.videoHeight;
-          const aW = W - PADDING * 2;
-          const aH = H - PADDING * 2;
+          const aW = W - PADDING_X * 2;
+          const aH = H - PADDING_Y * 2;
           let vw, vh;
           if (vR > aW / aH) {
             vw = aW;
@@ -171,8 +172,8 @@ export default function StudioPage() {
           // Apply user scale + position around canvas centre
           const cx = W / 2 + canvasPosX;
           const cy = H / 2 + canvasPosY;
-          const svw = vw * videoScale;
-          const svh = vh * videoScale;
+          const svw = vw * layout.scale;
+          const svh = vh * layout.scale;
           const vx = cx - svw / 2;
           const vy = cy - svh / 2;
 

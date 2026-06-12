@@ -10,12 +10,23 @@ import Timeline from "./Timeline";
 import { Play, Pause } from "lucide-react";
 import { Typography } from "@/design-system/Typography";
 
+export interface ExportLayout {
+  scale: number;
+  /** posX as fraction of container width  (−0.5 = left edge, 0 = centre, 0.5 = right edge) */
+  posX_frac: number;
+  /** posY as fraction of container height */
+  posY_frac: number;
+  /** horizontal padding on one side as fraction of container width  (mirrors preview CSS padding) */
+  paddingX_frac: number;
+  /** vertical padding on one side as fraction of container height */
+  paddingY_frac: number;
+}
+
 export interface VideoPlayerHandle {
   trimStart: number;
   trimEnd: number;
-  scale: number;
-  posX: number; // −1 … +1 relative to canvas half-width
-  posY: number; // −1 … +1 relative to canvas half-height
+  /** Returns accurate layout data measured from the live DOM at call time. */
+  getExportLayout(): ExportLayout;
 }
 
 interface VideoPlayerProps {
@@ -56,7 +67,35 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
     useImperativeHandle(
       ref,
-      () => ({ trimStart, trimEnd, scale, posX, posY }),
+      () => ({
+        trimStart,
+        trimEnd,
+        getExportLayout(): ExportLayout {
+          const container = containerRef.current;
+          const wrapper = wrapperRef.current;
+          if (!container || !wrapper) {
+            return { scale, posX_frac: 0, posY_frac: 0, paddingX_frac: 0.08, paddingY_frac: 0.08 };
+          }
+          const containerW = container.clientWidth;
+          const containerH = container.clientHeight;
+          // offsetWidth / offsetHeight are NOT affected by CSS transform,
+          // so they give the wrapper's natural (pre-transform) dimensions.
+          const wrapperNaturalW = wrapper.offsetWidth;
+          const wrapperNaturalH = wrapper.offsetHeight;
+          // The gap between the container and the wrapper = the CSS padding
+          // applied by the flex parent on each side.
+          const paddingX_frac = containerW > 0 ? (containerW - wrapperNaturalW) / 2 / containerW : 0.05;
+          const paddingY_frac = containerH > 0 ? (containerH - wrapperNaturalH) / 2 / containerH : 0.05;
+          return {
+            scale,
+            posX_frac: containerW > 0 ? posX / containerW : 0,
+            posY_frac: containerH > 0 ? posY / containerH : 0,
+            paddingX_frac,
+            paddingY_frac,
+          };
+        },
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [trimStart, trimEnd, scale, posX, posY],
     );
 
