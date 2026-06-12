@@ -27,6 +27,9 @@ export default function StudioPage() {
     try {
       const trimStart = videoPlayerRef.current?.trimStart ?? 0;
       const trimEnd = videoPlayerRef.current?.trimEnd ?? Infinity;
+      const videoScale = videoPlayerRef.current?.scale ?? 1;
+      const videoPosX = videoPlayerRef.current?.posX ?? 0;
+      const videoPosY = videoPlayerRef.current?.posY ?? 0;
 
       // ── 1. Off-screen video element ──────────────────────────────────────
       const video = document.createElement("video");
@@ -102,7 +105,23 @@ export default function StudioPage() {
       });
 
       // ── 6. rAF loop: draw background + video onto canvas ──────────────────
+      // The preview renders the video with object-contain inside the padded
+      // area, then applies translate(posX, posY) scale(videoScale) around the
+      // canvas centre.  We replicate that here so the export matches.
       const PADDING = Math.round(W * 0.08);
+
+      // Map the preview-space posX/posY (px) to canvas-space.
+      // The preview container is the full viewport; the canvas is 1280×720.
+      // We scale the offset by the ratio of canvas-width to container-width
+      // of the live preview element (best-effort; posX/posY are small offsets
+      // so proportional scaling is sufficient).
+      const previewEl = document.getElementById("studio-video-player");
+      const previewW = previewEl?.closest(".relative")?.clientWidth ?? W;
+      const previewH = previewEl?.closest(".relative")?.clientHeight ?? H;
+      const scaleX = W / previewW;
+      const scaleY = H / previewH;
+      const canvasPosX = videoPosX * scaleX;
+      const canvasPosY = videoPosY * scaleY;
 
       const renderFrame = () => {
         if (video.currentTime >= effectiveTrimEnd || video.ended) {
@@ -135,7 +154,7 @@ export default function StudioPage() {
           ctx.fillRect(0, 0, W, H);
         }
 
-        // Video layer (object-contain inside padded area, rounded corners)
+        // Video layer: object-contain → user scale+translate
         if (video.videoWidth > 0 && video.videoHeight > 0) {
           const vR = video.videoWidth / video.videoHeight;
           const aW = W - PADDING * 2;
@@ -148,17 +167,24 @@ export default function StudioPage() {
             vh = aH;
             vw = aH * vR;
           }
-          const vx = (W - vw) / 2;
-          const vy = (H - vh) / 2;
+
+          // Apply user scale + position around canvas centre
+          const cx = W / 2 + canvasPosX;
+          const cy = H / 2 + canvasPosY;
+          const svw = vw * videoScale;
+          const svh = vh * videoScale;
+          const vx = cx - svw / 2;
+          const vy = cy - svh / 2;
+
           ctx.save();
           ctx.beginPath();
           if (typeof ctx.roundRect === "function") {
-            ctx.roundRect(vx, vy, vw, vh, 8);
+            ctx.roundRect(vx, vy, svw, svh, 8);
           } else {
-            ctx.rect(vx, vy, vw, vh);
+            ctx.rect(vx, vy, svw, svh);
           }
           ctx.clip();
-          ctx.drawImage(video, vx, vy, vw, vh);
+          ctx.drawImage(video, vx, vy, svw, svh);
           ctx.restore();
         }
 
