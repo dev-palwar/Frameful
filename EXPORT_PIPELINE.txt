@@ -1,0 +1,380 @@
+================================================================================
+  FRAMEFUL — EXPORT PIPELINE DOCUMENTATION
+  How the "Download Edited Video" button actually works
+  Written for humans and future LLMs alike.
+================================================================================
+
+Last updated : 2026-06-13
+Relevant files: src/pages/StudioPage.tsx
+                src/components/video/VideoPlayer.tsx
+
+
+────────────────────────────────────────────────────────────────────────────────
+  PLAIN ENGLISH OVERVIEW
+────────────────────────────────────────────────────────────────────────────────
+
+When the user clicks "Download Edited Video", here is what happens in simple
+terms:
+
+  1.  We create an invisible <video> element in memory and load the user's
+      recorded video into it (not the one on screen, a fresh copy).
+
+  2.  We create an invisible <canvas> element — think of it as a blank
+      1280×720 whiteboard.
+
+  3.  We press play on the invisible video and watch it frame by frame.
+      For every frame, we draw the background image first, then draw the
+      video on top of it — just like stacking layers in Photoshop — but
+      onto our whiteboard.
+
+  4.  While we're doing that drawing, a "screen recorder" is watching the
+      whiteboard and capturing everything as a new video file.
+
+  5.  When the video reaches the trim-end point, we stop the recording,
+      bundle up all the captured data, and hand it to the browser as a
+      file download.
+
+That's it. The core idea is: redraw every single frame of the video onto a
+canvas in real time, while another tool records that canvas.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  STEP-BY-STEP TECHNICAL BREAKDOWN
+────────────────────────────────────────────────────────────────────────────────
+
+The entire export lives inside `handleDownload()` in StudioPage.tsx.
+
+
+STEP 0 — READ LAYOUT STATE FROM VIDEOPLAYER
+--------------------------------------------
+
+Before anything video-related happens, we call:
+
+    videoPlayerRef.current.getExportLayout()
+
+`getExportLayout()` is a method on the VideoPlayer component (exposed via
+React's `useImperativeHandle`). It does NOT read from React state — it reads
+directly from the live DOM using:
+
+    container.clientWidth / clientHeight   → actual rendered size of the 16:9 box
+    wrapper.offsetWidth / offsetHeight     → natural size of the video wrapper
+                                             BEFORE any CSS transform is applied
+                                             (offsetWidth ignores CSS transforms,
+                                              that is why we use it instead of
+                                              getBoundingClientRect)
+
+From these two measurements we derive:
+
+    paddingX_frac  = (containerW - wrapperNaturalW) / 2 / containerW
+    paddingY_frac  = (containerH - wrapperNaturalH) / 2 / containerH
+
+    These are the actual CSS padding values (from `p-3 / p-5 / p-8` Tailwind
+    classes) expressed as a fraction of the container. Because the padding is
+    responsive, we cannot hardcode it — we must measure it live.
+
+    posX_frac = posX (raw pixels the user dragged) / containerW
+    posY_frac = posY / containerH
+
+    These normalise the user's drag offset to [0, 1] space so they can
+    be scaled up to any output canvas size.
+
+    scale = the current zoom level (1.0 = default, 2.0 = 2x, etc.)
+
+Why measure from the DOM instead of state?
+    Because the CSS padding changes at different screen sizes (responsive).
+    If we used a hardcoded value like "8% of canvas width", the video in
+    the export would be positioned differently to what the user sees.
+
+
+STEP 1 — CREATE AN OFF-SCREEN VIDEO ELEMENT
+--------------------------------------------
+
+    const video = document.createElement("video");
+    video.src = videoUrl;
+    await new Promise(resolve => { video.onloadedmetadata = resolve; });
+
+We create a brand new <video> element that is never added to the page (it
+only exists in memory). We point it at the same recorded video URL.
+
+We wait for `onloadedmetadata` to fire before continuing. This event means
+the browser has read the file header and now knows the video's duration,
+width, and height. We need the duration to clamp the trim-end correctly:
+
+    effectiveTrimEnd = Math.min(trimEnd, video.duration)
+
+This guards against the case where trimEnd was set to Infinity (meaning
+"go to the end") — we replace it with the actual duration in seconds.
+
+
+STEP 2 — CREATE AN OFF-SCREEN CANVAS
+--------------------------------------
+
+    const W = 1280, H = 720;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+This canvas is our "output frame". Every frame of the exported video is
+drawn here. Like the video element, this canvas is never added to the DOM.
+
+Output resolution is hardcoded at 1280×720 (720p, 16:9).
+
+
+STEP 3 — PRE-LOAD THE BACKGROUND IMAGE
+----------------------------------------
+
+    if (background) {
+        bgImg = new Image();
+        bgImg.src = background;
+        await new Promise(resolve => { bgImg.onload = resolve; });
+    }
+
+If the user selected a background from the ToolBar, we load it into an
+HTMLImageElement and wait for it to fully load before starting the export.
+
+If we did not wait here, the first few frames might draw with no background.
+
+
+STEP 4 — SET UP MEDIARECORDER (THE "SCREEN RECORDER")
+-------------------------------------------------------
+
+    const canvasStream = canvas.captureStream(30);
+
+`captureStream(30)` is a browser API that turns the canvas into a live
+video stream at 30 frames per second. Whenever we draw something on the
+canvas, the stream captures it.
+
+Audio handling:
+    We try to pipe the audio from our invisible video element through the
+    Web Audio API and attach it to the same stream:
+
+        AudioContext → createMediaElementSource(video)
+                     → createMediaStreamDestination()
+                     → add audio tracks to the stream
+
+    If this fails (e.g. the recording had no audio, or the browser blocks
+    it), we silently fall back to video-only export.
+
+MediaRecorder:
+    The stream is handed to a MediaRecorder, which compresses it into a
+    video file in chunks:
+
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+
+    We prefer VP9 codec ("video/webm;codecs=vp9") and fall back to plain
+    WebM if the browser doesn't support it.
+
+
+STEP 5 — SEEK TO THE TRIM START
+---------------------------------
+
+    video.currentTime = trimStart;
+    await new Promise(resolve => { video.onseeked = resolve; });
+
+Before pressing play, we jump the invisible video to where the user's
+trim-in point is. We wait for the `onseeked` event so we know the browser
+has actually decoded to that position — starting to draw before this fires
+would produce a stale frame.
+
+
+STEP 6 — THE rAF RENDER LOOP (THE CORE OF THE EXPORT)
+-------------------------------------------------------
+
+This is the main loop. rAF = requestAnimationFrame.
+
+    recorder.start(100);   // begin recording, emit chunks every 100ms
+    video.play();          // start playing the invisible video
+    renderFrame();         // kick off the drawing loop
+
+`renderFrame()` is called recursively via requestAnimationFrame. Each call:
+
+    a) Check if we've reached the end:
+           if (video.currentTime >= effectiveTrimEnd || video.ended) {
+               video.pause();
+               recorder.stop();
+               return;       // ← exits the loop
+           }
+
+    b) Clear the canvas.
+
+    c) Draw the background layer:
+           - Scale the background image to "cover" the canvas (fills edge
+             to edge, crops if aspect ratio doesn't match), at 110% size
+             and 80% opacity with a 1px blur.
+           - If no background was selected, fill with solid black.
+
+    d) Draw the video layer:
+           - Convert layout fractions back to canvas pixels:
+                 PADDING_X = paddingX_frac × 1280
+                 PADDING_Y = paddingY_frac × 720
+                 canvasPosX = posX_frac × 1280
+                 canvasPosY = posY_frac × 720
+
+           - Compute the "natural" video size using object-contain logic:
+             If the video's aspect ratio is wider than the available area,
+             it fits by width. Otherwise it fits by height.
+
+           - Apply the user's scale and position around the canvas center:
+                 cx = (canvas center X) + canvasPosX
+                 cy = (canvas center Y) + canvasPosY
+                 scaled width  = natural width  × layout.scale
+                 scaled height = natural height × layout.scale
+                 video X = cx - (scaled width  / 2)
+                 video Y = cy - (scaled height / 2)
+
+           - Clip to a rounded rectangle (8px radius) and draw the video
+             frame at those coordinates.
+
+    e) Call requestAnimationFrame(renderFrame) to repeat on the next frame.
+
+The loop keeps running until the video reaches the trim-end, at which point
+it calls recorder.stop() and exits.
+
+
+STEP 7 — TRIGGER THE DOWNLOAD
+-------------------------------
+
+    const resultBlob = await recordingDone;
+    const url = URL.createObjectURL(resultBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "frameful-edited-YYYY-MM-DD.webm";
+    link.click();
+
+When recorder.stop() is called in the loop, a `recorder.onstop` event fires.
+This resolves the `recordingDone` Promise with the final Blob (a complete
+WebM video file held in memory).
+
+We create an object URL for that Blob (a temporary browser-local URL), attach
+it to a fake <a> tag, and programmatically click it to trigger the browser's
+native file download dialog.
+
+The object URL is revoked after 1 second to free memory.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  DATA FLOW DIAGRAM
+────────────────────────────────────────────────────────────────────────────────
+
+  User's recorded video (blob URL)
+          │
+          ▼
+  ┌───────────────────┐      ┌──────────────────────────────┐
+  │  <video> element  │      │  VideoPlayer.getExportLayout  │
+  │  (off-screen)     │      │  Measures live DOM:           │
+  │                   │      │  - padding fractions          │
+  │  plays at 1x      │      │  - position fractions         │
+  │  speed silently   │      │  - scale                      │
+  └────────┬──────────┘      └──────────────┬───────────────┘
+           │ frames                          │ layout params
+           ▼                                 ▼
+  ┌──────────────────────────────────────────────────────┐
+  │              renderFrame() loop (rAF)                │
+  │                                                      │
+  │  1. draw background image (blurred, scaled, dimmed)  │
+  │  2. compute video rect from padding + scale + pos    │
+  │  3. clip to rounded rect                             │
+  │  4. draw video frame                                 │
+  └──────────────────────────┬───────────────────────────┘
+                             │ every frame painted on canvas
+                             ▼
+  ┌──────────────────────────────────────┐
+  │  canvas.captureStream(30fps)         │
+  │  + Web Audio API (mic/system audio)  │
+  └──────────────────────┬───────────────┘
+                         │ MediaStream
+                         ▼
+  ┌──────────────────────────────────────┐
+  │  MediaRecorder (VP9 / WebM)          │
+  │  collects encoded chunks every 100ms │
+  └──────────────────────┬───────────────┘
+                         │ on recorder.stop()
+                         ▼
+  ┌──────────────────────────────────────┐
+  │  Blob (complete .webm file in RAM)   │
+  └──────────────────────┬───────────────┘
+                         │ createObjectURL
+                         ▼
+              Browser file download
+
+
+────────────────────────────────────────────────────────────────────────────────
+  KNOWN LIMITATIONS (WHY WE PLAN TO MIGRATE TO FFMPEG.WASM)
+────────────────────────────────────────────────────────────────────────────────
+
+1.  REAL-TIME ONLY
+    The invisible video plays at normal speed. A 10-minute recording takes
+    10 minutes to export. There is no way to speed this up with the current
+    approach.
+
+2.  FRAME DROPS
+    requestAnimationFrame is tied to the display refresh rate (~60Hz) and
+    the browser's scheduler. If the tab is backgrounded, throttled, or the
+    CPU is busy, frames get skipped in the output without any warning.
+
+3.  NO QUALITY CONTROL
+    MediaRecorder chooses its own bitrate. There is no way to set CRF
+    (quality level), target bitrate, or output resolution with the current
+    API surface.
+
+4.  DOUBLE ENCODE
+    The source video was already encoded when it was recorded. We decode it
+    frame by frame, draw it to canvas, then MediaRecorder re-encodes it.
+    Two encode/decode cycles = quality loss, even at the same resolution.
+
+5.  AUDIO SYNC DRIFT
+    The Web Audio API tap from MediaElementSource can accumulate drift
+    over long recordings. On a 5+ minute video, audio and video can be
+    noticeably out of sync by the end.
+
+6.  CANNOT COMPOSITE MULTIPLE VIDEO TRACKS
+    Adding a camera overlay (webcam bubble) would require playing two
+    <video> elements simultaneously and drawing both onto the canvas.
+    Keeping them frame-accurate and drift-free is not reliably possible
+    with this approach.
+
+7.  DESIGN EFFECTS ARE HARD
+    Shadows, border-radius, glass effects, etc. must all be implemented
+    manually via Canvas 2D drawing APIs. Each new effect is custom code.
+
+These limitations are why the next version of the pipeline will use
+FFmpeg.wasm — a WebAssembly build of FFmpeg that runs entirely in the
+browser. It processes video faster than real-time, is frame-accurate,
+handles multiple input tracks cleanly, and expresses every effect as a
+one-line filter string.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  KEY INTERFACE: VideoPlayerHandle
+────────────────────────────────────────────────────────────────────────────────
+
+The VideoPlayer component exposes this interface to StudioPage via
+React's useImperativeHandle / forwardRef pattern:
+
+    interface VideoPlayerHandle {
+        trimStart        : number    // seconds — where playback / export begins
+        trimEnd          : number    // seconds — where playback / export ends
+        getExportLayout(): ExportLayout
+    }
+
+    interface ExportLayout {
+        scale        : number  // CSS transform scale (1.0 = no change)
+        posX_frac    : number  // horizontal drag offset as fraction of container width
+        posY_frac    : number  // vertical drag offset as fraction of container height
+        paddingX_frac: number  // CSS padding (one side) as fraction of container width
+        paddingY_frac: number  // CSS padding (one side) as fraction of container height
+    }
+
+All position/padding values are normalised to [0, 1] fractions so they
+can be multiplied by any canvas dimension (W or H) to get the correct
+pixel coordinates for that output size.
+
+`getExportLayout()` is called once at the start of handleDownload, before
+the rAF loop begins. The values are captured at that snapshot in time and
+used for the entire duration of the export render loop.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  END OF DOCUMENT
+────────────────────────────────────────────────────────────────────────────────

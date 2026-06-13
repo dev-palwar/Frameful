@@ -1,41 +1,21 @@
 import React, { useState } from "react";
-import { Image as ImageIcon } from "lucide-react";
-import type { ToolBarProps, ToolBarTab } from "./types";
-import BackgroundTab from "./tabs/BackgroundTab";
-import { Typography } from "@/design-system/Typography";
-
-// ─── Tab Registry ─────────────────────────────────────────────────────────────
-// To add a new feature tab:
-//   1. Create a new panel in ./tabs/<YourFeature>Tab.tsx
-//   2. Add one entry here — the tab strip updates automatically.
-// ─────────────────────────────────────────────────────────────────────────────
-const TABS: ToolBarTab[] = [
-  {
-    id: "backgrounds",
-    label: "Backgrounds",
-    icon: ImageIcon,
-    subtitle: "Choose or upload a background image",
-    panel: BackgroundTab,
-  },
-  // Future tabs:
-  // { id: "filters",  label: "Filters",  icon: SlidersIcon,  subtitle: "…", panel: FiltersTab  },
-  // { id: "trim",     label: "Trim",     icon: ScissorsIcon, subtitle: "…", panel: TrimTab     },
-];
+import { Typography } from "@/design-system";
+import { TABS } from "./config";
+import type { ToolBarProps } from "./types";
 
 const ToolBar: React.FC<ToolBarProps> = (props) => {
   const [activeTabId, setActiveTabId] = useState<string>(TABS[0].id);
 
-  const activeTab = TABS.find((t) => t.id === activeTabId) ?? TABS[0];
+  const activeTab   = TABS.find((t) => t.id === activeTabId) ?? TABS[0];
   const ActivePanel = activeTab.panel;
 
   return (
     <aside className="w-full lg:w-80 xl:w-96 border-t lg:border-t-0 lg:border-l border-border bg-card shrink-0 flex flex-col overflow-hidden">
-      {/* ── Tab strip ─────────────────────────────────────────────────────── */}
+      {/* Tab strip */}
       <div className="flex items-center gap-0 border-b border-border shrink-0">
         {TABS.map((tab) => {
-          const Icon = tab.icon;
+          const Icon     = tab.icon;
           const isActive = tab.id === activeTabId;
-
           return (
             <button
               key={tab.id}
@@ -49,17 +29,14 @@ const ToolBar: React.FC<ToolBarProps> = (props) => {
               ].join(" ")}
             >
               <Icon className="w-3.5 h-3.5 shrink-0" />
-              <Typography variant="label" as="span">
-                {tab.label}
-              </Typography>
+              <Typography variant="label" as="span">{tab.label}</Typography>
             </button>
           );
         })}
       </div>
 
-      {/* ── Panel area ────────────────────────────────────────────────────── */}
+      {/* Panel area */}
       <div className="flex-1 overflow-y-auto p-5">
-        {/* Panel header */}
         <div className="mb-5">
           <Typography variant="h4" as="h2" className="text-foreground">
             {activeTab.label}
@@ -69,10 +46,8 @@ const ToolBar: React.FC<ToolBarProps> = (props) => {
           </Typography>
         </div>
 
-        {/* Active panel content */}
         <ActivePanel {...props} />
 
-        {/* Coming-soon footer */}
         <div className="mt-8 p-4 rounded-md border border-border bg-muted/30">
           <Typography variant="label" as="h3" className="text-foreground mb-1.5 block">
             Coming Soon

@@ -60,7 +60,7 @@
   /* ── Typographic scale ──────────────────────────────────────────────────
      All font-size/line-height combos are named semantically.
      Use the Typography component or these utilities — never raw sizes.   */
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
   /* Display — hero headline */
   --text-display:        clamp(2.25rem, 5vw, 3.75rem); /* 36–60px */

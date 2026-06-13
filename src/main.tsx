@@ -1,3 +1,5 @@
+// @ts-expect-error - no types for fontsource CSS
+import "@fontsource-variable/plus-jakarta-sans";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "./index.css";
@@ -13,5 +15,5 @@ createRoot(document.getElementById("root")!).render(
         <App />
       </RecorderProvider>
     </BrowserRouter>
-  </ThemeProvider>,
+  </ThemeProvider>
 );

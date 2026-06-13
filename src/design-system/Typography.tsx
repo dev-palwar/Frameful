@@ -28,6 +28,8 @@ interface TypographyProps<T extends keyof React.JSX.IntrinsicElements = "p"> {
   gradient?: boolean;
   /** Extra Tailwind / CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   children: React.ReactNode;
 }
 
@@ -50,6 +52,7 @@ function Typography<T extends keyof React.JSX.IntrinsicElements = "p">({
   as,
   gradient = false,
   className,
+  style,
   children,
 }: TypographyProps<T>) {
   const Tag = (as ?? TAG_MAP[variant]) as React.ElementType;
@@ -61,6 +64,7 @@ function Typography<T extends keyof React.JSX.IntrinsicElements = "p">({
         gradient && "text-brand-gradient",
         className,
       )}
+      style={style}
     >
       {children}
     </Tag>

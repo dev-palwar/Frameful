@@ -1,6 +1,5 @@
 import { LucideGithub } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
-import { Typography } from "@/design-system/Typography";
 
 const Header = () => {
   const navigate = useNavigate();
