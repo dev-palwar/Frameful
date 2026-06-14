@@ -1,5 +1,5 @@
 import { useRecorder } from "@/hooks/useRecorder";
-import { Circle, Square, Monitor, Clock, Sparkles } from "lucide-react";
+import { Circle, Square, Monitor, Clock, Sparkles, Upload } from "lucide-react";
 import { Typography } from "@/design-system/Typography";
 
 const formatTime = (seconds: number) => {
@@ -9,8 +9,15 @@ const formatTime = (seconds: number) => {
 };
 
 export default function RecordingPage() {
-  const { recordingState, elapsedTime, startRecording, stopRecording } =
+  const { recordingState, elapsedTime, startRecording, stopRecording, setUploadedVideo } =
     useRecorder();
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedVideo(file);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
@@ -41,16 +48,40 @@ export default function RecordingPage() {
                 </div>
               </div>
 
-              {/* Start button */}
-              <button
-                id="start-recording-btn"
-                onClick={startRecording}
-                className="w-full py-4 bg-brand-gradient text-primary-foreground cursor-pointer animate-gradient-shift flex items-center justify-center gap-2.5"
-                style={{ backgroundSize: "200% 200%" }}
-              >
-                <Circle className="w-4 h-4 fill-current" />
-                <Typography variant="label" as="span">Start Recording</Typography>
-              </button>
+              <div className="w-full flex flex-col gap-3">
+                {/* Start button */}
+                <button
+                  id="start-recording-btn"
+                  onClick={startRecording}
+                  className="w-full py-4 bg-brand-gradient text-primary-foreground cursor-pointer animate-gradient-shift flex items-center justify-center gap-2.5"
+                  style={{ backgroundSize: "200% 200%" }}
+                >
+                  <Circle className="w-4 h-4 fill-current" />
+                  <Typography variant="label" as="span">Start Recording</Typography>
+                </button>
+
+                <div className="relative flex items-center py-2">
+                  <div className="flex-grow border-t border-border"></div>
+                  <span className="flex-shrink-0 mx-4 text-muted-foreground text-xs uppercase tracking-wider">or</span>
+                  <div className="flex-grow border-t border-border"></div>
+                </div>
+
+                {/* Upload button */}
+                <label
+                  htmlFor="video-upload"
+                  className="w-full py-4 border border-border bg-muted/30 text-foreground cursor-pointer hover:bg-muted/50 transition-colors flex items-center justify-center gap-2.5"
+                >
+                  <Upload className="w-4 h-4" />
+                  <Typography variant="label" as="span">Upload Video</Typography>
+                  <input
+                    id="video-upload"
+                    type="file"
+                    accept="video/*"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </label>
+              </div>
 
               {/* Feature hints */}
               <div className="flex items-center gap-4 text-muted-foreground">

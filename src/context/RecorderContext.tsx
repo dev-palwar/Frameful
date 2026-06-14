@@ -10,6 +10,7 @@ interface RecorderContextValue {
   startRecording: () => Promise<void>;
   stopRecording: () => void;
   discardRecording: () => void;
+  setUploadedVideo: (file: File) => void;
 }
 
 // Context that holds all recorder state and actions

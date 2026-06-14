@@ -114,6 +114,20 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const setUploadedVideo = useCallback(
+    (file: File) => {
+      if (videoUrl) {
+        URL.revokeObjectURL(videoUrl);
+      }
+      const url = URL.createObjectURL(file);
+      setBlob(file);
+      setVideoUrl(url);
+      setRecordingState("preview");
+      navigate("/studio");
+    },
+    [videoUrl, navigate]
+  );
+
   return (
     <RecorderContext.Provider
       value={{
@@ -124,6 +138,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
         startRecording,
         stopRecording,
         discardRecording,
+        setUploadedVideo,
       }}
     >
       {children}
