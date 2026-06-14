@@ -8,6 +8,7 @@ import type { VideoPlayerHandle } from "@/components/video";
 import { Typography } from "@/design-system";
 import { useExport } from "@/export";
 import type { DesignSettings } from "@/components/toolbar/types";
+import { resolveRatio } from "@/components/toolbar/tabs/design/widgets/AspectRatioSelect";
 
 export default function StudioPage() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function StudioPage() {
     scale: 1.0,
     shadow: "none",
     shadowIntensity: 75,
+    aspectRatio: "native",
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 
@@ -47,13 +49,19 @@ export default function StudioPage() {
       shadow: "none" as const,
     };
 
+    // Derive export canvas size from the chosen aspect ratio
+    const BASE_W = 1280;
+    const numericRatio = resolveRatio(designSettings.aspectRatio);
+    const outputWidth = BASE_W;
+    const outputHeight = numericRatio ? Math.round(BASE_W / numericRatio) : 720;
+
     await exportVideo({
       videoBlob: blob,
       trimStart: videoPlayerRef.current?.trimStart ?? 0,
       trimEnd: videoPlayerRef.current?.trimEnd ?? Infinity,
       backgroundUrl: background || undefined,
-      outputWidth: 1280,
-      outputHeight: 720,
+      outputWidth,
+      outputHeight,
       crf: 22,
       ...layout,
     });

@@ -11,6 +11,8 @@ export interface DesignSettings {
   shadow: string;
   /** 0–100 multiplier applied on top of the shadow preset (100 = full strength) */
   shadowIntensity: number;
+  /** Canvas aspect ratio key, e.g. "16:9", "9:16", "native" */
+  aspectRatio: string;
 }
 
 /** Props passed down from ToolBar to every tab panel. */

@@ -6,6 +6,7 @@ import { HANDLES } from "./config";
 import { useVideoPlayback, useVideoTransform, useExportLayout } from "./hooks";
 import type { ExportLayout } from "./hooks";
 import type { DesignSettings } from "../toolbar/types";
+import { resolveRatio } from "../toolbar/tabs/design/widgets/AspectRatioSelect";
 
 export interface VideoPlayerHandle {
   trimStart: number;
@@ -76,7 +77,12 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       scale: designScale = 1.0,
       shadow = "none",
       shadowIntensity = 75,
+      aspectRatio = "native",
     } = designSettings || {};
+
+    // Resolve the numeric w/h ratio → CSS paddingBottom percentage
+    const numericRatio = resolveRatio(aspectRatio);
+    const paddingBottom = numericRatio ? `${(1 / numericRatio) * 100}%` : "56.25%";
 
     const getStyleClasses = () => {
       switch (style) {
@@ -129,7 +135,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         <div
           ref={containerRef}
           className="relative w-full overflow-hidden rounded-lg border border-border bg-black/40"
-          style={{ paddingBottom: "56.25%" }}
+          style={{ paddingBottom }}
         >
           {/* Blurred background layer */}
           <div

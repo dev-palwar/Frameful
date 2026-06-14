@@ -7,6 +7,7 @@ import {
   StylePreview,
   ShadowPreview,
   BorderShapePreview,
+  AspectRatioSelect,
 } from "./widgets";
 
 const STYLE_VARIANTS = [
@@ -34,10 +35,18 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
   const update = (key: keyof typeof designSettings, value: unknown) =>
     setDesignSettings((prev) => ({ ...prev, [key]: value }));
 
-  const { style, padding, opacity, borderStyle, radius, scale, shadow, shadowIntensity } = designSettings;
+  const { style, padding, opacity, borderStyle, radius, scale, shadow, shadowIntensity, aspectRatio } = designSettings;
 
   return (
     <div className="grid grid-cols-1 gap-2">
+      {/* ── Aspect Ratio ── */}
+      <Section title="Canvas">
+        <AspectRatioSelect
+          value={aspectRatio}
+          onChange={(v) => update("aspectRatio", v)}
+        />
+      </Section>
+
       {/* ── Style ── */}
       <Section title="Style">
         <div className="grid grid-cols-3 gap-x-4 gap-y-4 mb-4">
