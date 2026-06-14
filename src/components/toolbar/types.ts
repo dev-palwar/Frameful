@@ -19,11 +19,40 @@ export interface DesignSettings {
   blurAmount: number;
 }
 
+/**
+ * Settings for the window / browser frame overlay rendered around the video.
+ */
+export interface FrameSettings {
+  /**
+   * OS frame variant: "none" | "macos" | "macos-light" | "windows" | "ubuntu"
+   * When set to anything other than "none", browserFrame should be "none".
+   */
+  osFrame: string;
+  /**
+   * Browser frame variant: "none" | "chrome" | "safari" | "firefox" | "arc" | "edge"
+   * When set to anything other than "none", osFrame should be "none".
+   */
+  browserFrame: string;
+  /**
+   * Which window control buttons are visible:
+   * "all" | "close-only" | "min-max" | "none"
+   */
+  buttonControls: string;
+  /**
+   * Where the control buttons are placed within the titlebar:
+   * "top-left" | "top-center" | "top-right" |
+   * "bottom-left" | "bottom-center" | "bottom-right"
+   */
+  buttonPosition: string;
+}
+
 /** Props passed down from ToolBar to every tab panel. */
 export interface ToolBarProps {
   onBackgroundSelect: (bg: string) => void;
   designSettings: DesignSettings;
   setDesignSettings: React.Dispatch<React.SetStateAction<DesignSettings>>;
+  frameSettings: FrameSettings;
+  setFrameSettings: React.Dispatch<React.SetStateAction<FrameSettings>>;
 }
 
 /** Descriptor for a single toolbar tab. */

@@ -5,8 +5,9 @@ import Timeline from "./Timeline";
 import { HANDLES } from "./config";
 import { useVideoPlayback, useVideoTransform, useExportLayout } from "./hooks";
 import type { ExportLayout } from "./hooks";
-import type { DesignSettings } from "../toolbar/types";
+import type { DesignSettings, FrameSettings } from "../toolbar/types";
 import { resolveRatio } from "../toolbar/tabs/design/widgets/AspectRatioSelect";
+import { FrameWrapper } from "./FrameWrapper";
 
 export interface VideoPlayerHandle {
   trimStart: number;
@@ -21,11 +22,12 @@ interface VideoPlayerProps {
   background?: string;
   className?: string;
   designSettings?: DesignSettings;
+  frameSettings?: FrameSettings;
 }
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
   function VideoPlayer(
-    { videoUrl, background = "", className = "", designSettings },
+    { videoUrl, background = "", className = "", designSettings, frameSettings },
     ref,
   ) {
     const [trimStart, setTrimStart] = useState(0);
@@ -188,17 +190,19 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                   transform: `scale(${designScale})`,
                 }}
               >
-                <video
-                  ref={videoRef}
-                  id="studio-video-player"
-                  src={videoUrl}
-                  className="w-full h-full object-cover"
-                  style={{
-                    pointerEvents: "none",
-                    display: "block",
-                    borderRadius: innerRadius,
-                  }}
-                />
+                <FrameWrapper settings={frameSettings} innerRadius={innerRadius}>
+                  <video
+                    ref={videoRef}
+                    id="studio-video-player"
+                    src={videoUrl}
+                    className="w-full h-full object-cover"
+                    style={{
+                      pointerEvents: "none",
+                      display: "block",
+                      borderRadius: frameSettings && (frameSettings.osFrame !== "none" || frameSettings.browserFrame !== "none") ? 0 : innerRadius,
+                    }}
+                  />
+                </FrameWrapper>
               </div>
 
               {/* Selection ring + resize handles */}

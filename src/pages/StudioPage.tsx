@@ -7,7 +7,7 @@ import { VideoPlayer } from "@/components/video";
 import type { VideoPlayerHandle } from "@/components/video";
 import { Typography } from "@/design-system";
 import { useExport } from "@/export";
-import type { DesignSettings } from "@/components/toolbar/types";
+import type { DesignSettings, FrameSettings } from "@/components/toolbar/types";
 import { resolveRatio } from "@/components/toolbar/tabs/design/widgets/AspectRatioSelect";
 
 export default function StudioPage() {
@@ -25,6 +25,12 @@ export default function StudioPage() {
     aspectRatio: "native",
     blur: "none",
     blurAmount: 50,
+  });
+  const [frameSettings, setFrameSettings] = useState<FrameSettings>({
+    osFrame: "none",
+    browserFrame: "none",
+    buttonControls: "all",
+    buttonPosition: "top-left",
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 
@@ -131,6 +137,7 @@ export default function StudioPage() {
               videoUrl={videoUrl as string}
               background={background}
               designSettings={designSettings}
+              frameSettings={frameSettings}
             />
           </div>
         </div>
@@ -140,6 +147,8 @@ export default function StudioPage() {
           onBackgroundSelect={setBackground}
           designSettings={designSettings}
           setDesignSettings={setDesignSettings}
+          frameSettings={frameSettings}
+          setFrameSettings={setFrameSettings}
         />
       </div>
     </div>
