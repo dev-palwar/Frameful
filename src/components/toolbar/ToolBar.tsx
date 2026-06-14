@@ -91,23 +91,6 @@ const ToolBar: React.FC<ToolBarProps> = (props) => {
         </div>
 
         <ActivePanel {...props} />
-
-        <div className="mt-8 p-4 rounded-md border border-border bg-muted/30">
-          <Typography
-            variant="label"
-            as="h3"
-            className="text-foreground mb-1.5 block"
-          >
-            Coming Soon
-          </Typography>
-          <Typography
-            variant="caption"
-            className="text-muted-foreground leading-relaxed"
-          >
-            Advanced editing tools, filters, and dynamic layouts are currently
-            under development.
-          </Typography>
-        </div>
       </div>
     </aside>
   );

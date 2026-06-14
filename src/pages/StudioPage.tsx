@@ -20,6 +20,7 @@ export default function StudioPage() {
     radius: 0,
     scale: 1.0,
     shadow: "none",
+    shadowIntensity: 75,
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 

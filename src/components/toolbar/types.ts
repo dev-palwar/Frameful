@@ -9,6 +9,8 @@ export interface DesignSettings {
   radius: number;
   scale: number;
   shadow: string;
+  /** 0–100 multiplier applied on top of the shadow preset (100 = full strength) */
+  shadowIntensity: number;
 }
 
 /** Props passed down from ToolBar to every tab panel. */
