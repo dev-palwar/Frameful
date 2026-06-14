@@ -78,11 +78,21 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       shadow = "none",
       shadowIntensity = 75,
       aspectRatio = "native",
+      blur = "none",
+      blurAmount = 50,
     } = designSettings || {};
 
     // Resolve the numeric w/h ratio → CSS paddingBottom percentage
     const numericRatio = resolveRatio(aspectRatio);
     const paddingBottom = numericRatio ? `${(1 / numericRatio) * 100}%` : "56.25%";
+
+    // Blur: map preset to base px, then scale by blurAmount/100
+    const getBlurValue = (): string => {
+      if (blur === "none") return "none";
+      const t = blurAmount / 100;
+      const base = blur === "subtle" ? 4 : blur === "medium" ? 10 : 20; // heavy = 20px
+      return `blur(${(base * t).toFixed(1)}px)`;
+    };
 
     const getStyleClasses = () => {
       switch (style) {
@@ -139,9 +149,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         >
           {/* Blurred background layer */}
           <div
-            className="absolute inset-0 bg-cover bg-center blur-[1px] opacity-80"
+            className="absolute inset-0 bg-cover bg-center opacity-80"
             style={{
               backgroundImage: background ? `url(${background})` : "none",
+              filter: getBlurValue() !== "none" ? getBlurValue() : undefined,
             }}
           />
 

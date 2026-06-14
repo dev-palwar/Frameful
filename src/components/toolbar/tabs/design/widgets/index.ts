@@ -5,3 +5,4 @@ export { StylePreview } from "./StylePreview";
 export { ShadowPreview } from "./ShadowPreview";
 export { BorderShapePreview } from "./BorderShapePreview";
 export { AspectRatioSelect } from "./AspectRatioSelect";
+export { BlurPreview } from "./BlurPreview";

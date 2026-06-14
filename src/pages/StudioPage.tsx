@@ -23,6 +23,8 @@ export default function StudioPage() {
     shadow: "none",
     shadowIntensity: 75,
     aspectRatio: "native",
+    blur: "none",
+    blurAmount: 50,
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 

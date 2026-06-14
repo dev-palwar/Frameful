@@ -13,6 +13,10 @@ export interface DesignSettings {
   shadowIntensity: number;
   /** Canvas aspect ratio key, e.g. "16:9", "9:16", "native" */
   aspectRatio: string;
+  /** Blur preset: "none" | "subtle" | "medium" | "heavy" */
+  blur: string;
+  /** 0–100 fine-tune on top of the blur preset */
+  blurAmount: number;
 }
 
 /** Props passed down from ToolBar to every tab panel. */

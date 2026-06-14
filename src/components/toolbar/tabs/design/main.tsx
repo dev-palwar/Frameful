@@ -8,6 +8,7 @@ import {
   ShadowPreview,
   BorderShapePreview,
   AspectRatioSelect,
+  BlurPreview,
 } from "./widgets";
 
 const STYLE_VARIANTS = [
@@ -30,12 +31,13 @@ const STYLE_LABELS: Record<(typeof STYLE_VARIANTS)[number], string> = {
 
 const BORDER_VARIANTS = ["sharp", "curved", "round"] as const;
 const SHADOW_VARIANTS = ["none", "hug", "soft", "strong"] as const;
+const BLUR_VARIANTS  = ["none", "subtle", "medium", "heavy"] as const;
 
 const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }) => {
   const update = (key: keyof typeof designSettings, value: unknown) =>
     setDesignSettings((prev) => ({ ...prev, [key]: value }));
 
-  const { style, padding, opacity, borderStyle, radius, scale, shadow, shadowIntensity, aspectRatio } = designSettings;
+  const { style, padding, opacity, borderStyle, radius, scale, shadow, shadowIntensity, aspectRatio, blur, blurAmount } = designSettings;
 
   return (
     <div className="grid grid-cols-1 gap-2">
@@ -139,6 +141,32 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
           label="Intensity"
           value={shadowIntensity}
           onChange={(v) => update("shadowIntensity", v)}
+          min={0}
+          max={100}
+          step={1}
+          formatValue={(v) => `${v}%`}
+        />
+      </Section>
+
+      {/* ── Blur ── */}
+      <Section title="Blur">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-4 mb-4">
+          {BLUR_VARIANTS.map((v) => (
+            <OptionButton
+              key={v}
+              label={v.charAt(0).toUpperCase() + v.slice(1)}
+              isActive={blur === v}
+              onClick={() => update("blur", v)}
+            >
+              <BlurPreview variant={v} />
+            </OptionButton>
+          ))}
+        </div>
+
+        <CustomSlider
+          label="Amount"
+          value={blurAmount}
+          onChange={(v) => update("blurAmount", v)}
           min={0}
           max={100}
           step={1}
