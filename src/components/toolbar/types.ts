@@ -24,15 +24,13 @@ export interface DesignSettings {
  */
 export interface FrameSettings {
   /**
-   * OS frame variant: "none" | "macos" | "macos-light" | "windows" | "ubuntu"
-   * When set to anything other than "none", browserFrame should be "none".
+   * OS frame variant: "none" | "macos" | "arc" | "firefox" | "chrome" | "safari" | "edge"
    */
   osFrame: string;
   /**
-   * Browser frame variant: "none" | "chrome" | "safari" | "firefox" | "arc" | "edge"
-   * When set to anything other than "none", osFrame should be "none".
+   * Frame theme: "dark" | "light"
    */
-  browserFrame: string;
+  theme: "dark" | "light";
   /**
    * Which window control buttons are visible:
    * "all" | "close-only" | "min-max" | "none"
@@ -44,6 +42,10 @@ export interface FrameSettings {
    * "bottom-left" | "bottom-center" | "bottom-right"
    */
   buttonPosition: string;
+  /**
+   * The URL to display in the browser frame's address bar
+   */
+  url: string;
 }
 
 /** Props passed down from ToolBar to every tab panel. */

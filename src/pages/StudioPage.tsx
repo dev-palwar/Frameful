@@ -28,9 +28,10 @@ export default function StudioPage() {
   });
   const [frameSettings, setFrameSettings] = useState<FrameSettings>({
     osFrame: "none",
-    browserFrame: "none",
+    theme: "dark",
     buttonControls: "all",
     buttonPosition: "top-left",
+    url: "frameful.com",
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 

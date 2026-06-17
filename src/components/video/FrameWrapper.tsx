@@ -13,21 +13,26 @@ const DOT_COLORS = {
   max: "#28c840",
 };
 
-export const FrameWrapper = ({ settings, children, innerRadius }: FrameWrapperProps) => {
+export const FrameWrapper = ({
+  settings,
+  children,
+  innerRadius,
+}: FrameWrapperProps) => {
   if (!settings) return <>{children}</>;
 
-  const { osFrame, browserFrame, buttonControls, buttonPosition } = settings;
+  const { osFrame, theme, url, buttonControls, buttonPosition } = settings;
 
   // If no frame selected, just return children
-  if (osFrame === "none" && browserFrame === "none") {
+  if (osFrame === "none") {
     return <>{children}</>;
   }
 
-  const isMac = osFrame?.startsWith("macos") || osFrame === "ubuntu" || browserFrame === "safari";
+  const isMac = osFrame === "macos";
 
   const renderMacDots = () => {
     if (buttonControls === "none") return null;
-    const showClose = buttonControls === "all" || buttonControls === "close-only";
+    const showClose =
+      buttonControls === "all" || buttonControls === "close-only";
     const showMin = buttonControls === "all" || buttonControls === "min-max";
     const showMax = buttonControls === "all" || buttonControls === "min-max";
 
@@ -64,174 +69,233 @@ export const FrameWrapper = ({ settings, children, innerRadius }: FrameWrapperPr
     );
   };
 
-  const renderWinButtons = () => {
-    if (buttonControls === "none") return null;
-    const showClose = buttonControls === "all" || buttonControls === "close-only";
-    const showMin = buttonControls === "all" || buttonControls === "min-max";
-    const showMax = buttonControls === "all" || buttonControls === "min-max";
-
-    const winBtn = (symbol: string, active: boolean) => (
-      <div
-        className="flex items-center justify-center shrink-0"
-        style={{
-          width: 24,
-          height: "100%",
-          opacity: active ? 1 : 0.2,
-          color: "rgba(255,255,255,0.7)",
-          fontSize: 10,
-        }}
-      >
-        {symbol}
-      </div>
-    );
-
-    return (
-      <div className="flex items-center h-full">
-        {winBtn("─", showMin)}
-        {winBtn("□", showMax)}
-        {winBtn("✕", showClose)}
-      </div>
-    );
-  };
-
-  const renderButtons = () => {
-    if (isMac || osFrame === "ubuntu") {
-      return (
-        <div className="flex items-center gap-2">
-          {renderMacDots()}
-        </div>
-      );
-    } else {
-      return renderWinButtons();
-    }
-  };
-
   const isTop = buttonPosition.startsWith("top");
   const isLeft = buttonPosition.endsWith("left");
   const isRight = buttonPosition.endsWith("right");
   const justify = isLeft ? "flex-start" : isRight ? "flex-end" : "center";
 
-  // Browser Frames
-  if (browserFrame !== "none") {
-    if (browserFrame === "chrome") {
-      return (
-        <div className="flex flex-col w-full h-full overflow-hidden" style={{ background: "#202124", borderRadius: innerRadius }}>
-          <div className="flex items-end px-2 pt-2 gap-1 shrink-0" style={{ height: "40px", background: "#35363a" }}>
-            <div className="flex items-center gap-2 px-3 rounded-t-md text-sm text-white/80 shrink-0" style={{ height: "100%", background: "#202124", minWidth: "140px", maxWidth: "200px" }}>
-              <div className="w-3 h-3 rounded-full bg-blue-400/60 shrink-0" />
-              <span className="truncate text-xs">Tab</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 px-4 shrink-0" style={{ height: "32px", background: "#202124", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20 shrink-0" />
-            <div className="flex-1 h-[14px] rounded-full bg-white/10" />
-          </div>
-          <div className="flex-1 relative bg-white overflow-hidden">
-            {children}
-          </div>
-        </div>
-      );
-    }
-    if (browserFrame === "safari") {
-      return (
-        <div className="flex flex-col w-full h-full overflow-hidden" style={{ background: "#1c1c1e", borderRadius: innerRadius }}>
-          <div className="flex flex-col shrink-0" style={{ height: "56px", background: "linear-gradient(180deg, #2c2c2e 0%, #252527 100%)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-            <div className="flex items-center gap-2 px-4 pt-2" style={{ height: "24px" }}>
-              {renderMacDots()}
-            </div>
-            <div className="flex items-center justify-center px-4" style={{ height: "32px" }}>
-              <div className="flex items-center gap-2 px-4 rounded-md" style={{ background: "rgba(255,255,255,0.08)", height: "24px", width: "60%" }}>
-                <div className="flex-1 h-[8px] rounded-full bg-white/20" />
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 relative bg-white overflow-hidden">
-            {children}
+  // Theme and OS Frames
+  const isLightOS = theme === "light";
+  const iconColor = isLightOS ? "#8a8a8c" : "#98989a";
+
+  if (osFrame === "firefox") {
+    return (
+      <div
+        className="flex flex-col w-full h-full overflow-hidden"
+        style={{
+          background: isLightOS ? "#f9f9fb" : "#1d1b20",
+          borderRadius: innerRadius,
+        }}
+      >
+        <div
+          className="flex items-end px-2 pt-2 gap-1 shrink-0"
+          style={{
+            height: "40px",
+            background: isLightOS ? "#e3e4e6" : "#2b2a33",
+          }}
+        >
+          <div
+            className="flex items-center gap-2 px-3 rounded-t-md shrink-0 mb-1"
+            style={{
+              height: "calc(100% - 4px)",
+              background: isLightOS ? "#f9f9fb" : "#1d1b20",
+              minWidth: "140px",
+            }}
+          >
+            <div className="w-3 h-3 rounded-full bg-orange-500/70 shrink-0" />
+            <div
+              className={`flex-1 h-[6px] rounded-full ${isLightOS ? "bg-black/10" : "bg-white/20"}`}
+            />
           </div>
         </div>
-      );
-    }
-    if (browserFrame === "firefox") {
-      return (
-        <div className="flex flex-col w-full h-full overflow-hidden" style={{ background: "#1d1b20", borderRadius: innerRadius }}>
-          <div className="flex items-end px-2 pt-2 gap-1 shrink-0" style={{ height: "40px", background: "#2b2a33" }}>
-            <div className="flex items-center gap-2 px-3 rounded-md shrink-0 mb-1" style={{ height: "calc(100% - 4px)", background: "#1d1b20", minWidth: "140px" }}>
-              <div className="w-3 h-3 rounded-full bg-orange-500/70 shrink-0" />
-              <div className="flex-1 h-[6px] rounded-full bg-white/20" />
-            </div>
+        <div
+          className="flex items-center gap-3 px-3 shrink-0"
+          style={{
+            height: "36px",
+            background: isLightOS ? "#f9f9fb" : "#1d1b20",
+            borderBottom: isLightOS
+              ? "1px solid rgba(0,0,0,0.06)"
+              : "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${isLightOS ? "bg-black/20" : "bg-white/20"} shrink-0`}
+          />
+          <div
+            className={`flex items-center px-3 h-[24px] rounded-md flex-1 ${isLightOS ? "bg-black/5 border border-black/5" : "bg-white/10"}`}
+          >
+            <span
+              className={`text-xs ${isLightOS ? "text-black/60" : "text-white/60"} truncate`}
+            >
+              {url}
+            </span>
           </div>
-          <div className="flex items-center gap-3 px-3 shrink-0" style={{ height: "36px", background: "#1d1b20", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20 shrink-0" />
-            <div className="flex-1 h-[20px] rounded-md bg-white/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20 shrink-0" />
-          </div>
-          <div className="flex-1 relative bg-white overflow-hidden">
-            {children}
-          </div>
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${isLightOS ? "bg-black/20" : "bg-white/20"} shrink-0`}
+          />
         </div>
-      );
-    }
-    if (browserFrame === "arc") {
-      return (
-        <div className="flex w-full h-full overflow-hidden" style={{ background: "linear-gradient(135deg, #0f0a1e 0%, #1a0d35 100%)", borderRadius: innerRadius }}>
-          <div className="flex flex-col py-4 px-2 gap-3 shrink-0" style={{ width: "160px", background: "linear-gradient(180deg, rgba(139,92,246,0.18) 0%, rgba(139,92,246,0.06) 100%)", borderRight: "1px solid rgba(139,92,246,0.2)" }}>
-             <div className="flex gap-2 px-2 pb-2">
-                {renderMacDots()}
-             </div>
-             <div className="w-full px-2">
-               <div className="w-full h-px bg-purple-400/20 mb-3" />
-               <div className="flex flex-col gap-2">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-full h-3 rounded-sm bg-white/10" />
-                  ))}
-               </div>
-             </div>
-          </div>
-          <div className="flex-1 relative bg-white overflow-hidden border border-purple-400/10 rounded-l-lg shadow-2xl">
-            {children}
-          </div>
+        <div className="flex-1 relative bg-white overflow-hidden">
+          {children}
         </div>
-      );
-    }
-    if (browserFrame === "edge") {
-      return (
-        <div className="flex flex-col w-full h-full overflow-hidden" style={{ background: "#202020", borderRadius: innerRadius }}>
-          <div className="flex items-end px-2 pt-2 gap-1 shrink-0" style={{ height: "36px", background: "#2d2d2d" }}>
-             <div className="flex items-center gap-2 px-3 rounded-t-md shrink-0" style={{ height: "100%", background: "#202020", minWidth: "140px" }}>
-                <div className="w-3 h-3 rounded-full bg-cyan-400/70 shrink-0" />
-                <div className="flex-1 h-[6px] rounded-full bg-white/20" />
-             </div>
-          </div>
-          <div className="flex items-center gap-2 px-4 shrink-0" style={{ height: "32px", background: "#202020", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-             <div className="w-2.5 h-2.5 rounded-full bg-cyan-400/40 shrink-0" />
-             <div className="flex-1 h-[18px] rounded-md bg-white/10" />
-          </div>
-          <div className="flex-1 relative bg-white overflow-hidden">
-             {children}
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 
-  // OS Frames
+  if (osFrame === "arc") {
+    return (
+      <div
+        className="flex w-full h-full overflow-hidden"
+        style={{
+          background: isLightOS
+            ? "linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)"
+            : "linear-gradient(135deg, #0f0a1e 0%, #1a0d35 100%)",
+          borderRadius: innerRadius,
+        }}
+      >
+        <div
+          className="flex flex-col py-4 px-2 gap-3 shrink-0"
+          style={{
+            width: "160px",
+            background: isLightOS
+              ? "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.02) 100%)"
+              : "linear-gradient(180deg, rgba(139,92,246,0.18) 0%, rgba(139,92,246,0.06) 100%)",
+            borderRight: isLightOS
+              ? "1px solid rgba(0,0,0,0.05)"
+              : "1px solid rgba(139,92,246,0.2)",
+          }}
+        >
+          <div className="flex gap-2 px-2 pb-2">{renderMacDots()}</div>
+          <div className="w-full px-2">
+            <div
+              className={`w-full h-px ${isLightOS ? "bg-black/10" : "bg-purple-400/20"} mb-3`}
+            />
+            <div
+              className={`flex items-center px-2 py-1 mb-2 rounded ${isLightOS ? "bg-black/5 text-black/60" : "bg-white/10 text-white/60"}`}
+            >
+              <span className="text-xs truncate">{url}</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-full h-3 rounded-sm ${isLightOS ? "bg-black/10" : "bg-white/10"}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div
+          className={`flex-1 relative ${isLightOS ? "bg-white" : "bg-[#18181b]"} overflow-hidden border ${isLightOS ? "border-black/5" : "border-purple-400/10"} rounded-l-lg shadow-2xl`}
+        >
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   const bar = (
     <div
-      className="flex items-center px-4 shrink-0"
+      className="flex items-center px-4 w-full shrink-0"
       style={{
-        height: "36px",
-        background: osFrame === "macos" ? "linear-gradient(180deg, #3d3d3d 0%, #2e2e2e 100%)" :
-                    osFrame === "macos-light" ? "linear-gradient(180deg, #fafafa 0%, #ececec 100%)" :
-                    osFrame === "windows" ? "linear-gradient(180deg, #202020 0%, #181818 100%)" :
-                    osFrame === "ubuntu" ? "linear-gradient(180deg, #3a3a3a 0%, #2e2e2e 100%)" :
-                    "#2e2e2e",
-        borderBottom: isTop ? "1px solid rgba(0,0,0,0.4)" : "none",
-        borderTop: !isTop ? "1px solid rgba(0,0,0,0.4)" : "none",
-        justifyContent: justify,
-        gap: 8,
+        height: "52px",
+        background: isLightOS ? "#f5f5f7" : "#38383a",
+        borderBottom: isTop
+          ? isLightOS
+            ? "1px solid rgba(0,0,0,0.1)"
+            : "1px solid rgba(0,0,0,0.4)"
+          : "none",
+        borderTop: !isTop
+          ? isLightOS
+            ? "1px solid rgba(0,0,0,0.1)"
+            : "1px solid rgba(0,0,0,0.4)"
+          : "none",
       }}
     >
-      {renderButtons()}
+      <div className="flex items-center w-full justify-between">
+        {/* Left area */}
+        <div className="flex items-center gap-4 flex-1">
+          {isLeft && (
+            <div className="flex items-center gap-2">{renderMacDots()}</div>
+          )}
+          <div className="flex items-center gap-4" style={{ color: iconColor }}>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </div>
+        </div>
+
+        {/* Center area */}
+        <div
+          className="flex items-center justify-center gap-3 shrink-0"
+          style={{ width: "50%", maxWidth: "500px" }}
+        >
+          {!isLeft && !isRight && (
+            <div className="flex items-center gap-2">{renderMacDots()}</div>
+          )}
+
+          <div
+            className="flex items-center px-3 gap-2 rounded-md w-full"
+            style={{
+              background: isLightOS ? "#ffffff" : "#242426",
+              border: isLightOS
+                ? "1px solid rgba(0,0,0,0.05)"
+                : "1px solid rgba(255,255,255,0.05)",
+              height: "30px",
+              color: iconColor,
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <div className="flex-1 flex items-center justify-center overflow-hidden">
+              <span className="text-sm truncate opacity-80">{url}</span>
+            </div>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 2v6h-6"></path>
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            </svg>
+          </div>
+        </div>
+
+        {/* Right area */}
+        <div
+          className="flex items-center justify-end gap-4 flex-1"
+          style={{ color: iconColor }}
+        >
+          {isRight && (
+            <div className="flex items-center gap-2">{renderMacDots()}</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 
@@ -239,25 +303,18 @@ export const FrameWrapper = ({ settings, children, innerRadius }: FrameWrapperPr
     <div
       className="flex flex-col w-full h-full overflow-hidden"
       style={{
-        background: osFrame === "macos" ? "#1e1e1e" :
-                    osFrame === "macos-light" ? "#ffffff" :
-                    osFrame === "windows" ? "#1e1e1e" :
-                    osFrame === "ubuntu" ? "#1e1e1e" : "#1e1e1e",
-        borderRadius: innerRadius
+        background: isLightOS ? "#ffffff" : "#1e1e1e",
+        borderRadius: innerRadius,
       }}
     >
       {isTop ? (
         <>
           {bar}
-          <div className="flex-1 relative overflow-hidden">
-            {children}
-          </div>
+          <div className="flex-1 relative overflow-hidden">{children}</div>
         </>
       ) : (
         <>
-          <div className="flex-1 relative overflow-hidden">
-            {children}
-          </div>
+          <div className="flex-1 relative overflow-hidden">{children}</div>
           {bar}
         </>
       )}

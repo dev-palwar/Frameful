@@ -10,23 +10,19 @@ import {
 } from "./widgets";
 
 // ── OS Frame variants ──────────────────────────────────────────────────────────
-const OS_FRAME_VARIANTS = ["none", "macos", "macos-light", "windows", "ubuntu"] as const;
+const OS_FRAME_VARIANTS = ["none", "macos", "arc", "firefox"] as const;
 const OS_FRAME_LABELS: Record<(typeof OS_FRAME_VARIANTS)[number], string> = {
   none: "None",
-  macos: "macOS Dark",
-  "macos-light": "macOS Light",
-  windows: "Windows 11",
-  ubuntu: "Ubuntu",
+  macos: "macOS",
+  arc: "Arc",
+  firefox: "Firefox",
 };
 
-// ── Browser Frame variants ────────────────────────────────────────────────────
-const BROWSER_FRAME_VARIANTS = ["chrome", "safari", "firefox", "arc", "edge"] as const;
-const BROWSER_FRAME_LABELS: Record<(typeof BROWSER_FRAME_VARIANTS)[number], string> = {
-  chrome: "Chrome",
-  safari: "Safari",
-  firefox: "Firefox",
-  arc: "Arc",
-  edge: "Edge",
+// ── Theme variants ─────────────────────────────────────────────────────────────
+const THEME_VARIANTS = ["dark", "light"] as const;
+const THEME_LABELS: Record<(typeof THEME_VARIANTS)[number], string> = {
+  dark: "Dark Mode",
+  light: "Light Mode",
 };
 
 // ── Button Control variants ──────────────────────────────────────────────────
@@ -60,7 +56,7 @@ const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) =
   const update = (key: keyof typeof frameSettings, value: unknown) =>
     setFrameSettings((prev) => ({ ...prev, [key]: value }));
 
-  const { osFrame, browserFrame, buttonControls, buttonPosition } = frameSettings;
+  const { osFrame, buttonControls, buttonPosition } = frameSettings;
 
   // Determine if we should show button controls / position (only when an OS frame is active)
   const showButtonControls = osFrame !== "none";
@@ -74,36 +70,41 @@ const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) =
             <OptionButton
               key={v}
               label={OS_FRAME_LABELS[v]}
-              isActive={osFrame === v && browserFrame === "none"}
+              isActive={osFrame === v}
               onClick={() => {
                 update("osFrame", v);
-                // Switching to an OS frame clears browser frame
-                if (v !== "none") update("browserFrame", "none");
               }}
             >
-              <OsFramePreview variant={v} />
+              <OsFramePreview variant={v} theme={frameSettings.theme} />
             </OptionButton>
           ))}
         </div>
       </Section>
 
-      {/* ── Browser Frames ── */}
-      <Section title="Browser Frame">
-        <div className="grid grid-cols-3 gap-x-4 gap-y-4">
-          {BROWSER_FRAME_VARIANTS.map((v) => (
+      {/* ── Theme Toggle ── */}
+      <Section title="Theme" defaultOpen={osFrame !== "none"}>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+          {THEME_VARIANTS.map((v) => (
             <OptionButton
               key={v}
-              label={BROWSER_FRAME_LABELS[v]}
-              isActive={browserFrame === v}
-              onClick={() => {
-                update("browserFrame", v);
-                // Browser frame replaces OS frame
-                update("osFrame", "none");
-              }}
-            >
-              <BrowserFramePreview variant={v} />
-            </OptionButton>
+              label={THEME_LABELS[v]}
+              isActive={frameSettings.theme === v}
+              onClick={() => update("theme", v)}
+            />
           ))}
+        </div>
+      </Section>
+
+      {/* ── URL Input ── */}
+      <Section title="Website URL" defaultOpen={osFrame !== "none"}>
+        <div className="flex px-1">
+          <input
+            type="text"
+            className="w-full bg-black/20 border border-white/10 rounded-md px-3 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:border-brand-primary"
+            placeholder="e.g. frameful.com"
+            value={frameSettings.url || ""}
+            onChange={(e) => update("url", e.target.value)}
+          />
         </div>
       </Section>
 
@@ -119,11 +120,7 @@ const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) =
             >
               <ButtonControlPreview
                 variant={v}
-                style={
-                  osFrame?.startsWith("macos") || osFrame === "ubuntu"
-                    ? "macos"
-                    : "windows"
-                }
+                style="macos"
               />
             </OptionButton>
           ))}
