@@ -27,7 +27,13 @@ interface VideoPlayerProps {
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
   function VideoPlayer(
-    { videoUrl, background = "", className = "", designSettings, frameSettings },
+    {
+      videoUrl,
+      background = "",
+      className = "",
+      designSettings,
+      frameSettings,
+    },
     ref,
   ) {
     const [trimStart, setTrimStart] = useState(0);
@@ -86,7 +92,9 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
     // Resolve the numeric w/h ratio → CSS paddingBottom percentage
     const numericRatio = resolveRatio(aspectRatio);
-    const paddingBottom = numericRatio ? `${(1 / numericRatio) * 100}%` : "56.25%";
+    const paddingBottom = numericRatio
+      ? `${(1 / numericRatio) * 100}%`
+      : "56.25%";
 
     // Blur: map preset to base px, then scale by blurAmount/100
     const getBlurValue = (): string => {
@@ -151,9 +159,15 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
         >
           {/* Blurred background layer */}
           <div
-            className="absolute inset-0 bg-cover bg-center opacity-80"
+            className="absolute inset-0 bg-center opacity-80 bg-cover"
             style={{
-              backgroundImage: background ? `url(${background})` : "none",
+              background: background.includes("gradient(")
+                ? background
+                : background
+                  ? `url(${background})`
+                  : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               filter: getBlurValue() !== "none" ? getBlurValue() : undefined,
             }}
           />
@@ -190,7 +204,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                   transform: `scale(${designScale})`,
                 }}
               >
-                <FrameWrapper settings={frameSettings} innerRadius={innerRadius}>
+                <FrameWrapper
+                  settings={frameSettings}
+                  innerRadius={innerRadius}
+                >
                   <video
                     ref={videoRef}
                     id="studio-video-player"
@@ -199,7 +216,12 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                     style={{
                       pointerEvents: "none",
                       display: "block",
-                      borderRadius: frameSettings && (frameSettings.osFrame !== "none" || frameSettings.browserFrame !== "none") ? 0 : innerRadius,
+                      borderRadius:
+                        frameSettings &&
+                        (frameSettings.osFrame !== "none" ||
+                          frameSettings.browserFrame !== "none")
+                          ? 0
+                          : innerRadius,
                     }}
                   />
                 </FrameWrapper>

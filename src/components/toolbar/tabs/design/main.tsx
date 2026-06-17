@@ -110,15 +110,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
             max={100}
             step={1}
           />
-          <CustomSlider
-            label="Scale"
-            value={scale}
-            onChange={(v) => update("scale", v)}
-            min={0.1}
-            max={2.0}
-            step={0.1}
-            formatValue={(v) => v.toFixed(1)}
-          />
+
         </div>
       </Section>
 
