@@ -19,6 +19,7 @@ interface TimelineProps {
   zoomEvents?: ZoomEvent[];
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
+  onUpdateZoomTime?: (id: string, time: number) => void;
 }
 
 const MIN_TRIM_DURATION = 1; // seconds
@@ -36,9 +37,10 @@ export default function Timeline({
   zoomEvents = [],
   onAddZoom,
   onDeleteZoom,
+  onUpdateZoomTime,
 }: TimelineProps) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [dragging, setDragging] = useState<"start" | "end" | "playhead" | null>(null);
+  const [dragging, setDragging] = useState<{ type: "start" | "end" | "playhead" | "zoom"; id?: string } | null>(null);
   const [selectedZoomId, setSelectedZoomId] = useState<string | null>(null);
 
   const pixelToTime = useCallback(
@@ -63,12 +65,14 @@ export default function Timeline({
 
     const handleMove = (e: MouseEvent | TouchEvent) => {
       const newTime = pixelToTime(getClientX(e));
-      if (dragging === "start") {
+      if (dragging.type === "start") {
         setTrimStart(Math.max(0, Math.min(newTime, trimEnd - MIN_TRIM_DURATION)));
-      } else if (dragging === "end") {
+      } else if (dragging.type === "end") {
         setTrimEnd(Math.max(trimStart + MIN_TRIM_DURATION, Math.min(newTime, duration)));
-      } else if (dragging === "playhead") {
+      } else if (dragging.type === "playhead") {
         onSeek(Math.max(0, Math.min(newTime, duration)));
+      } else if (dragging.type === "zoom" && dragging.id && onUpdateZoomTime) {
+        onUpdateZoomTime(dragging.id, Math.max(0, Math.min(newTime, duration)));
       }
     };
 
@@ -85,7 +89,7 @@ export default function Timeline({
       document.removeEventListener("touchmove", handleMove as EventListener);
       document.removeEventListener("touchend", handleUp);
     };
-  }, [dragging, trimStart, trimEnd, duration, setTrimStart, setTrimEnd, pixelToTime, onSeek]);
+  }, [dragging, trimStart, trimEnd, duration, setTrimStart, setTrimEnd, pixelToTime, onSeek, onUpdateZoomTime]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -172,6 +176,7 @@ export default function Timeline({
               setSelectedZoomId(null);
               onDeleteZoom?.(id);
             }}
+            onDragStart={(id) => setDragging({ type: "zoom", id })}
           />
         ))}
 
@@ -181,11 +186,11 @@ export default function Timeline({
           style={{ left: `${playheadPercent}%` }}
           onMouseDown={(e) => {
             e.stopPropagation();
-            setDragging("playhead");
+            setDragging({ type: "playhead" });
           }}
           onTouchStart={(e) => {
             e.stopPropagation();
-            setDragging("playhead");
+            setDragging({ type: "playhead" });
           }}
         >
           <div className="absolute -top-1 w-3 h-3 bg-primary rounded-full shadow-sm group-hover:scale-125 transition-transform" />
@@ -198,11 +203,11 @@ export default function Timeline({
           style={{ left: `calc(${startPercent}% - 8px)` }}
           onMouseDown={(e) => {
             e.stopPropagation();
-            setDragging("start");
+            setDragging({ type: "start" });
           }}
           onTouchStart={(e) => {
             e.stopPropagation();
-            setDragging("start");
+            setDragging({ type: "start" });
           }}
         >
           <div className="w-1 h-6 bg-primary-foreground/60 rounded-full group-hover:bg-primary-foreground transition-colors" />
@@ -214,11 +219,11 @@ export default function Timeline({
           style={{ left: `calc(${endPercent}% - 8px)` }}
           onMouseDown={(e) => {
             e.stopPropagation();
-            setDragging("end");
+            setDragging({ type: "end" });
           }}
           onTouchStart={(e) => {
             e.stopPropagation();
-            setDragging("end");
+            setDragging({ type: "end" });
           }}
         >
           <div className="w-1 h-6 bg-primary-foreground/60 rounded-full group-hover:bg-primary-foreground transition-colors" />

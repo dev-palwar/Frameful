@@ -17,6 +17,7 @@ interface ZoomChipProps {
   onSelect: (id: string) => void;
   onDeselect: () => void;
   onDelete: (id: string) => void;
+  onDragStart: (id: string) => void;
 }
 
 export function ZoomChip({
@@ -26,6 +27,7 @@ export function ZoomChip({
   onSelect,
   onDeselect,
   onDelete,
+  onDragStart,
 }: ZoomChipProps) {
   const chipRef = useRef<HTMLDivElement>(null);
 
@@ -63,16 +65,18 @@ export function ZoomChip({
       }}
       onMouseDown={(e) => {
         e.stopPropagation();
-        if (isSelected) {
-          onDeselect();
-        } else {
-          onSelect(event.id);
-        }
+        onSelect(event.id);
+        onDragStart(event.id);
+      }}
+      onTouchStart={(e) => {
+        e.stopPropagation();
+        onSelect(event.id);
+        onDragStart(event.id);
       }}
     >
       {/* Chip body */}
       <div
-        className="relative h-full w-full flex items-center justify-center cursor-pointer"
+        className="relative h-full w-full flex items-center justify-center cursor-ew-resize"
         style={{
           background: isAuto
             ? "rgba(245, 158, 11, 0.18)"

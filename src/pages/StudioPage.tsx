@@ -12,6 +12,12 @@ import { resolveRatio } from "@/components/toolbar/tabs/design/widgets/AspectRat
 import type { ZoomEvent } from "@/lib/zoom";
 import { DEFAULT_ZOOM_DURATION, DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
+interface PlacingZoom {
+  time: number;
+  originX: number;
+  originY: number;
+}
+
 export default function StudioPage() {
   const navigate = useNavigate();
   const [background, setBackground] = useState<string>("");
@@ -43,21 +49,44 @@ export default function StudioPage() {
   // Whether this is a recorded video (not uploaded) — determines if we show extension banner
   const isRecorded = recordingState === "preview" && blob !== null;
 
+  // ── Zoom placement mode ─────────────────────────────────────────────────
+  const [placingZoom, setPlacingZoom] = useState<PlacingZoom | null>(null);
+
+  // Enter placement mode — picker appears on the video
   const handleAddZoom = useCallback((time: number) => {
+    setPlacingZoom({ time, originX: 0.5, originY: 0.5 });
+  }, []);
+
+  // Live update as user drags the focus indicator
+  const handleFocusChange = useCallback((x: number, y: number) => {
+    setPlacingZoom((prev) => (prev ? { ...prev, originX: x, originY: y } : null));
+  }, []);
+
+  // Confirm: create the ZoomEvent and exit placement mode
+  const handleConfirmZoom = useCallback(() => {
+    if (!placingZoom) return;
     const newEvent: ZoomEvent = {
       id: crypto.randomUUID(),
-      time,
+      time: placingZoom.time,
       duration: DEFAULT_ZOOM_DURATION,
       zoomFactor: DEFAULT_ZOOM_FACTOR,
-      originX: 0.5,
-      originY: 0.5,
+      originX: placingZoom.originX,
+      originY: placingZoom.originY,
       source: "manual",
     };
     setZoomEvents([...zoomEvents, newEvent]);
-  }, [zoomEvents, setZoomEvents]);
+    setPlacingZoom(null);
+  }, [placingZoom, zoomEvents, setZoomEvents]);
+
+  // Cancel placement without creating a zoom
+  const handleCancelZoom = useCallback(() => setPlacingZoom(null), []);
 
   const handleDeleteZoom = useCallback((id: string) => {
     setZoomEvents(zoomEvents.filter((e) => e.id !== id));
+  }, [zoomEvents, setZoomEvents]);
+
+  const handleUpdateZoomTime = useCallback((id: string, time: number) => {
+    setZoomEvents(zoomEvents.map((e) => (e.id === id ? { ...e, time } : e)));
   }, [zoomEvents, setZoomEvents]);
 
   const handleGoBack = () => {
@@ -160,10 +189,16 @@ export default function StudioPage() {
             background={background}
             designSettings={designSettings}
             frameSettings={frameSettings}
-                      zoomEvents={zoomEvents}
+            zoomEvents={zoomEvents}
             onAddZoom={handleAddZoom}
             onDeleteZoom={handleDeleteZoom}
+            onUpdateZoomTime={handleUpdateZoomTime}
+            placingZoom={placingZoom}
+            onFocusChange={handleFocusChange}
+            onConfirmZoom={handleConfirmZoom}
+            onCancelZoom={handleCancelZoom}
           />
+
         </div>
 
         {/* Extension install banner — only for recorded videos without extension */}

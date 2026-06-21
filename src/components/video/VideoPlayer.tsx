@@ -6,7 +6,9 @@ import type { ExportLayout } from "./hooks";
 import type { DesignSettings, FrameSettings } from "../toolbar/types";
 import { resolveRatio } from "../toolbar/tabs/design/widgets/AspectRatioSelect";
 import { FrameWrapper } from "./FrameWrapper";
+import { ZoomFocusPicker } from "./ZoomFocusPicker";
 import type { ZoomEvent } from "@/lib/zoom";
+import { DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
 export interface VideoPlayerHandle {
   trimStart: number;
@@ -25,6 +27,11 @@ interface VideoPlayerProps {
   zoomEvents?: ZoomEvent[];
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
+  onUpdateZoomTime?: (id: string, time: number) => void;
+  placingZoom?: { time: number; originX: number; originY: number } | null;
+  onFocusChange?: (x: number, y: number) => void;
+  onConfirmZoom?: () => void;
+  onCancelZoom?: () => void;
 }
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
@@ -38,6 +45,11 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       zoomEvents = [],
       onAddZoom,
       onDeleteZoom,
+      onUpdateZoomTime,
+      placingZoom,
+      onFocusChange,
+      onConfirmZoom,
+      onCancelZoom,
     },
     ref,
   ) {
@@ -75,8 +87,13 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       posY,
     });
 
-    // Zoom transform — computed fresh on every currentTime change
-    const zoomTransform = useZoomTransform(currentTime, zoomEvents);
+    // Zoom transform — computed fresh on every frame via rAF when playing
+    const zoomTransform = useZoomTransform(videoRef, currentTime, isPlaying, zoomEvents);
+    
+    // If placing a zoom manually, override the display transform to preview it
+    const activeTransform = placingZoom
+      ? { scale: DEFAULT_ZOOM_FACTOR, originX: placingZoom.originX, originY: placingZoom.originY }
+      : zoomTransform;
 
     useImperativeHandle(ref, () => ({ trimStart, trimEnd, getExportLayout }), [
       trimStart,
@@ -233,15 +250,26 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                               ? 0
                               : innerRadius,
                           // Auto-zoom transform
-                          transform: zoomTransform
-                            ? `scale(${zoomTransform.scale})`
+                          transform: activeTransform
+                            ? `scale(${activeTransform.scale})`
                             : undefined,
-                          transformOrigin: zoomTransform
-                            ? `${zoomTransform.originX * 100}% ${zoomTransform.originY * 100}%`
+                          transformOrigin: activeTransform
+                            ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
                             : "center center",
-                          transition: "transform 0.05s linear, transform-origin 0.05s linear",
+                          // No CSS transition here! The rAF loop in useZoomTransform handles 60fps interpolation.
+                          // A CSS transition here would fight the JS loop and cause stuttering.
                         }}
                       />
+                      {/* Interactive focus picker overlay */}
+                      {placingZoom && onFocusChange && onConfirmZoom && onCancelZoom && (
+                        <ZoomFocusPicker
+                          originX={placingZoom.originX}
+                          originY={placingZoom.originY}
+                          onFocusChange={onFocusChange}
+                          onConfirm={onConfirmZoom}
+                          onCancel={onCancelZoom}
+                        />
+                      )}
                     </FrameWrapper>
                   </div>
 
@@ -329,6 +357,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               zoomEvents={zoomEvents}
               onAddZoom={onAddZoom}
               onDeleteZoom={onDeleteZoom}
+              onUpdateZoomTime={onUpdateZoomTime}
             />
           </div>
         )}
