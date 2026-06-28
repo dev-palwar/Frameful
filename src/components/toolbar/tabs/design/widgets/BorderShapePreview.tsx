@@ -1,5 +1,6 @@
-const TILE = "w-full h-full rounded-md overflow-hidden relative flex items-center justify-center";
-const BASE_STYLE = { background: "linear-gradient(135deg, #1a1030 0%, #0d0920 100%)" };
+const TILE =
+  "w-full h-full rounded-md overflow-hidden relative flex items-center justify-center";
+const BASE_STYLE = { background: "#2e2e2e" };
 
 const RADII: Record<string, string> = {
   sharp: "0px",
@@ -15,19 +16,16 @@ export const BorderShapePreview = ({ variant }: BorderShapePreviewProps) => {
   const r = RADII[variant] ?? "0px";
   return (
     <div className={TILE} style={BASE_STYLE}>
-      <div
-        className="w-[58%] h-[58%] bg-white"
-        style={{
-          borderRadius: r,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.85) inset",
-        }}
-      >
+      <div className="relative translate-x-4 translate-y-[22px]">
+        {/* White card — border-radius reflects the shape variant */}
         <div
-          className="w-full h-[45%]"
-          style={{
-            borderRadius: `${r} ${r} 0 0`,
-            background: "linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 100%)",
-          }}
+          className="w-[5vw] h-[8vh] bg-white"
+          style={{ borderRadius: `${r} ${r} 0 0` }}
+        />
+        {/* Border overlay — same radius as the card */}
+        <div
+          className="absolute -inset-[3px] border border-white/30 pointer-events-none"
+          style={{ borderRadius: `calc(${r} + 3px) calc(${r} + 3px) 0 0` }}
         />
       </div>
     </div>
