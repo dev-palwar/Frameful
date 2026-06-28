@@ -1,6 +1,7 @@
 import { useRecorder } from "@/hooks/useRecorder";
 import { Circle, Square, Monitor, Clock, Sparkles, Upload } from "lucide-react";
 import { Typography } from "@/design-system/Typography";
+import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -21,6 +22,7 @@ export default function RecordingPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
+      <DarkModeToggle />
       {/* Decorative background — static, not animated */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />

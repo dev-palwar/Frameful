@@ -230,6 +230,52 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   GRUVBOX DARK TOKENS
+   Warm retro palette: stone backgrounds, amber primary, cream foreground.
+   ────────────────────────────────────────────────────────────────────────── */
+.gruvbox-dark {
+  --background:        #282828;
+  --foreground:        #ebdbb2;
+  --card:              #3c3836;
+  --card-foreground:   #ebdbb2;
+  --popover:           #3c3836;
+  --popover-foreground:#ebdbb2;
+
+  --primary:           #d79921;
+  --primary-foreground:#282828;
+
+  --secondary:         #504945;
+  --secondary-foreground: #d5c4a1;
+
+  --muted:             #3c3836;
+  --muted-foreground:  #a89984;
+
+  --accent:            #504945;
+  --accent-foreground: #ebdbb2;
+
+  --destructive:       #cc241d;
+
+  --border:            rgba(168, 153, 132, 0.25);
+  --input:             rgba(168, 153, 132, 0.30);
+  --ring:              #d79921;
+
+  --chart-1: #d79921;
+  --chart-2: #98971a;
+  --chart-3: #458588;
+  --chart-4: #b16286;
+  --chart-5: #d65d0e;
+
+  --sidebar:                    #3c3836;
+  --sidebar-foreground:         #ebdbb2;
+  --sidebar-primary:            #d79921;
+  --sidebar-primary-foreground: #282828;
+  --sidebar-accent:             #504945;
+  --sidebar-accent-foreground:  #ebdbb2;
+  --sidebar-border:             rgba(168, 153, 132, 0.25);
+  --sidebar-ring:               #d79921;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    BASE LAYER
    ────────────────────────────────────────────────────────────────────────── */
 @layer base {
@@ -242,7 +288,8 @@
     scroll-behavior: smooth;
   }
 
-  html.dark {
+  html.dark,
+  html.gruvbox-dark {
     color-scheme: dark;
   }
 
