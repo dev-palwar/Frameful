@@ -10,6 +10,12 @@ import {
   RecorderContext,
   type RecordingState,
 } from "@/context/RecorderContext";
+import {
+  isExtensionInstalled,
+  startSession,
+  stopSession,
+} from "@/lib/extension-bridge";
+import { clicksToZoomEvents, type ZoomEvent } from "@/lib/zoom";
 
 export function RecorderProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
@@ -23,6 +29,18 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [recordingState, setRecordingState] = useState<RecordingState>("idle");
   const [elapsedTime, setElapsedTime] = useState(0);
+
+  // Auto-zoom state
+  const [zoomEvents, setZoomEvents] = useState<ZoomEvent[]>([]);
+  const [extensionInstalled, setExtensionInstalled] = useState(false);
+
+  // Check extension presence on mount
+  useEffect(() => {
+    isExtensionInstalled().then((installed) => {
+      console.log('[Frameful] Extension installed:', installed);
+      setExtensionInstalled(installed);
+    });
+  }, []);
 
   const clearTimer = () => {
     if (timerRef.current) {
@@ -49,6 +67,11 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
 
       streamRef.current = stream;
 
+      // Tell the extension to start capturing clicks
+      console.log('[Frameful] startSession called');
+      await startSession();
+      console.log('[Frameful] startSession done');
+
       // MediaRecorder setup — collects chunks on dataavailable, builds blob on stop
       const recorder = new MediaRecorder(stream);
       recorderRef.current = recorder;
@@ -60,7 +83,14 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
         }
       };
 
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
+        // Fetch click events from extension before doing anything else
+        console.log('[Frameful] Recording stopped, fetching clicks...');
+        const clicks = await stopSession();
+        console.log('[Frameful] Clicks received:', clicks.length, clicks);
+        const detectedZooms = clicksToZoomEvents(clicks);
+        console.log('[Frameful] Zoom events generated:', detectedZooms.length, detectedZooms);
+
         const recordedBlob = new Blob(chunksRef.current, {
           type: "video/webm",
         });
@@ -73,6 +103,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
         const url = URL.createObjectURL(recordedBlob);
         setBlob(recordedBlob);
         setVideoUrl(url);
+        setZoomEvents(detectedZooms);
         setRecordingState("preview");
 
         // Navigate to studio page after recording stops
@@ -103,6 +134,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
     setVideoUrl(null);
     setRecordingState("idle");
     setElapsedTime(0);
+    setZoomEvents([]);
   }, [videoUrl]);
 
   // Cleanup on unmount
@@ -122,6 +154,8 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
       const url = URL.createObjectURL(file);
       setBlob(file);
       setVideoUrl(url);
+      // Uploaded videos get no auto-zoom events
+      setZoomEvents([]);
       setRecordingState("preview");
       navigate("/studio");
     },
@@ -139,9 +173,13 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
         stopRecording,
         discardRecording,
         setUploadedVideo,
+        zoomEvents,
+        setZoomEvents,
+        extensionInstalled,
       }}
     >
       {children}
     </RecorderContext.Provider>
   );
 }
+

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export type Theme = "dark" | "light" | "system"
+export type Theme = "dark" | "light" | "system" | "gruvbox-dark"
 
 export type ThemeProviderState = {
   theme: Theme

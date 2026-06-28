@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
-import { ArrowLeft, Download, Loader2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowLeft, Download, Loader2, ZoomIn } from "lucide-react";
+import { useRef, useState, useCallback } from "react";
 import { useRecorder } from "@/hooks";
 import { ToolBar } from "@/components/toolbar";
 import { VideoPlayer } from "@/components/video";
@@ -9,6 +9,14 @@ import { Typography } from "@/design-system";
 import { useExport } from "@/export";
 import type { DesignSettings, FrameSettings } from "@/components/toolbar/types";
 import { resolveRatio } from "@/components/toolbar/tabs/design/widgets/AspectRatioSelect";
+import type { ZoomEvent } from "@/lib/zoom";
+import { DEFAULT_ZOOM_DURATION, DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
+
+interface PlacingZoom {
+  time: number;
+  originX: number;
+  originY: number;
+}
 
 export default function StudioPage() {
   const navigate = useNavigate();
@@ -35,8 +43,51 @@ export default function StudioPage() {
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 
-  const { videoUrl, blob, discardRecording } = useRecorder();
+  const { videoUrl, blob, discardRecording, recordingState, zoomEvents, setZoomEvents, extensionInstalled } = useRecorder();
   const { exportVideo, isExporting, loadingWasm, progress } = useExport();
+
+  // Whether this is a recorded video (not uploaded) — determines if we show extension banner
+  const isRecorded = recordingState === "preview" && blob !== null;
+
+  // ── Zoom placement mode ─────────────────────────────────────────────────
+  const [placingZoom, setPlacingZoom] = useState<PlacingZoom | null>(null);
+
+  // Enter placement mode — picker appears on the video
+  const handleAddZoom = useCallback((time: number) => {
+    setPlacingZoom({ time, originX: 0.5, originY: 0.5 });
+  }, []);
+
+  // Live update as user drags the focus indicator
+  const handleFocusChange = useCallback((x: number, y: number) => {
+    setPlacingZoom((prev) => (prev ? { ...prev, originX: x, originY: y } : null));
+  }, []);
+
+  // Confirm: create the ZoomEvent and exit placement mode
+  const handleConfirmZoom = useCallback(() => {
+    if (!placingZoom) return;
+    const newEvent: ZoomEvent = {
+      id: crypto.randomUUID(),
+      time: placingZoom.time,
+      duration: DEFAULT_ZOOM_DURATION,
+      zoomFactor: DEFAULT_ZOOM_FACTOR,
+      originX: placingZoom.originX,
+      originY: placingZoom.originY,
+      source: "manual",
+    };
+    setZoomEvents([...zoomEvents, newEvent]);
+    setPlacingZoom(null);
+  }, [placingZoom, zoomEvents, setZoomEvents]);
+
+  // Cancel placement without creating a zoom
+  const handleCancelZoom = useCallback(() => setPlacingZoom(null), []);
+
+  const handleDeleteZoom = useCallback((id: string) => {
+    setZoomEvents(zoomEvents.filter((e) => e.id !== id));
+  }, [zoomEvents, setZoomEvents]);
+
+  const handleUpdateZoomTime = useCallback((id: string, time: number) => {
+    setZoomEvents(zoomEvents.map((e) => (e.id === id ? { ...e, time } : e)));
+  }, [zoomEvents, setZoomEvents]);
 
   const handleGoBack = () => {
     discardRecording();
@@ -129,7 +180,7 @@ export default function StudioPage() {
       </header>
 
       {/* Studio layout — split screen */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* Left: Video preview */}
         <div className="flex-1 flex flex-col bg-background min-h-0 min-w-0">
           <VideoPlayer
@@ -138,8 +189,36 @@ export default function StudioPage() {
             background={background}
             designSettings={designSettings}
             frameSettings={frameSettings}
+            zoomEvents={zoomEvents}
+            onAddZoom={handleAddZoom}
+            onDeleteZoom={handleDeleteZoom}
+            onUpdateZoomTime={handleUpdateZoomTime}
+            placingZoom={placingZoom}
+            onFocusChange={handleFocusChange}
+            onConfirmZoom={handleConfirmZoom}
+            onCancelZoom={handleCancelZoom}
           />
+
         </div>
+
+        {/* Extension install banner — only for recorded videos without extension */}
+        {isRecorded && !extensionInstalled && (
+          <div className="absolute bottom-24 left-6 z-50 pointer-events-none max-w-sm">
+            <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg border border-amber-500/20 bg-amber-500/5 backdrop-blur-sm">
+              <ZoomIn className="w-4 h-4 text-amber-500 shrink-0" />
+              <Typography variant="caption" className="text-amber-500/80">
+                Install the{" "}
+                <a
+                  href="#"
+                  className="underline underline-offset-2 pointer-events-auto hover:text-amber-400 transition-colors"
+                >
+                  Frameful extension
+                </a>{" "}
+                to enable auto-zoom detection from your clicks.
+              </Typography>
+            </div>
+          </div>
+        )}
 
         {/* Right: Tools panel */}
         <ToolBar

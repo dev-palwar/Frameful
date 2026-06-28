@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import type { ZoomEvent } from "@/lib/zoom";
 
 export type RecordingState = "idle" | "recording" | "preview";
 
@@ -11,6 +12,10 @@ interface RecorderContextValue {
   stopRecording: () => void;
   discardRecording: () => void;
   setUploadedVideo: (file: File) => void;
+  // Auto-zoom
+  zoomEvents: ZoomEvent[];
+  setZoomEvents: (events: ZoomEvent[]) => void;
+  extensionInstalled: boolean;
 }
 
 // Context that holds all recorder state and actions

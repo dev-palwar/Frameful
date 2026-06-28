@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Frameful — Auto Zoom",
+  "version": "1.0.0",
+  "description": "Captures click events during screen recording to enable auto-zoom in Frameful Studio.",
+
+  "permissions": ["tabs", "scripting", "storage"],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:*/*",
+      "https://frameful.app/*",
+      "https://*.frameful.app/*"
+    ]
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Frameful Auto Zoom"
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

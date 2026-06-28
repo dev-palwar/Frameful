@@ -230,6 +230,52 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   GRUVBOX DARK TOKENS
+   Warm retro palette: stone backgrounds, amber primary, cream foreground.
+   ────────────────────────────────────────────────────────────────────────── */
+.gruvbox-dark {
+  --background:        #282828;
+  --foreground:        #ebdbb2;
+  --card:              #3c3836;
+  --card-foreground:   #ebdbb2;
+  --popover:           #3c3836;
+  --popover-foreground:#ebdbb2;
+
+  --primary:           #d79921;
+  --primary-foreground:#282828;
+
+  --secondary:         #504945;
+  --secondary-foreground: #d5c4a1;
+
+  --muted:             #3c3836;
+  --muted-foreground:  #a89984;
+
+  --accent:            #504945;
+  --accent-foreground: #ebdbb2;
+
+  --destructive:       #cc241d;
+
+  --border:            rgba(168, 153, 132, 0.25);
+  --input:             rgba(168, 153, 132, 0.30);
+  --ring:              #d79921;
+
+  --chart-1: #d79921;
+  --chart-2: #98971a;
+  --chart-3: #458588;
+  --chart-4: #b16286;
+  --chart-5: #d65d0e;
+
+  --sidebar:                    #3c3836;
+  --sidebar-foreground:         #ebdbb2;
+  --sidebar-primary:            #d79921;
+  --sidebar-primary-foreground: #282828;
+  --sidebar-accent:             #504945;
+  --sidebar-accent-foreground:  #ebdbb2;
+  --sidebar-border:             rgba(168, 153, 132, 0.25);
+  --sidebar-ring:               #d79921;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    BASE LAYER
    ────────────────────────────────────────────────────────────────────────── */
 @layer base {
@@ -242,7 +288,8 @@
     scroll-behavior: smooth;
   }
 
-  html.dark {
+  html.dark,
+  html.gruvbox-dark {
     color-scheme: dark;
   }
 
@@ -400,3 +447,25 @@
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+
+/* ── ZoomFocusPicker animations ─────────────────────────────────────────── */
+@keyframes frameful-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes frameful-pulse {
+  0%, 100% {
+    box-shadow: 0 0 22px rgba(168,85,247,0.35), inset 0 0 12px rgba(168,85,247,0.1);
+    transform: translate(-50%,-50%) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 34px rgba(168,85,247,0.55), inset 0 0 18px rgba(168,85,247,0.2);
+    transform: translate(-50%,-50%) scale(1.06);
+  }
+}
+
+@keyframes frameful-fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

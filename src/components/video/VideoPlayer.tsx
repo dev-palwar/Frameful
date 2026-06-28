@@ -1,11 +1,14 @@
 import { forwardRef, useState, useImperativeHandle } from "react";
 import Timeline from "./Timeline";
 import { HANDLES } from "./config";
-import { useVideoPlayback, useVideoTransform, useExportLayout } from "./hooks";
+import { useVideoPlayback, useVideoTransform, useExportLayout, useZoomTransform } from "./hooks";
 import type { ExportLayout } from "./hooks";
 import type { DesignSettings, FrameSettings } from "../toolbar/types";
 import { resolveRatio } from "../toolbar/tabs/design/widgets/AspectRatioSelect";
 import { FrameWrapper } from "./FrameWrapper";
+import { ZoomFocusPicker } from "./ZoomFocusPicker";
+import type { ZoomEvent } from "@/lib/zoom";
+import { DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
 export interface VideoPlayerHandle {
   trimStart: number;
@@ -21,6 +24,14 @@ interface VideoPlayerProps {
   className?: string;
   designSettings?: DesignSettings;
   frameSettings?: FrameSettings;
+  zoomEvents?: ZoomEvent[];
+  onAddZoom?: (time: number) => void;
+  onDeleteZoom?: (id: string) => void;
+  onUpdateZoomTime?: (id: string, time: number) => void;
+  placingZoom?: { time: number; originX: number; originY: number } | null;
+  onFocusChange?: (x: number, y: number) => void;
+  onConfirmZoom?: () => void;
+  onCancelZoom?: () => void;
 }
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
@@ -31,6 +42,14 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       className = "",
       designSettings,
       frameSettings,
+      zoomEvents = [],
+      onAddZoom,
+      onDeleteZoom,
+      onUpdateZoomTime,
+      placingZoom,
+      onFocusChange,
+      onConfirmZoom,
+      onCancelZoom,
     },
     ref,
   ) {
@@ -67,6 +86,14 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       posX,
       posY,
     });
+
+    // Zoom transform — computed fresh on every frame via rAF when playing
+    const zoomTransform = useZoomTransform(videoRef, currentTime, isPlaying, zoomEvents);
+    
+    // If placing a zoom manually, override the display transform to preview it
+    const activeTransform = placingZoom
+      ? { scale: DEFAULT_ZOOM_FACTOR, originX: placingZoom.originX, originY: placingZoom.originY }
+      : zoomTransform;
 
     useImperativeHandle(ref, () => ({ trimStart, trimEnd, getExportLayout }), [
       trimStart,
@@ -222,8 +249,27 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                             frameSettings.osFrame !== "none"
                               ? 0
                               : innerRadius,
+                          // Auto-zoom transform
+                          transform: activeTransform
+                            ? `scale(${activeTransform.scale})`
+                            : undefined,
+                          transformOrigin: activeTransform
+                            ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
+                            : "center center",
+                          // No CSS transition here! The rAF loop in useZoomTransform handles 60fps interpolation.
+                          // A CSS transition here would fight the JS loop and cause stuttering.
                         }}
                       />
+                      {/* Interactive focus picker overlay */}
+                      {placingZoom && onFocusChange && onConfirmZoom && onCancelZoom && (
+                        <ZoomFocusPicker
+                          originX={placingZoom.originX}
+                          originY={placingZoom.originY}
+                          onFocusChange={onFocusChange}
+                          onConfirm={onConfirmZoom}
+                          onCancel={onCancelZoom}
+                        />
+                      )}
                     </FrameWrapper>
                   </div>
 
@@ -308,6 +354,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               isPlaying={isPlaying}
               onPlayPause={handlePlayPause}
               onSeek={seekTo}
+              zoomEvents={zoomEvents}
+              onAddZoom={onAddZoom}
+              onDeleteZoom={onDeleteZoom}
+              onUpdateZoomTime={onUpdateZoomTime}
             />
           </div>
         )}
