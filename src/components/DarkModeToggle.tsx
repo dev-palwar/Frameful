@@ -3,12 +3,12 @@ import { Sun, Moon, Palette } from "lucide-react";
 import { ThemeProviderContext } from "@/providers/theme-provider";
 import type { Theme } from "@/context/theme";
 
-const CYCLE: Theme[] = ["light", "dark", "gruvbox-dark"];
+const CYCLE: Theme[] = ["light", "oxide", "gruvbox-dark"];
 
 const META: Record<string, { label: string; icon: React.ReactNode; dot: string }> = {
-  light:         { label: "Light",   icon: <Sun     className="w-3.5 h-3.5" />, dot: "bg-muted-foreground/30" },
-  dark:          { label: "Dark",    icon: <Moon    className="w-3.5 h-3.5" />, dot: "bg-primary"              },
-  "gruvbox-dark":{ label: "Gruvbox", icon: <Palette className="w-3.5 h-3.5" />, dot: "bg-[#fabd2f]"           },
+  light:          { label: "Light",   icon: <Sun     className="w-3.5 h-3.5" />, dot: "bg-muted-foreground/30" },
+  oxide:          { label: "Oxide",   icon: <Moon    className="w-3.5 h-3.5" />, dot: "bg-[#f97316]"           },
+  "gruvbox-dark": { label: "Gruvbox", icon: <Palette className="w-3.5 h-3.5" />, dot: "bg-[#fabd2f]"           },
 };
 
 export function DarkModeToggle() {

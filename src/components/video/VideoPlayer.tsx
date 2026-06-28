@@ -1,7 +1,12 @@
 import { forwardRef, useState, useImperativeHandle } from "react";
 import Timeline from "./Timeline";
 import { HANDLES } from "./config";
-import { useVideoPlayback, useVideoTransform, useExportLayout, useZoomTransform } from "./hooks";
+import {
+  useVideoPlayback,
+  useVideoTransform,
+  useExportLayout,
+  useZoomTransform,
+} from "./hooks";
 import type { ExportLayout } from "./hooks";
 import type { DesignSettings, FrameSettings } from "../toolbar/types";
 import { resolveRatio } from "../toolbar/tabs/design/widgets/AspectRatioSelect";
@@ -56,14 +61,20 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
     const [trimStart, setTrimStart] = useState(0);
     const [trimEnd, setTrimEnd] = useState(0);
 
-    const { videoRef, duration, currentTime, isPlaying, handlePlayPause, seekTo } =
-      useVideoPlayback({
-        videoUrl,
-        trimStart,
-        trimEnd,
-        setTrimStart,
-        setTrimEnd,
-      });
+    const {
+      videoRef,
+      duration,
+      currentTime,
+      isPlaying,
+      handlePlayPause,
+      seekTo,
+    } = useVideoPlayback({
+      videoUrl,
+      trimStart,
+      trimEnd,
+      setTrimStart,
+      setTrimEnd,
+    });
 
     const {
       containerRef,
@@ -88,11 +99,20 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
     });
 
     // Zoom transform — computed fresh on every frame via rAF when playing
-    const zoomTransform = useZoomTransform(videoRef, currentTime, isPlaying, zoomEvents);
-    
+    const zoomTransform = useZoomTransform(
+      videoRef,
+      currentTime,
+      isPlaying,
+      zoomEvents,
+    );
+
     // If placing a zoom manually, override the display transform to preview it
     const activeTransform = placingZoom
-      ? { scale: DEFAULT_ZOOM_FACTOR, originX: placingZoom.originX, originY: placingZoom.originY }
+      ? {
+          scale: DEFAULT_ZOOM_FACTOR,
+          originX: placingZoom.originX,
+          originY: placingZoom.originY,
+        }
       : zoomTransform;
 
     useImperativeHandle(ref, () => ({ trimStart, trimEnd, getExportLayout }), [
@@ -187,7 +207,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
             >
               {/* Blurred background layer */}
               <div
-                className="absolute inset-0 bg-center opacity-80 bg-cover"
+                className="absolute inset-0 bg-center opacity-80 bg-cover bg-cover"
                 style={{
                   background: background.includes("gradient(")
                     ? background
@@ -196,7 +216,8 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                       : "none",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  filter: getBlurValue() !== "none" ? getBlurValue() : undefined,
+                  filter:
+                    getBlurValue() !== "none" ? getBlurValue() : undefined,
                 }}
               />
 
@@ -245,8 +266,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                           pointerEvents: "none",
                           display: "block",
                           borderRadius:
-                            frameSettings &&
-                            frameSettings.osFrame !== "none"
+                            frameSettings && frameSettings.osFrame !== "none"
                               ? 0
                               : innerRadius,
                           // Auto-zoom transform
@@ -261,15 +281,18 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                         }}
                       />
                       {/* Interactive focus picker overlay */}
-                      {placingZoom && onFocusChange && onConfirmZoom && onCancelZoom && (
-                        <ZoomFocusPicker
-                          originX={placingZoom.originX}
-                          originY={placingZoom.originY}
-                          onFocusChange={onFocusChange}
-                          onConfirm={onConfirmZoom}
-                          onCancel={onCancelZoom}
-                        />
-                      )}
+                      {placingZoom &&
+                        onFocusChange &&
+                        onConfirmZoom &&
+                        onCancelZoom && (
+                          <ZoomFocusPicker
+                            originX={placingZoom.originX}
+                            originY={placingZoom.originY}
+                            onFocusChange={onFocusChange}
+                            onConfirm={onConfirmZoom}
+                            onCancel={onCancelZoom}
+                          />
+                        )}
                     </FrameWrapper>
                   </div>
 
