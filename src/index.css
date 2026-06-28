@@ -231,48 +231,61 @@
 
 /* ─────────────────────────────────────────────────────────────────────────────
    GRUVBOX DARK TOKENS
-   Warm retro palette: stone backgrounds, amber primary, cream foreground.
+   Retro warm palette — exact Gruvbox Dark hex values.
+   bg0=#282828  bg1=#3c3836  bg2=#504945  bg3=#665c54
+   fg0=#fbf1c7  fg1=#ebdbb2  fg2=#d5c4a1  fg3=#bdae93
+   Accents: red=#fb4934 green=#b8bb26 yellow=#fabd2f
+            blue=#83a598 purple=#d3869b aqua=#8ec07c orange=#fe8019
    ────────────────────────────────────────────────────────────────────────── */
 .gruvbox-dark {
-  --background:        #282828;
-  --foreground:        #ebdbb2;
-  --card:              #3c3836;
-  --card-foreground:   #ebdbb2;
-  --popover:           #3c3836;
-  --popover-foreground:#ebdbb2;
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --background:        #282828;   /* bg0 — main page background              */
+  --foreground:        #ebdbb2;   /* fg1 — primary readable text             */
+  --card:              #3c3836;   /* bg1 — cards, panels, sections           */
+  --card-foreground:   #ebdbb2;   /* fg1                                     */
+  --popover:           #3c3836;   /* bg1 — dropdowns, tooltips               */
+  --popover-foreground:#ebdbb2;   /* fg1                                     */
 
-  --primary:           #d79921;
-  --primary-foreground:#282828;
+  /* ── Primary — Gruvbox Blue (links, interactive elements) ────────────── */
+  --primary:           #83a598;
+  --primary-foreground:#282828;   /* bg0 — dark text on blue                 */
 
-  --secondary:         #504945;
-  --secondary-foreground: #d5c4a1;
+  /* ── Secondary surface — bg2 ─────────────────────────────────────────── */
+  --secondary:         #504945;   /* bg2                                     */
+  --secondary-foreground: #d5c4a1; /* fg2                                    */
 
-  --muted:             #3c3836;
-  --muted-foreground:  #a89984;
+  /* ── Muted — bg1 / fg3 ───────────────────────────────────────────────── */
+  --muted:             #3c3836;   /* bg1                                     */
+  --muted-foreground:  #bdae93;   /* fg3 — lowest contrast text              */
 
-  --accent:            #504945;
-  --accent-foreground: #ebdbb2;
+  /* ── Accent — Aqua highlight ─────────────────────────────────────────── */
+  --accent:            #504945;   /* bg2 — accent surface                    */
+  --accent-foreground: #8ec07c;   /* aqua — highlighted text on accent bg    */
 
-  --destructive:       #cc241d;
+  /* ── Semantic ────────────────────────────────────────────────────────── */
+  --destructive:       #fb4934;   /* bright red                              */
 
-  --border:            rgba(168, 153, 132, 0.25);
-  --input:             rgba(168, 153, 132, 0.30);
-  --ring:              #d79921;
+  /* ── Strokes ─────────────────────────────────────────────────────────── */
+  --border:            rgba(189, 174, 147, 0.20);  /* fg3 at 20% opacity    */
+  --input:             rgba(189, 174, 147, 0.25);  /* fg3 at 25% opacity    */
+  --ring:              #fabd2f;   /* yellow — focus rings / CTAs             */
 
-  --chart-1: #d79921;
-  --chart-2: #98971a;
-  --chart-3: #458588;
-  --chart-4: #b16286;
-  --chart-5: #d65d0e;
+  /* ── Charts — full Gruvbox accent palette ────────────────────────────── */
+  --chart-1: #fabd2f;   /* yellow  */
+  --chart-2: #b8bb26;   /* green   */
+  --chart-3: #83a598;   /* blue    */
+  --chart-4: #d3869b;   /* purple  */
+  --chart-5: #fe8019;   /* orange  */
 
-  --sidebar:                    #3c3836;
-  --sidebar-foreground:         #ebdbb2;
-  --sidebar-primary:            #d79921;
-  --sidebar-primary-foreground: #282828;
-  --sidebar-accent:             #504945;
-  --sidebar-accent-foreground:  #ebdbb2;
-  --sidebar-border:             rgba(168, 153, 132, 0.25);
-  --sidebar-ring:               #d79921;
+  /* ── Sidebar — bg1 base ──────────────────────────────────────────────── */
+  --sidebar:                    #3c3836;   /* bg1                           */
+  --sidebar-foreground:         #ebdbb2;   /* fg1                           */
+  --sidebar-primary:            #83a598;   /* blue                          */
+  --sidebar-primary-foreground: #282828;   /* bg0                           */
+  --sidebar-accent:             #504945;   /* bg2                           */
+  --sidebar-accent-foreground:  #8ec07c;   /* aqua                          */
+  --sidebar-border:             rgba(189, 174, 147, 0.20);
+  --sidebar-ring:               #fabd2f;   /* yellow                        */
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
