@@ -8,6 +8,8 @@
 
 import type { ClickEvent } from "./zoom";
 
+declare const chrome: any;
+
 /**
  * The extension ID is set at build time via the VITE_EXTENSION_ID env var.
  * During local development, load the unpacked extension from extension/

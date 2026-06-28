@@ -1,6 +1,7 @@
 import {
-  ComingSoonSection,
+  FeaturesSection,
   HowItWorksSection,
+  StatsSection,
   WaitlistSection,
 } from "@/components/landing";
 import Hero from "@/components/landing/Hero";
@@ -13,8 +14,10 @@ export default function LandingPage() {
       <main>
         <Header />
         <Hero />
+        <StatsSection />
+        <FeaturesSection />
         <HowItWorksSection />
-        <ComingSoonSection />
+        {/* <ComingSoonSection /> */}
         <WaitlistSection />
         <Footer />
       </main>

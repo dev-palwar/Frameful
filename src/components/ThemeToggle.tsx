@@ -25,8 +25,11 @@ export function ThemeToggle() {
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+        <DropdownMenuItem onClick={() => setTheme("oxide")}>
+          Oxide Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("gruvbox-dark")}>
+          Gruvbox Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           System
