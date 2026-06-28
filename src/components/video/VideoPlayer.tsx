@@ -207,7 +207,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
             >
               {/* Blurred background layer */}
               <div
-                className="absolute inset-0 bg-center opacity-80 bg-cover bg-cover"
+                className="absolute inset-0 bg-center opacity-80 bg-cover"
                 style={{
                   background: background.includes("gradient(")
                     ? background

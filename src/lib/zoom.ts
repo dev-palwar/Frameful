@@ -102,12 +102,19 @@ interface ZoomTransform {
  * Given the current playhead time and the list of zoom events, resolves
  * what CSS transform should be applied to the video element right now.
  *
+ * When two zoom windows overlap, the function crossfades between them so the
+ * frame smoothly "guides" from one focal point to the next instead of
+ * collapsing back to 1× and zooming in again.
+ *
  * Returns null when no zoom is active (scale = 1, no transform needed).
  */
 export function resolveZoomTransform(
   currentTime: number,
   zoomEvents: ZoomEvent[],
 ): ZoomTransform | null {
+  // Collect every event that is currently active (currentTime falls within its window)
+  const active: { event: ZoomEvent; t: number }[] = [];
+
   for (const event of zoomEvents) {
     const halfDur = event.duration / 2;
     const start = event.time - halfDur;
@@ -118,33 +125,67 @@ export function resolveZoomTransform(
     // Normalised position within the zoom window [0, 1]
     const raw = (currentTime - start) / event.duration;
 
-    // Ease in-out using a sine curve — smooth ramp up, hold, smooth ramp down
-    // We split the window: 30% ramp-in | 40% hold | 30% ramp-out
+    // 30% ramp-in | 40% hold | 30% ramp-out
     let t: number;
     if (raw < 0.3) {
-      // Ramp in
       t = easeInOut(raw / 0.3);
     } else if (raw < 0.7) {
-      // Hold at full zoom
       t = 1;
     } else {
-      // Ramp out
       t = easeInOut(1 - (raw - 0.7) / 0.3);
     }
 
-    const scale = 1 + (event.zoomFactor - 1) * t;
+    active.push({ event, t });
+  }
 
+  if (active.length === 0) return null;
+
+  // Single active zoom — standard path
+  if (active.length === 1) {
+    const { event, t } = active[0];
     return {
-      scale,
+      scale: 1 + (event.zoomFactor - 1) * t,
       originX: event.originX,
       originY: event.originY,
     };
   }
 
-  return null;
+  // Two (or more) zooms overlap — crossfade between the earliest and the next one.
+  // Sort by start time so we always blend from "older" → "newer".
+  active.sort((a, b) => (a.event.time - b.event.time));
+
+  const from = active[0];
+  const to = active[1];
+
+  // Determine how far we are through the overlap window.
+  // Overlap starts where the later event begins and ends where the earlier event ends.
+  const fromEnd = from.event.time + from.event.duration / 2;
+  const toStart = to.event.time - to.event.duration / 2;
+  const overlapDuration = fromEnd - toStart; // > 0 by definition
+
+  // alpha goes 0→1 across the overlap: 0 = "fully on from", 1 = "fully on to"
+  const alpha = overlapDuration > 0
+    ? Math.min(1, Math.max(0, (currentTime - toStart) / overlapDuration))
+    : 1;
+
+  const blendAlpha = easeInOut(alpha);
+
+  const fromScale = 1 + (from.event.zoomFactor - 1) * from.t;
+  const toScale = 1 + (to.event.zoomFactor - 1) * to.t;
+
+  return {
+    scale: lerp(fromScale, toScale, blendAlpha),
+    originX: lerp(from.event.originX, to.event.originX, blendAlpha),
+    originY: lerp(from.event.originY, to.event.originY, blendAlpha),
+  };
 }
 
 /** Smooth ease-in-out: starts and ends slow, fast in the middle. */
 function easeInOut(t: number): number {
   return 0.5 - 0.5 * Math.cos(Math.PI * t);
+}
+
+/** Linear interpolation between two values. */
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
 }

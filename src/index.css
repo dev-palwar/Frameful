@@ -16,46 +16,53 @@
    is wired to the CSS vars below. Never add raw hex values here.           */
 @theme inline {
   /* ── Radius scale ── */
-  --radius-xs:  calc(var(--radius) - 6px);   /* 4px  — tags, badges      */
-  --radius-sm:  calc(var(--radius) - 4px);   /* 6px  — inputs, chips     */
-  --radius-md:  calc(var(--radius) - 2px);   /* 8px  — cards, panels     */
-  --radius-lg:  var(--radius);               /* 10px — default           */
-  --radius-xl:  calc(var(--radius) + 4px);   /* 14px — modals            */
-  --radius-2xl: calc(var(--radius) + 8px);   /* 18px — large cards       */
-  --radius-3xl: calc(var(--radius) + 12px);  /* 22px — hero sections     */
+  --radius-xs: calc(var(--radius) - 6px);
+  /* 4px  — tags, badges      */
+  --radius-sm: calc(var(--radius) - 4px);
+  /* 6px  — inputs, chips     */
+  --radius-md: calc(var(--radius) - 2px);
+  /* 8px  — cards, panels     */
+  --radius-lg: var(--radius);
+  /* 10px — default           */
+  --radius-xl: calc(var(--radius) + 4px);
+  /* 14px — modals            */
+  --radius-2xl: calc(var(--radius) + 8px);
+  /* 18px — large cards       */
+  --radius-3xl: calc(var(--radius) + 12px);
+  /* 22px — hero sections     */
 
   /* ── Colour tokens → CSS vars ── */
-  --color-background:              var(--background);
-  --color-foreground:              var(--foreground);
-  --color-card:                    var(--card);
-  --color-card-foreground:         var(--card-foreground);
-  --color-popover:                 var(--popover);
-  --color-popover-foreground:      var(--popover-foreground);
-  --color-primary:                 var(--primary);
-  --color-primary-foreground:      var(--primary-foreground);
-  --color-secondary:               var(--secondary);
-  --color-secondary-foreground:    var(--secondary-foreground);
-  --color-muted:                   var(--muted);
-  --color-muted-foreground:        var(--muted-foreground);
-  --color-accent:                  var(--accent);
-  --color-accent-foreground:       var(--accent-foreground);
-  --color-destructive:             var(--destructive);
-  --color-border:                  var(--border);
-  --color-input:                   var(--input);
-  --color-ring:                    var(--ring);
-  --color-chart-1:                 var(--chart-1);
-  --color-chart-2:                 var(--chart-2);
-  --color-chart-3:                 var(--chart-3);
-  --color-chart-4:                 var(--chart-4);
-  --color-chart-5:                 var(--chart-5);
-  --color-sidebar:                 var(--sidebar);
-  --color-sidebar-foreground:      var(--sidebar-foreground);
-  --color-sidebar-primary:         var(--sidebar-primary);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent:          var(--sidebar-accent);
+  --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border:          var(--sidebar-border);
-  --color-sidebar-ring:            var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
   /* ── Typographic scale ──────────────────────────────────────────────────
      All font-size/line-height combos are named semantically.
@@ -63,59 +70,70 @@
   --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
   /* Display — hero headline */
-  --text-display:        clamp(2.25rem, 5vw, 3.75rem); /* 36–60px */
-  --leading-display:     1.05;
-  --tracking-display:    -0.03em;
+  --text-display: clamp(2.25rem, 5vw, 3.75rem);
+  /* 36–60px */
+  --leading-display: 1.05;
+  --tracking-display: -0.03em;
 
   /* H1 — page title */
-  --text-h1:             clamp(1.875rem, 3.5vw, 2.75rem); /* 30–44px */
-  --leading-h1:          1.1;
-  --tracking-h1:         -0.02em;
+  --text-h1: clamp(1.875rem, 3.5vw, 2.75rem);
+  /* 30–44px */
+  --leading-h1: 1.1;
+  --tracking-h1: -0.02em;
 
   /* H2 — section heading */
-  --text-h2:             clamp(1.5rem, 2.5vw, 2rem);   /* 24–32px */
-  --leading-h2:          1.2;
-  --tracking-h2:         -0.015em;
+  --text-h2: clamp(1.5rem, 2.5vw, 2rem);
+  /* 24–32px */
+  --leading-h2: 1.2;
+  --tracking-h2: -0.015em;
 
   /* H3 — card / sub-section title */
-  --text-h3:             1.125rem;   /* 18px */
-  --leading-h3:          1.35;
-  --tracking-h3:         -0.01em;
+  --text-h3: 1.125rem;
+  /* 18px */
+  --leading-h3: 1.35;
+  --tracking-h3: -0.01em;
 
   /* H4 — label-like headings */
-  --text-h4:             1rem;       /* 16px */
-  --leading-h4:          1.4;
-  --tracking-h4:         -0.005em;
+  --text-h4: 1rem;
+  /* 16px */
+  --leading-h4: 1.4;
+  --tracking-h4: -0.005em;
 
   /* Body — default prose */
-  --text-body:           1rem;       /* 16px */
-  --leading-body:        1.625;
-  --tracking-body:       0em;
+  --text-body: 1rem;
+  /* 16px */
+  --leading-body: 1.625;
+  --tracking-body: 0em;
 
   /* Body SM — secondary prose */
-  --text-body-sm:        0.9375rem;  /* 15px */
-  --leading-body-sm:     1.6;
-  --tracking-body-sm:    0em;
+  --text-body-sm: 0.9375rem;
+  /* 15px */
+  --leading-body-sm: 1.6;
+  --tracking-body-sm: 0em;
 
   /* Caption — supporting text */
-  --text-caption:        0.8125rem;  /* 13px */
-  --leading-caption:     1.5;
-  --tracking-caption:    0em;
+  --text-caption: 0.8125rem;
+  /* 13px */
+  --leading-caption: 1.5;
+  --tracking-caption: 0em;
 
   /* Label — form labels, tab labels */
-  --text-label:          0.75rem;    /* 12px */
-  --leading-label:       1.4;
-  --tracking-label:      0.01em;
+  --text-label: 0.75rem;
+  /* 12px */
+  --leading-label: 1.4;
+  --tracking-label: 0.01em;
 
   /* Overline — section eyebrows, tags */
-  --text-overline:       0.75rem;    /* 12px */
-  --leading-overline:    1.4;
-  --tracking-overline:   0.08em;
+  --text-overline: 0.75rem;
+  /* 12px */
+  --leading-overline: 1.4;
+  --tracking-overline: 0.08em;
 
   /* Code — monospaced (timecodes, step numbers) */
-  --text-code:           0.8125rem;  /* 13px */
-  --leading-code:        1.5;
-  --tracking-code:       0em;
+  --text-code: 0.8125rem;
+  /* 13px */
+  --leading-code: 1.5;
+  --tracking-code: 0em;
   --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
 }
 
@@ -132,39 +150,40 @@
  *   Muted: even lighter violet wash (#f5f0ff) for quiet backgrounds
  */
 :root {
-  --radius: 0.625rem; /* 10px — base radius all relative variants derive from */
+  --radius: 0.625rem;
+  /* 10px — base radius all relative variants derive from */
 
   /* Surfaces */
-  --background:        #faf8ff;
-  --foreground:        #1a0e2e;
-  --card:              #ffffff;
-  --card-foreground:   #1a0e2e;
-  --popover:           #ffffff;
-  --popover-foreground:#1a0e2e;
+  --background: #faf8ff;
+  --foreground: #1a0e2e;
+  --card: #ffffff;
+  --card-foreground: #1a0e2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a0e2e;
 
   /* Brand */
-  --primary:           #8b5cf6;
-  --primary-foreground:#ffffff;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
 
   /* Tinted secondary surface */
-  --secondary:         #f3e8ff;
+  --secondary: #f3e8ff;
   --secondary-foreground: #6b21a8;
 
   /* Quiet backgrounds */
-  --muted:             #f5f0ff;
-  --muted-foreground:  #7c6a99;
+  --muted: #f5f0ff;
+  --muted-foreground: #7c6a99;
 
   /* Accent (active states, highlights) */
-  --accent:            #ede5ff;
+  --accent: #ede5ff;
   --accent-foreground: #5b21b6;
 
   /* Semantic */
-  --destructive:       #ef4444;
+  --destructive: #ef4444;
 
   /* Strokes */
-  --border:            #e4d8f8;
-  --input:             #e4d8f8;
-  --ring:              #a78bfa;
+  --border: #e4d8f8;
+  --input: #e4d8f8;
+  --ring: #a78bfa;
 
   /* Charts — violet-to-fuchsia range */
   --chart-1: #8b5cf6;
@@ -174,14 +193,14 @@
   --chart-5: #7c3aed;
 
   /* Sidebar — barely-there violet tint */
-  --sidebar:                    #f9f5ff;
-  --sidebar-foreground:         #1a0e2e;
-  --sidebar-primary:            #8b5cf6;
+  --sidebar: #f9f5ff;
+  --sidebar-foreground: #1a0e2e;
+  --sidebar-primary: #8b5cf6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent:             #ede5ff;
-  --sidebar-accent-foreground:  #5b21b6;
-  --sidebar-border:             #e4d8f8;
-  --sidebar-ring:               #a78bfa;
+  --sidebar-accent: #ede5ff;
+  --sidebar-accent-foreground: #5b21b6;
+  --sidebar-border: #e4d8f8;
+  --sidebar-ring: #a78bfa;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -194,53 +213,76 @@
    ────────────────────────────────────────────────────────────────────────── */
 .oxide {
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --background:        #09090b;   /* zinc-950 — true neutral near-black      */
-  --foreground:        #fafafa;   /* zinc-50  — crisp white text             */
-  --card:              #18181b;   /* zinc-900 — elevated panel               */
-  --card-foreground:   #fafafa;
-  --popover:           #27272a;   /* zinc-800 — dropdown / tooltip layer     */
-  --popover-foreground:#fafafa;
+  --background: #18181b;
+  /* zinc-950 — true neutral near-black      */
+  --foreground: #fafafa;
+  /* zinc-50  — crisp white text             */
+  --card: #18181b;
+  /* zinc-900 — elevated panel               */
+  --card-foreground: #fafafa;
+  --popover: #27272a;
+  /* zinc-800 — dropdown / tooltip layer     */
+  --popover-foreground: #fafafa;
 
   /* ── Primary — vivid orange (record / action energy) ───────────────────── */
-  --primary:           #f97316;   /* orange-500 — CTAs, active states        */
-  --primary-foreground:#09090b;   /* near-black on orange                    */
+  --primary: #f97316;
+  /* orange-500 — CTAs, active states        */
+  --primary-foreground: #09090b;
+  /* near-black on orange                    */
 
   /* ── Secondary surface ─────────────────────────────────────────────────── */
-  --secondary:         #27272a;   /* zinc-800                                */
-  --secondary-foreground: #e4e4e7; /* zinc-200                               */
+  --secondary: #27272a;
+  /* zinc-800                                */
+  --secondary-foreground: #e4e4e7;
+  /* zinc-200                               */
 
   /* ── Muted ─────────────────────────────────────────────────────────────── */
-  --muted:             #18181b;   /* zinc-900                                */
-  --muted-foreground:  #71717a;   /* zinc-500 — supporting text              */
+  --muted: #18181b;
+  /* zinc-900                                */
+  --muted-foreground: #71717a;
+  /* zinc-500 — supporting text              */
 
   /* ── Accent — electric cyan (links, highlights) ────────────────────────── */
-  --accent:            #27272a;   /* zinc-800 accent surface                 */
-  --accent-foreground: #06b6d4;   /* cyan-500 — links / selected states      */
+  --accent: #27272a;
+  /* zinc-800 accent surface                 */
+  --accent-foreground: #06b6d4;
+  /* cyan-500 — links / selected states      */
 
   /* ── Semantic ──────────────────────────────────────────────────────────── */
-  --destructive:       #ef4444;   /* red-500                                 */
+  --destructive: #ef4444;
+  /* red-500                                 */
 
   /* ── Strokes ───────────────────────────────────────────────────────────── */
-  --border:            rgba(255, 255, 255, 0.08);  /* clean white ghost      */
-  --input:             rgba(255, 255, 255, 0.10);
-  --ring:              #f97316;   /* orange focus ring — on-brand            */
+  --border: rgba(255, 255, 255, 0.08);
+  /* clean white ghost      */
+  --input: rgba(255, 255, 255, 0.10);
+  --ring: #f97316;
+  /* orange focus ring — on-brand            */
 
   /* ── Charts — warm → cool spectrum ────────────────────────────────────── */
-  --chart-1: #f97316;   /* orange     */
-  --chart-2: #06b6d4;   /* cyan       */
-  --chart-3: #a78bfa;   /* violet     */
-  --chart-4: #facc15;   /* yellow     */
-  --chart-5: #4ade80;   /* green      */
+  --chart-1: #f97316;
+  /* orange     */
+  --chart-2: #06b6d4;
+  /* cyan       */
+  --chart-3: #a78bfa;
+  /* violet     */
+  --chart-4: #facc15;
+  /* yellow     */
+  --chart-5: #4ade80;
+  /* green      */
 
   /* ── Sidebar ───────────────────────────────────────────────────────────── */
-  --sidebar:                    #18181b;   /* zinc-900                      */
-  --sidebar-foreground:         #fafafa;
-  --sidebar-primary:            #f97316;   /* orange                        */
+  --sidebar: #18181b;
+  /* zinc-900                      */
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #f97316;
+  /* orange                        */
   --sidebar-primary-foreground: #09090b;
-  --sidebar-accent:             #27272a;
-  --sidebar-accent-foreground:  #06b6d4;   /* cyan                          */
-  --sidebar-border:             rgba(255, 255, 255, 0.08);
-  --sidebar-ring:               #f97316;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #06b6d4;
+  /* cyan                          */
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #f97316;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -253,53 +295,82 @@
    ────────────────────────────────────────────────────────────────────────── */
 .gruvbox-dark {
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --background:        #282828;   /* bg0 — main page background              */
-  --foreground:        #ebdbb2;   /* fg1 — primary readable text             */
-  --card:              #3c3836;   /* bg1 — cards, panels, sections           */
-  --card-foreground:   #ebdbb2;   /* fg1                                     */
-  --popover:           #3c3836;   /* bg1 — dropdowns, tooltips               */
-  --popover-foreground:#ebdbb2;   /* fg1                                     */
+  --background: #282828;
+  /* bg0 — main page background              */
+  --foreground: #ebdbb2;
+  /* fg1 — primary readable text             */
+  --card: #3c3836;
+  /* bg1 — cards, panels, sections           */
+  --card-foreground: #ebdbb2;
+  /* fg1                                     */
+  --popover: #3c3836;
+  /* bg1 — dropdowns, tooltips               */
+  --popover-foreground: #ebdbb2;
+  /* fg1                                     */
 
   /* ── Primary — Gruvbox Blue (links, interactive elements) ────────────── */
-  --primary:           #83a598;
-  --primary-foreground:#282828;   /* bg0 — dark text on blue                 */
+  --primary: #83a598;
+  --primary-foreground: #282828;
+  /* bg0 — dark text on blue                 */
 
   /* ── Secondary surface — bg2 ─────────────────────────────────────────── */
-  --secondary:         #504945;   /* bg2                                     */
-  --secondary-foreground: #d5c4a1; /* fg2                                    */
+  --secondary: #504945;
+  /* bg2                                     */
+  --secondary-foreground: #d5c4a1;
+  /* fg2                                    */
 
   /* ── Muted — bg1 / fg3 ───────────────────────────────────────────────── */
-  --muted:             #3c3836;   /* bg1                                     */
-  --muted-foreground:  #bdae93;   /* fg3 — lowest contrast text              */
+  --muted: #3c3836;
+  /* bg1                                     */
+  --muted-foreground: #bdae93;
+  /* fg3 — lowest contrast text              */
 
   /* ── Accent — Aqua highlight ─────────────────────────────────────────── */
-  --accent:            #504945;   /* bg2 — accent surface                    */
-  --accent-foreground: #8ec07c;   /* aqua — highlighted text on accent bg    */
+  --accent: #504945;
+  /* bg2 — accent surface                    */
+  --accent-foreground: #8ec07c;
+  /* aqua — highlighted text on accent bg    */
 
   /* ── Semantic ────────────────────────────────────────────────────────── */
-  --destructive:       #fb4934;   /* bright red                              */
+  --destructive: #fb4934;
+  /* bright red                              */
 
   /* ── Strokes ─────────────────────────────────────────────────────────── */
-  --border:            rgba(189, 174, 147, 0.20);  /* fg3 at 20% opacity    */
-  --input:             rgba(189, 174, 147, 0.25);  /* fg3 at 25% opacity    */
-  --ring:              #fabd2f;   /* yellow — focus rings / CTAs             */
+  --border: rgba(189, 174, 147, 0.20);
+  /* fg3 at 20% opacity    */
+  --input: rgba(189, 174, 147, 0.25);
+  /* fg3 at 25% opacity    */
+  --ring: #fabd2f;
+  /* yellow — focus rings / CTAs             */
 
   /* ── Charts — full Gruvbox accent palette ────────────────────────────── */
-  --chart-1: #fabd2f;   /* yellow  */
-  --chart-2: #b8bb26;   /* green   */
-  --chart-3: #83a598;   /* blue    */
-  --chart-4: #d3869b;   /* purple  */
-  --chart-5: #fe8019;   /* orange  */
+  --chart-1: #fabd2f;
+  /* yellow  */
+  --chart-2: #b8bb26;
+  /* green   */
+  --chart-3: #83a598;
+  /* blue    */
+  --chart-4: #d3869b;
+  /* purple  */
+  --chart-5: #fe8019;
+  /* orange  */
 
   /* ── Sidebar — bg1 base ──────────────────────────────────────────────── */
-  --sidebar:                    #3c3836;   /* bg1                           */
-  --sidebar-foreground:         #ebdbb2;   /* fg1                           */
-  --sidebar-primary:            #83a598;   /* blue                          */
-  --sidebar-primary-foreground: #282828;   /* bg0                           */
-  --sidebar-accent:             #504945;   /* bg2                           */
-  --sidebar-accent-foreground:  #8ec07c;   /* aqua                          */
-  --sidebar-border:             rgba(189, 174, 147, 0.20);
-  --sidebar-ring:               #fabd2f;   /* yellow                        */
+  --sidebar: #3c3836;
+  /* bg1                           */
+  --sidebar-foreground: #ebdbb2;
+  /* fg1                           */
+  --sidebar-primary: #83a598;
+  /* blue                          */
+  --sidebar-primary-foreground: #282828;
+  /* bg0                           */
+  --sidebar-accent: #504945;
+  /* bg2                           */
+  --sidebar-accent-foreground: #8ec07c;
+  /* aqua                          */
+  --sidebar-border: rgba(189, 174, 147, 0.20);
+  --sidebar-ring: #fabd2f;
+  /* yellow                        */
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -347,54 +418,63 @@
     letter-spacing: var(--tracking-display);
     font-weight: 700;
   }
+
   .type-h1 {
     font-size: var(--text-h1);
     line-height: var(--leading-h1);
     letter-spacing: var(--tracking-h1);
     font-weight: 700;
   }
+
   .type-h2 {
     font-size: var(--text-h2);
     line-height: var(--leading-h2);
     letter-spacing: var(--tracking-h2);
     font-weight: 700;
   }
+
   .type-h3 {
     font-size: var(--text-h3);
     line-height: var(--leading-h3);
     letter-spacing: var(--tracking-h3);
     font-weight: 600;
   }
+
   .type-h4 {
     font-size: var(--text-h4);
     line-height: var(--leading-h4);
     letter-spacing: var(--tracking-h4);
     font-weight: 600;
   }
+
   .type-body {
     font-size: var(--text-body);
     line-height: var(--leading-body);
     letter-spacing: var(--tracking-body);
     font-weight: 400;
   }
+
   .type-body-sm {
     font-size: var(--text-body-sm);
     line-height: var(--leading-body-sm);
     letter-spacing: var(--tracking-body-sm);
     font-weight: 400;
   }
+
   .type-caption {
     font-size: var(--text-caption);
     line-height: var(--leading-caption);
     letter-spacing: var(--tracking-caption);
     font-weight: 400;
   }
+
   .type-label {
     font-size: var(--text-label);
     line-height: var(--leading-label);
     letter-spacing: var(--tracking-label);
     font-weight: 500;
   }
+
   .type-overline {
     font-size: var(--text-overline);
     line-height: var(--leading-overline);
@@ -402,6 +482,7 @@
     font-weight: 600;
     text-transform: uppercase;
   }
+
   .type-code {
     font-family: var(--font-mono);
     font-size: var(--text-code);
@@ -433,66 +514,120 @@
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .animate-fade-up {
   animation: fade-up 0.45s ease-out both;
 }
 
 @keyframes gradient-shift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
+
 .animate-gradient-shift {
   animation: gradient-shift 3s ease infinite;
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 18px rgba(139, 92, 246, 0.12); }
-  50%       { box-shadow: 0 0 32px rgba(217, 70, 239, 0.20); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.12);
+  }
+
+  50% {
+    box-shadow: 0 0 32px rgba(217, 70, 239, 0.20);
+  }
 }
+
 .animate-pulse-glow {
   animation: pulse-glow 3.5s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
+
 .animate-shimmer {
   background-size: 200% 100%;
   animation: shimmer 2.5s linear infinite;
 }
 
 /* Staggered entrance delays */
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
 
 /* ── ZoomFocusPicker animations ─────────────────────────────────────────── */
 @keyframes frameful-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 @keyframes frameful-pulse {
-  0%, 100% {
-    box-shadow: 0 0 22px rgba(168,85,247,0.35), inset 0 0 12px rgba(168,85,247,0.1);
-    transform: translate(-50%,-50%) scale(1);
+
+  0%,
+  100% {
+    box-shadow: 0 0 22px rgba(168, 85, 247, 0.35), inset 0 0 12px rgba(168, 85, 247, 0.1);
+    transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
-    box-shadow: 0 0 34px rgba(168,85,247,0.55), inset 0 0 18px rgba(168,85,247,0.2);
-    transform: translate(-50%,-50%) scale(1.06);
+    box-shadow: 0 0 34px rgba(168, 85, 247, 0.55), inset 0 0 18px rgba(168, 85, 247, 0.2);
+    transform: translate(-50%, -50%) scale(1.06);
   }
 }
 
 @keyframes frameful-fadein {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
