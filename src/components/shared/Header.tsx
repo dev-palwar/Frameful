@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { LucideGithub, ArrowRight } from "lucide-react";
+import { LucideGithub, ArrowRight, Video } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,60 +21,61 @@ const Header = () => {
   if (isHidden) return null;
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "backdrop-blur-xl shadow-sm shadow-primary/5"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        {/* Brand wordmark */}
+    <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <nav
+        className={`pointer-events-auto flex items-center justify-between h-14 px-4 sm:px-6 rounded-full border transition-all duration-500 w-full max-w-4xl ${
+          scrolled
+            ? "bg-background/80 backdrop-blur-xl border-border/50 shadow-2xl shadow-primary/5 translate-y-0"
+            : "bg-background/40 backdrop-blur-md border-border/30 shadow-lg translate-y-2"
+        }`}
+      >
+        {/* LEFT: Brand */}
         <div
           id="header-brand"
           onClick={() => navigate("/")}
-          className="cursor-pointer flex items-center gap-2.5 group"
+          className="cursor-pointer flex items-center gap-3 group"
         >
-          <div className="relative inline-block">
-            <span className="bg-brand-gradient text-primary-foreground px-3.5 py-1.5 inline-block type-label tracking-widest uppercase font-bold transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
-              FrameFul
-            </span>
-            {/* v1 badge */}
-            <span
-              className="absolute -top-2 -right-2.5 flex items-center justify-center rounded-full px-1.5 py-0.5 type-overline ring-1 ring-white/20 bg-brand-gradient text-primary-foreground"
-              style={{ fontSize: "9px" }}
-            >
-              v1
-            </span>
-          </div>
+          <span className="font-extrabold tracking-tight text-lg bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 hidden sm:inline-block">
+            Frameful
+          </span>
+          <span className="flex items-center justify-center rounded-full px-2 py-0.5 text-[10px] font-bold ring-1 ring-primary/30 bg-primary/10 text-primary uppercase tracking-wider hidden sm:flex">
+            Beta
+          </span>
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4">
-          {/* GitHub link */}
-          <a
-            href="https://github.com/dev-palwar/frameful"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View Frameful on GitHub"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/5 transition-all duration-200"
-          >
-            <LucideGithub className="w-[18px] h-[18px]" />
-          </a>
+        {/* RIGHT: Actions */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-2 mr-2 border-r border-border/50 pr-4">
+            <a
+              href="https://github.com/dev-palwar/frameful"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View Frameful on GitHub"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              <LucideGithub className="w-4 h-4" />
+            </a>
 
-          {/* CTA */}
+            <div className="scale-90">
+              <ThemeToggle />
+            </div>
+          </div>
+
           <Button
             id="header-record-btn"
             size="sm"
-            className="gap-1.5 rounded-lg hidden sm:inline-flex"
+            className="gap-2 rounded-full px-5 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
             onClick={() => navigate("/record")}
           >
-            Start recording
+            <span className="font-semibold hidden sm:inline-block">
+              Start Studio
+            </span>
+            <span className="font-semibold sm:hidden">Start</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };
 

@@ -40,6 +40,9 @@ export function useExport(): ExportState & {
         // Phase 1: canvas render maps to 0–50%
         (p) => setProgress(p * 0.5),
       );
+      // Hold at 100% briefly so the user sees completion before the bar resets
+      setProgress(1);
+      await new Promise((res) => setTimeout(res, 1500));
     } finally {
       setIsExporting(false);
       setProgress(0);

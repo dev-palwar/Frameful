@@ -112,15 +112,15 @@ export const COMING_SOON_CONFIG = {
 /* ── Waitlist ── */
 export const WAITLIST_CONFIG = {
   formspreeEndpoint: "https://formspree.io/f/xpqjynpw",
-  badgeLabel: "Join the waitlist",
-  headline: "Be first to try new features.",
+  badgeLabel: "Don't be late to the party",
+  headline: "Get the good stuff first.",
   subtext:
-    "Auto zoom-in, advanced editing, and the browser extension are coming soon. Drop your email and we'll let you know when they're ready.",
-  inputPlaceholder: "you@email.com",
-  ctaLabel: "Notify me",
-  successMessage: "You're on the list! We'll reach out soon.",
-  errorMessage: "Something went wrong. Please try again.",
-  disclaimer: "No spam. We'll only email you about new features.",
+    "Auto-zoom, advanced editing, and browser extensions are dropping soon. Drop your email and we'll slide into your inbox (respectfully) when it's live.",
+  inputPlaceholder: "your.cool@email.com",
+  ctaLabel: "I'm in",
+  successMessage: "Boom. You're on the list. Keep an eye on your inbox.",
+  errorMessage: "Yikes, something broke. Try again?",
+  disclaimer: "We hate spam as much as you do. Only the good stuff, promise.",
 };
 
 /* ── Footer ── */

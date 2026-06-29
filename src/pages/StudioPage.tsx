@@ -124,6 +124,7 @@ export default function StudioPage() {
       outputHeight,
       crf: 22,
       designSettings,
+      zoomEvents,
       ...layout,
     });
   };

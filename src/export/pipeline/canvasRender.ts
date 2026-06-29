@@ -1,4 +1,5 @@
 import type { ExportOptions, CanvasLayout } from "../types";
+import { resolveZoomTransform } from "@/lib/zoom";
 
 /** Clips ctx to a rounded rect path. */
 function clipRounded(
@@ -36,7 +37,7 @@ export async function renderToCanvasBlob(
   onProgress?: (t: number) => void,
 ): Promise<Blob> {
   const { outputWidth: W, outputHeight: H, designSettings: ds } = opts;
-  const { svw, svh, vx, vy, effectiveTrimEnd } = layout;
+  const { svw, svh, vx, vy, effectiveTrimEnd: layoutTrimEnd } = layout;
 
   // ── Resolve design values ───────────────────────────────────────────────────
   const padding     = ds.padding      ?? 0;
@@ -95,12 +96,43 @@ export async function renderToCanvasBlob(
 
   const bgImg = opts.backgroundUrl ? await loadImage(opts.backgroundUrl) : null;
 
-  const videoEl        = document.createElement("video");
-  videoEl.muted        = true;
-  videoEl.playsInline  = true;
-  videoEl.src          = URL.createObjectURL(opts.videoBlob);
-  videoEl.currentTime  = opts.trimStart;
-  await new Promise<void>((res) => { videoEl.onseeked = () => res(); videoEl.load(); });
+  const blobUrl = URL.createObjectURL(opts.videoBlob);
+  const videoEl = document.createElement("video");
+  videoEl.muted       = true;
+  videoEl.playsInline = true;
+  videoEl.preload     = "auto";
+  videoEl.src         = blobUrl;
+
+  // Wait for metadata so duration may be available
+  await new Promise<void>((res, rej) => {
+    videoEl.onerror = () => rej(new Error("Export: failed to load video blob"));
+    videoEl.onloadedmetadata = () => res();
+    videoEl.load();
+  });
+
+  // MediaRecorder WebM blobs have no duration in their header, so the browser
+  // reports Infinity. Seek to a huge time — the browser will clamp to the real
+  // end and update videoEl.duration to the true value.
+  if (!isFinite(videoEl.duration)) {
+    await new Promise<void>((res) => {
+      const onSeeked = () => { videoEl.removeEventListener("seeked", onSeeked); res(); };
+      videoEl.addEventListener("seeked", onSeeked);
+      videoEl.currentTime = 1e9;
+    });
+  }
+
+  // Now seek to the actual trim-start position
+  await new Promise<void>((res) => {
+    const onSeeked = () => { videoEl.removeEventListener("seeked", onSeeked); res(); };
+    videoEl.addEventListener("seeked", onSeeked);
+    videoEl.currentTime = opts.trimStart;
+  });
+
+  // Resolve the true effective trim-end now that the browser knows the duration
+  const realDuration     = isFinite(videoEl.duration) ? videoEl.duration : layoutTrimEnd;
+  const clampedTrimEnd   = isFinite(layoutTrimEnd) ? layoutTrimEnd : realDuration;
+  const effectiveTrimEnd = Math.min(clampedTrimEnd, realDuration);
+  const duration         = Math.max(effectiveTrimEnd - opts.trimStart, 0.001);
 
   // ── Frame draw ─────────────────────────────────────────────────────────────
   function drawFrame() {
@@ -162,13 +194,35 @@ export async function renderToCanvasBlob(
     }
     ctx.restore();
 
-    // 4. Video (clipped to border-radius, with opacity)
+    // 4. Video (clipped to border-radius + zoom transform applied)
+    //    Resolve the zoom state at the current playhead position.
+    const zoom = resolveZoomTransform(videoEl.currentTime, opts.zoomEvents);
+
     ctx.save();
     ctx.globalAlpha = opacity;
+
+    // Clip to the video slot (respects border-radius)
     if (borderRadius > 0) {
       clipRounded(ctx, vidX, vidY, vidW, vidH, Math.max(0, borderRadius - padding * 5) * scale);
       ctx.clip();
+    } else {
+      // Always clip to slot bounds so zoom doesn't bleed outside the container
+      ctx.beginPath();
+      ctx.rect(vidX, vidY, vidW, vidH);
+      ctx.clip();
     }
+
+    if (zoom && zoom.scale > 1) {
+      // Compute the canvas-space focal point (origin is 0–1 within the video slot)
+      const focalX = vidX + zoom.originX * vidW;
+      const focalY = vidY + zoom.originY * vidH;
+
+      // Translate so focal point stays fixed, scale around it
+      ctx.translate(focalX, focalY);
+      ctx.scale(zoom.scale, zoom.scale);
+      ctx.translate(-focalX, -focalY);
+    }
+
     ctx.drawImage(videoEl, vidX, vidY, vidW, vidH);
     ctx.restore();
 
@@ -209,21 +263,27 @@ export async function renderToCanvasBlob(
 
   return new Promise<Blob>((resolve, reject) => {
     recorder.onstop  = () => {
-      URL.revokeObjectURL(videoEl.src);
+      URL.revokeObjectURL(blobUrl);
       resolve(new Blob(chunks, { type: "video/webm" }));
     };
     recorder.onerror = reject;
     recorder.start(100); // emit data every 100 ms
 
-    const duration = effectiveTrimEnd - opts.trimStart;
+    // `duration` and `effectiveTrimEnd` are resolved above from the real video duration
 
     const tick = () => {
-      drawFrame();
-      onProgress?.((videoEl.currentTime - opts.trimStart) / duration);
-      if (videoEl.currentTime < effectiveTrimEnd && !videoEl.ended && !videoEl.paused) {
-        requestAnimationFrame(tick);
-      } else {
-        recorder.stop();
+      try {
+        drawFrame();
+        onProgress?.((videoEl.currentTime - opts.trimStart) / duration);
+        if (videoEl.currentTime < effectiveTrimEnd && !videoEl.ended && !videoEl.paused) {
+          requestAnimationFrame(tick);
+        } else {
+          if (recorder.state === "recording") recorder.stop();
+        }
+      } catch (err) {
+        // Errors inside rAF are otherwise uncaught and cause an infinite hang
+        if (recorder.state === "recording") recorder.stop();
+        reject(err);
       }
     };
 

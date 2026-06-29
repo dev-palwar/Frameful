@@ -1,5 +1,6 @@
 import type { ExportLayout } from "@/components/video/hooks";
 import type { DesignSettings } from "@/components/toolbar/types";
+import type { ZoomEvent } from "@/lib/zoom";
 
 /**
  * Everything the export pipeline needs to produce the output file.
@@ -32,6 +33,10 @@ export interface ExportOptions {
   // ── Design ──────────────────────────────────────────────────────────────────
   /** All design tab settings — padding, shadow, blur, opacity, etc. */
   designSettings: DesignSettings;
+
+  // ── Zoom ────────────────────────────────────────────────────────────────────
+  /** Zoom events to bake into the exported video (same as preview). */
+  zoomEvents: ZoomEvent[];
 
   // ── Output ──────────────────────────────────────────────────────────────────
   outputWidth:  number;
