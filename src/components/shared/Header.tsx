@@ -1,14 +1,5 @@
-<<<<<<< Updated upstream
-import { useEffect, useState } from "react";
-import { LucideGithub, ArrowRight, Video } from "lucide-react";
-=======
-<<<<<<< Updated upstream
-import { LucideGithub } from "lucide-react";
-=======
 import { useEffect, useState } from "react";
 import { LucideGithub, ArrowRight } from "lucide-react";
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 import { useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -44,24 +35,12 @@ const Header = () => {
           onClick={() => navigate("/")}
           className="cursor-pointer flex items-center gap-3 group"
         >
-<<<<<<< Updated upstream
-          <span className="font-extrabold tracking-tight text-lg bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 hidden sm:inline-block">
-            Frameful
-=======
-<<<<<<< Updated upstream
-          <div className="relative inline-block">
-            <span className="bg-brand-gradient text-primary-foreground px-3 py-1 inline-block type-label tracking-widest uppercase">
-              FrameFul
-=======
           <span className="font-extrabold tracking-tight text-lg bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 hidden sm:inline-block">
             Cutline
->>>>>>> Stashed changes
           </span>
           <span className="flex items-center justify-center rounded-full px-2 py-0.5 text-[10px] font-bold ring-1 ring-primary/30 bg-primary/10 text-primary uppercase tracking-wider hidden sm:flex">
             Beta
           </span>
-<<<<<<< Updated upstream
-=======
         </div>
 
         {/* RIGHT: Actions */}
@@ -72,45 +51,6 @@ const Header = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View Cutline on GitHub"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-            >
-              <LucideGithub className="w-4 h-4" />
-            </a>
-
-            <div className="scale-90">
-              <ThemeToggle />
-            </div>
-          </div>
-
-          <Button
-            id="header-record-btn"
-            size="sm"
-            className="gap-2 rounded-full px-5 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
-            onClick={() => navigate("/record")}
-          >
-            <span className="font-semibold hidden sm:inline-block">
-              Start Studio
->>>>>>> Stashed changes
-            </span>
-            {/* v1 badge */}
-            <span
-              className="absolute -top-2 -right-2 flex items-center justify-center rounded-full px-1.5 py-0.5 type-overline ring-1 ring-white/20 bg-brand-gradient text-primary-foreground"
-              style={{ fontSize: "9px" }}
-            >
-              v1
-            </span>
-          </div>
->>>>>>> Stashed changes
-        </div>
-
-        {/* RIGHT: Actions */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          <div className="flex items-center gap-1 sm:gap-2 mr-2 border-r border-border/50 pr-4">
-            <a
-              href="https://github.com/dev-palwar/frameful"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View Frameful on GitHub"
               className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
             >
               <LucideGithub className="w-4 h-4" />

@@ -46,30 +46,15 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-          <Typography variant="caption" className="text-muted-foreground">
-            {copyright}
-          </Typography>
-=======
->>>>>>> Stashed changes
           <div className="flex items-center gap-1.5">
             <Typography variant="caption" className="text-muted-foreground">
               Made with
             </Typography>
             <Heart className="h-3 w-3 text-primary fill-primary animate-pulse" />
             <Typography variant="caption" className="text-muted-foreground">
-<<<<<<< Updated upstream
-              © 2026 Frameful
-            </Typography>
-          </div>
-=======
               © 2026 Cutline
             </Typography>
           </div>
->>>>>>> Stashed changes
->>>>>>> Stashed changes
         </div>
       </div>
     </footer>
