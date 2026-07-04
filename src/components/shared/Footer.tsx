@@ -15,6 +15,7 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between gap-8 sm:flex-row">
           {/* Brand */}
           <div className="flex items-center gap-3">
+            <img src="/cutline-logo.png" alt="Cutline Logo" className="h-8 w-auto object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
             <span className="bg-brand-gradient text-primary-foreground px-3 py-1 type-label tracking-widest uppercase font-bold">
               {brandName}
             </span>

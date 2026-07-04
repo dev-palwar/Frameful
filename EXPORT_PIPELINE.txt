@@ -239,7 +239,7 @@ STEP 7 — TRIGGER THE DOWNLOAD
     const url = URL.createObjectURL(resultBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "frameful-edited-YYYY-MM-DD.webm";
+    link.download = "Cutline-edited-YYYY-MM-DD.webm";
     link.click();
 
 When recorder.stop() is called in the loop, a `recorder.onstop` event fires.

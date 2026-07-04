@@ -25,8 +25,16 @@ const THEME_LABELS: Record<(typeof THEME_VARIANTS)[number], string> = {
 };
 
 // ── Button Control variants ──────────────────────────────────────────────────
-const BUTTON_CONTROL_VARIANTS = ["all", "close-only", "min-max", "none"] as const;
-const BUTTON_CONTROL_LABELS: Record<(typeof BUTTON_CONTROL_VARIANTS)[number], string> = {
+const BUTTON_CONTROL_VARIANTS = [
+  "all",
+  "close-only",
+  "min-max",
+  "none",
+] as const;
+const BUTTON_CONTROL_LABELS: Record<
+  (typeof BUTTON_CONTROL_VARIANTS)[number],
+  string
+> = {
   all: "All",
   "close-only": "Close Only",
   "min-max": "Min / Max",
@@ -42,7 +50,10 @@ const BUTTON_POSITION_VARIANTS = [
   "bottom-center",
   "bottom-right",
 ] as const;
-const BUTTON_POSITION_LABELS: Record<(typeof BUTTON_POSITION_VARIANTS)[number], string> = {
+const BUTTON_POSITION_LABELS: Record<
+  (typeof BUTTON_POSITION_VARIANTS)[number],
+  string
+> = {
   "top-left": "Top Left",
   "top-center": "Top Center",
   "top-right": "Top Right",
@@ -51,7 +62,10 @@ const BUTTON_POSITION_LABELS: Record<(typeof BUTTON_POSITION_VARIANTS)[number], 
   "bottom-right": "Bot Right",
 };
 
-const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) => {
+const FrameTab: React.FC<ToolBarProps> = ({
+  frameSettings,
+  setFrameSettings,
+}) => {
   const update = (key: keyof typeof frameSettings, value: unknown) =>
     setFrameSettings((prev) => ({ ...prev, [key]: value }));
 
@@ -102,7 +116,7 @@ const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) =
           <input
             type="text"
             className="w-full bg-black/20 border border-white/10 rounded-md px-3 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:border-brand-primary"
-            placeholder="e.g. frameful.com"
+            placeholder="e.g. Cutline.com"
             value={frameSettings.url || ""}
             onChange={(e) => update("url", e.target.value)}
           />
@@ -119,10 +133,7 @@ const FrameTab: React.FC<ToolBarProps> = ({ frameSettings, setFrameSettings }) =
               isActive={buttonControls === v}
               onClick={() => update("buttonControls", v)}
             >
-              <ButtonControlPreview
-                variant={v}
-                style="macos"
-              />
+              <ButtonControlPreview variant={v} style="macos" />
             </OptionButton>
           ))}
         </div>

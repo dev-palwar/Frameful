@@ -23,7 +23,7 @@ export const HERO_CONFIG = {
   primaryCtaLabel: "Start recording — it's free",
   secondaryCtaLabel: "See how it works",
   browserSupportNote: "Works on Chrome, Edge, Brave & Firefox",
-  mockAddressBar: "frameful.devpalwar.xyz/studio",
+  mockAddressBar: "Cutline.devpalwar.xyz/studio",
   mockLabels: ["Custom Background", "Trim & Export", "1080p"] as const,
 };
 
@@ -132,7 +132,7 @@ export interface FooterLink {
 }
 
 export const FOOTER_CONFIG = {
-  brandName: "frameful",
+  brandName: "Cutline",
   copyright: "© 2026 Cutline. All rights reserved.",
   links: [
     { label: "Privacy", href: "/privacy", internal: true },

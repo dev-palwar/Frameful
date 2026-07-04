@@ -602,7 +602,7 @@
 }
 
 /* ── ZoomFocusPicker animations ─────────────────────────────────────────── */
-@keyframes frameful-spin {
+@keyframes Cutline-spin {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
   }
@@ -612,7 +612,7 @@
   }
 }
 
-@keyframes frameful-pulse {
+@keyframes Cutline-pulse {
 
   0%,
   100% {
@@ -626,7 +626,7 @@
   }
 }
 
-@keyframes frameful-fadein {
+@keyframes Cutline-fadein {
   from {
     opacity: 0;
     transform: translateY(4px);

@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cutline Auto Zoom</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       width: 260px;
@@ -84,8 +89,15 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
     }
 
     .count {
@@ -96,18 +108,18 @@
 
     .hint {
       font-size: 11px;
-      color: #52525b;
       text-align: center;
       line-height: 1.5;
     }
   </style>
 </head>
+
 <body>
   <div class="header">
-    <div class="logo">⚡</div>
+    <img src="cutline-logo.png" alt="Cutline Logo" style="height: 32px; width: auto; object-fit: contain;" />
     <div class="header-text">
       <h1>Cutline Auto Zoom</h1>
-      <p>Click capture companion</p>
+      <p style="margin-top: 0.35rem;">Click capture companion</p>
     </div>
   </div>
 
@@ -127,4 +139,5 @@
 
   <script src="popup.js"></script>
 </body>
+
 </html>
