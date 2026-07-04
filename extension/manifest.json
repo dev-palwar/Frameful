@@ -27,17 +27,22 @@
   "externally_connectable": {
     "matches": [
       "http://localhost:*/*",
-      "https://cutline.app/*",
-      "https://*.cutline.app/*"
+      "https://cutline.devpalwar.me/*",
+      "https://*.cutline.devpalwar.me/*"
     ]
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Cutline Auto Zoom"
+    "default_title": "Cutline Auto Zoom",
+    "default_icon": {
+      "16": "icons/icon16-v2.png",
+      "48": "icons/icon48-v2.png",
+      "128": "icons/icon128-v2.png"
+    }
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon16-v2.png",
+    "48": "icons/icon48-v2.png",
+    "128": "icons/icon128-v2.png"
   }
 }
