@@ -41,7 +41,7 @@ export default function StudioPage() {
     theme: "dark",
     buttonControls: "all",
     buttonPosition: "top-left",
-    url: "frameful.com",
+    url: "Cutline.com",
   });
   const videoPlayerRef = useRef<VideoPlayerHandle>(null);
 
@@ -120,7 +120,7 @@ export default function StudioPage() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `frameful-raw-${new Date().toISOString().slice(0, 10)}.webm`;
+      link.download = `Cutline-raw-${new Date().toISOString().slice(0, 10)}.webm`;
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
       return;

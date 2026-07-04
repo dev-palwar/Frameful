@@ -34,17 +34,14 @@ export function ZoomFocusPicker({
     requestAnimationFrame(() => setMounted(true));
   }, []);
 
-  const getRelativePos = useCallback(
-    (clientX: number, clientY: number) => {
-      if (!overlayRef.current) return { x: 0.5, y: 0.5 };
-      const rect = overlayRef.current.getBoundingClientRect();
-      return {
-        x: Math.max(0.05, Math.min(0.95, (clientX - rect.left) / rect.width)),
-        y: Math.max(0.05, Math.min(0.95, (clientY - rect.top) / rect.height)),
-      };
-    },
-    [],
-  );
+  const getRelativePos = useCallback((clientX: number, clientY: number) => {
+    if (!overlayRef.current) return { x: 0.5, y: 0.5 };
+    const rect = overlayRef.current.getBoundingClientRect();
+    return {
+      x: Math.max(0.05, Math.min(0.95, (clientX - rect.left) / rect.width)),
+      y: Math.max(0.05, Math.min(0.95, (clientY - rect.top) / rect.height)),
+    };
+  }, []);
 
   // Global drag handlers
   useEffect(() => {
@@ -132,7 +129,7 @@ export function ZoomFocusPicker({
             top: "50%",
             left: "50%",
             transform: "translate(-50%,-50%)",
-            animation: "frameful-spin 5s linear infinite",
+            animation: "Cutline-spin 5s linear infinite",
           }}
         />
         {/* Pulsing inner ring */}
@@ -144,11 +141,12 @@ export function ZoomFocusPicker({
             borderRadius: "50%",
             border: "1.5px solid rgba(168,85,247,0.55)",
             background: "rgba(168,85,247,0.08)",
-            boxShadow: "0 0 22px rgba(168,85,247,0.35), inset 0 0 12px rgba(168,85,247,0.1)",
+            boxShadow:
+              "0 0 22px rgba(168,85,247,0.35), inset 0 0 12px rgba(168,85,247,0.1)",
             top: "50%",
             left: "50%",
             transform: "translate(-50%,-50%)",
-            animation: "frameful-pulse 2s ease-in-out infinite",
+            animation: "Cutline-pulse 2s ease-in-out infinite",
           }}
         />
         {/* Center dot */}
@@ -205,7 +203,7 @@ export function ZoomFocusPicker({
           whiteSpace: "nowrap",
           border: "1px solid rgba(255,255,255,0.08)",
           pointerEvents: "none",
-          animation: "frameful-fadein 0.3s ease-out 0.1s both",
+          animation: "Cutline-fadein 0.3s ease-out 0.1s both",
         }}
       >
         Click or drag to set the zoom focus point
@@ -220,7 +218,7 @@ export function ZoomFocusPicker({
           transform: "translateX(-50%)",
           display: "flex",
           gap: 8,
-          animation: "frameful-fadein 0.3s ease-out 0.15s both",
+          animation: "Cutline-fadein 0.3s ease-out 0.15s both",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -242,8 +240,12 @@ export function ZoomFocusPicker({
             fontWeight: 500,
             transition: "color 0.15s, border-color 0.15s",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#e4e4e7"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#a1a1aa"; }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "#e4e4e7";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "#a1a1aa";
+          }}
         >
           <X style={{ width: 12, height: 12 }} />
           Cancel
@@ -267,8 +269,12 @@ export function ZoomFocusPicker({
             boxShadow: "0 0 18px rgba(168,85,247,0.4)",
             transition: "opacity 0.15s, box-shadow 0.15s",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.88"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.opacity = "0.88";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.opacity = "1";
+          }}
         >
           <Check style={{ width: 12, height: 12 }} />
           Set Zoom Here
