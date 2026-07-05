@@ -7,11 +7,14 @@ import App from "./App.tsx";
 import { RecorderProvider } from "./providers/recorder-provider.tsx";
 import { ThemeProvider } from "./providers/theme-provider.tsx";
 
+import { Analytics } from "@vercel/analytics/react";
+
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
     <BrowserRouter>
       <RecorderProvider>
         <App />
+        <Analytics />
       </RecorderProvider>
     </BrowserRouter>
   </ThemeProvider>
