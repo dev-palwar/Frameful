@@ -16,12 +16,16 @@ export function buildFilterGraph(
   const blurAmount   = (ds.blurAmount  ?? 50) / 100;   
   const designScale  = ds.scale        ?? 1.0;
 
-  const paddingFrac = Math.min(padding / 10, 0.35); 
-  const paddedW = Math.round(svw * (1 - paddingFrac * 2) * designScale);
-  const paddedH = Math.round(svh * (1 - paddingFrac * 2) * designScale);
-  
-  const paddedX = Math.round(vx + (svw - paddedW) / 2);
-  const paddedY = Math.round(vy + (svh - paddedH) / 2);
+  const scale = W / 1280;
+  const padPx = Math.round(padding * 16 * scale);
+  const conW = Math.round(svw * designScale);
+  const conH = Math.round(svh * designScale);
+  const conX = Math.round(vx + (svw - conW) / 2);
+  const conY = Math.round(vy + (svh - conH) / 2);
+  const paddedW = Math.max(1, conW - padPx * 2);
+  const paddedH = Math.max(1, conH - padPx * 2);
+  const paddedX = conX + padPx;
+  const paddedY = conY + padPx;
 
   const opacityVal = (opacity / 100).toFixed(3);
 

@@ -2,50 +2,43 @@ import type { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import type { ExportOptions } from "../types";
 import { computeLayout } from "./layout";
-import { renderToCanvasBlob } from "./canvasRender";
+import { renderFrames } from "./canvasRender";
 
 export async function runExport(
   ffmpeg: FFmpeg,
   opts: ExportOptions,
   onCanvasProgress?: (p: number) => void,
 ): Promise<void> {
-  
   const videoDuration = await probeDuration(opts.videoBlob);
   const layout = computeLayout(opts, videoDuration);
 
-  const renderedBlob = await renderToCanvasBlob(opts, layout, onCanvasProgress);
+  const { totalFrames, fps } = await renderFrames(
+    opts,
+    layout,
+    async (i, jpeg) => {
+      await ffmpeg.writeFile(`f${String(i).padStart(5, "0")}.jpg`, jpeg);
+    },
+    onCanvasProgress,
+  );
 
-  await ffmpeg.writeFile("rendered.webm", await fetchFile(renderedBlob));
   await ffmpeg.writeFile("input.webm", await fetchFile(opts.videoBlob));
 
-  const { trimStart } = opts;
-  const { duration } = layout;
-
   await ffmpeg.exec([
-    "-i",
-    "rendered.webm", 
-    "-i",
-    "input.webm", 
-    "-map",
-    "0:v:0", 
-    "-map",
-    "1:a:0?", 
-    "-ss",
-    String(trimStart),
-    "-t",
-    String(duration),
-    "-c:v",
-    "libx264",
-    "-crf",
-    String(opts.crf),
-    "-preset",
-    "fast",
-    "-movflags",
-    "+faststart",
-    "-c:a",
-    "aac",
-    "-b:a",
-    "128k",
+    "-framerate", String(fps),
+    "-i", "f%05d.jpg",
+    "-ss", String(opts.trimStart),
+    "-t", String(layout.duration),
+    "-i", "input.webm",
+    "-map", "0:v",
+    "-map", "1:a:0?",
+    "-c:v", "libx264",
+    "-crf", String(opts.crf),
+    "-pix_fmt", "yuv420p",
+    "-preset", "fast",
+    "-movflags", "+faststart",
+    "-c:a", "aac",
+    "-b:a", "128k",
+    "-shortest",
     "output.mp4",
   ]);
 
@@ -54,9 +47,17 @@ export async function runExport(
     new Blob([data as unknown as ArrayBuffer], { type: "video/mp4" }),
   );
 
-  for (const f of ["rendered.webm", "input.webm", "output.mp4"]) {
-    await ffmpeg.deleteFile(f).catch(() => {});
+  const cleanups: Promise<unknown>[] = [];
+  for (let i = 0; i < totalFrames; i++) {
+    cleanups.push(
+      ffmpeg.deleteFile(`f${String(i).padStart(5, "0")}.jpg`).catch(() => {}),
+    );
   }
+  cleanups.push(
+    ffmpeg.deleteFile("input.webm").catch(() => {}),
+    ffmpeg.deleteFile("output.mp4").catch(() => {}),
+  );
+  await Promise.all(cleanups);
 }
 
 function probeDuration(blob: Blob): Promise<number> {

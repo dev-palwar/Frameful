@@ -12,20 +12,8 @@ export function computeLayout(
   const aW = W - PADDING_X * 2;
   const aH = H - PADDING_Y * 2;
 
-  const videoAR = opts.videoNativeWidth / (opts.videoNativeHeight || 1);
-
-  let vw: number;
-  let vh: number;
-  if (videoAR > aW / aH) {
-    vw = aW;
-    vh = Math.round(aW / videoAR);
-  } else {
-    vh = aH;
-    vw = Math.round(aH * videoAR);
-  }
-
-  const svw = Math.round(vw * opts.scale);
-  const svh = Math.round(vh * opts.scale);
+  const svw = Math.round(aW * opts.scale);
+  const svh = Math.round(aH * opts.scale);
 
   const canvasPosX = Math.round(opts.posX_frac * W);
   const canvasPosY = Math.round(opts.posY_frac * H);

@@ -1,5 +1,11 @@
 import { Routes, Route } from "react-router";
-import { LandingPage, StudioPage, RecordingPage, PrivacyPage, ComingSoonExtPage } from "@/pages";
+import {
+  LandingPage,
+  StudioPage,
+  RecordingPage,
+  PrivacyPage,
+  ComingSoonExtPage,
+} from "@/pages";
 
 export default function App() {
   return (
