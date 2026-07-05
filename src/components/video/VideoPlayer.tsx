@@ -78,6 +78,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
     const {
       containerRef,
+      boundsRef,
       wrapperRef,
       scale,
       posX,
@@ -87,6 +88,11 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       setIsSelected,
       startDrag,
       startResize,
+      startCrop,
+      cropTop,
+      cropRight,
+      cropBottom,
+      cropLeft,
     } = useVideoTransform();
 
     const { getExportLayout } = useExportLayout({
@@ -221,26 +227,31 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
               {}
               <div
+                ref={boundsRef}
                 className={`absolute inset-0 flex items-center justify-center p-3 sm:p-5 lg:p-8 overflow-hidden ${className}`}
               >
-                <div
-                  ref={wrapperRef}
-                  id="video-resize-wrapper"
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    transform: `translate(${posX}px, ${posY}px) scale(${scale})`,
-                    transformOrigin: "center center",
-                    cursor: isSelected ? "move" : "default",
-                    userSelect: "none",
-                  }}
-                  onMouseDown={startDrag}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsSelected(true);
-                  }}
-                >
+                <div className="relative w-full h-full" style={{ pointerEvents: "none", containerType: "size" }}>
+                  <div
+                    ref={wrapperRef}
+                    id="video-resize-wrapper"
+                    style={{
+                      position: "absolute",
+                      top: `${cropTop}%`,
+                      bottom: `${cropBottom}%`,
+                      left: `${cropLeft}%`,
+                      right: `${cropRight}%`,
+                      transform: `translate(${posX}px, ${posY}px) scale(${scale})`,
+                      transformOrigin: "center center",
+                      cursor: isSelected ? "move" : "default",
+                      userSelect: "none",
+                      pointerEvents: "auto",
+                    }}
+                    onMouseDown={startDrag}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsSelected(true);
+                    }}
+                  >
                   <div
                     className={`w-full h-full flex items-center justify-center transition-all overflow-hidden ${getStyleClasses()}`}
                     style={{
@@ -255,41 +266,55 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                       settings={frameSettings}
                       innerRadius={innerRadius}
                     >
-                      <video
-                        ref={videoRef}
-                        id="studio-video-player"
-                        src={videoUrl}
-                        className="w-full h-full object-cover"
+                      <div
+                        className="w-full h-full overflow-hidden relative"
                         style={{
-                          pointerEvents: "none",
-                          display: "block",
                           borderRadius:
                             frameSettings && frameSettings.osFrame !== "none"
                               ? 0
                               : innerRadius,
-                          
-                          transform: activeTransform
-                            ? `scale(${activeTransform.scale})`
-                            : undefined,
-                          transformOrigin: activeTransform
-                            ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
-                            : "center center",
-
                         }}
-                      />
-                      {}
-                      {placingZoom &&
-                        onFocusChange &&
-                        onConfirmZoom &&
-                        onCancelZoom && (
-                          <ZoomFocusPicker
-                            originX={placingZoom.originX}
-                            originY={placingZoom.originY}
-                            onFocusChange={onFocusChange}
-                            onConfirm={onConfirmZoom}
-                            onCancel={onCancelZoom}
+                      >
+                        <div
+                          className="absolute"
+                          style={{
+                            width: `calc(100% + ${cropLeft + cropRight}cqw)`,
+                            height: `calc(100% + ${cropTop + cropBottom}cqh)`,
+                            left: `calc(-${cropLeft}cqw)`,
+                            top: `calc(-${cropTop}cqh)`,
+                          }}
+                        >
+                          <video
+                            ref={videoRef}
+                            id="studio-video-player"
+                            src={videoUrl}
+                            className="w-full h-full object-cover"
+                            style={{
+                              pointerEvents: "none",
+                              display: "block",
+                              transform: activeTransform
+                                ? `scale(${activeTransform.scale})`
+                                : undefined,
+                              transformOrigin: activeTransform
+                                ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
+                                : "center center",
+                            }}
                           />
-                        )}
+                          {}
+                          {placingZoom &&
+                            onFocusChange &&
+                            onConfirmZoom &&
+                            onCancelZoom && (
+                              <ZoomFocusPicker
+                                originX={placingZoom.originX}
+                                originY={placingZoom.originY}
+                                onFocusChange={onFocusChange}
+                                onConfirm={onConfirmZoom}
+                                onCancel={onCancelZoom}
+                              />
+                            )}
+                        </div>
+                      </div>
                     </FrameWrapper>
                   </div>
 
@@ -328,33 +353,49 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                       </div>
 
                       {}
-                      {HANDLES.map((h) => (
-                        <div
-                          key={h.id}
-                          onMouseDown={(e) => startResize(e, h.dx, h.dy)}
-                          style={{
-                            position: "absolute",
-                            width: 10,
-                            height: 10,
-                            background: "hsl(var(--brand, 265 80% 65%))",
-                            border: "2px solid #fff",
-                            borderRadius: 2,
-                            cursor: h.cursor,
-                            zIndex: 10,
-                            ...("top" in h && { top: h.top }),
-                            ...("left" in h && { left: h.left }),
-                            ...("right" in h && { right: h.right }),
-                            ...("bottom" in h && { bottom: h.bottom }),
-                            transform:
-                              ("left" in h && h.left === "50%") ||
-                              ("top" in h && h.top === "50%")
-                                ? "translate(-50%, -50%)"
-                                : undefined,
-                          }}
-                        />
-                      ))}
+                      {HANDLES.map((h) => {
+                        const isCropHandle = h.id === "n" || h.id === "s" || h.id === "e" || h.id === "w";
+                        
+                        let hTop, hBottom, hLeft, hRight, hTransform;
+                        if (h.id.includes("n")) hTop = -5;
+                        if (h.id.includes("s")) hBottom = -5;
+                        if (h.id.includes("w")) hLeft = -5;
+                        if (h.id.includes("e")) hRight = -5;
+
+                        if (h.id === "n" || h.id === "s") {
+                          hLeft = "50%";
+                          hTransform = "translateX(-50%)";
+                        }
+                        if (h.id === "w" || h.id === "e") {
+                          hTop = "50%";
+                          hTransform = "translateY(-50%)";
+                        }
+
+                        return (
+                          <div
+                            key={h.id}
+                            onMouseDown={(e) => isCropHandle ? startCrop(e, h.dx, h.dy) : startResize(e, h.dx, h.dy)}
+                            style={{
+                              position: "absolute",
+                              width: 10,
+                              height: 10,
+                              background: "hsl(var(--brand, 265 80% 65%))",
+                              border: "2px solid #fff",
+                              borderRadius: 2,
+                              cursor: h.cursor,
+                              zIndex: 10,
+                              top: hTop,
+                              bottom: hBottom,
+                              left: hLeft,
+                              right: hRight,
+                              transform: hTransform,
+                            }}
+                          />
+                        );
+                      })}
                     </>
                   )}
+                </div>
                 </div>
               </div>
             </div>
