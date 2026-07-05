@@ -17,11 +17,6 @@ interface VideoPlaybackState {
   seekTo: (time: number) => void;
 }
 
-/**
- * Manages all HTMLVideoElement event listeners and play/pause logic.
- * Owns: duration, currentTime, isPlaying.
- * Handles: loadedmetadata, timeupdate, play, pause events.
- */
 export function useVideoPlayback({
   videoUrl,
   trimStart,
@@ -34,7 +29,6 @@ export function useVideoPlayback({
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Load metadata and initialise trim range on source change
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -49,7 +43,6 @@ export function useVideoPlayback({
 
   const lastTimeRef = useRef(0);
 
-  // Track time and enforce trim boundaries
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -59,7 +52,6 @@ export function useVideoPlayback({
       const currTime = video.currentTime;
       setCurrentTime(currTime);
 
-      // Only pause and snap back if we naturally played across the trimEnd boundary
       if (prevTime < trimEnd && currTime >= trimEnd && !video.paused) {
         video.pause();
         setIsPlaying(false);

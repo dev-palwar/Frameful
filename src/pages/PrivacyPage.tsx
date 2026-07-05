@@ -7,7 +7,7 @@ export default function PrivacyPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
+      {}
       <div className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-4xl items-center gap-4 px-6">
           <button
@@ -22,9 +22,9 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      {/* Content */}
+      {}
       <div className="mx-auto max-w-3xl px-6 py-16">
-        {/* Header */}
+        {}
         <div className="mb-12">
           <Typography variant="overline" className="text-primary mb-3 block">
             Legal
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
           </Typography>
         </div>
 
-        {/* TL;DR callout */}
+        {}
         <div className="mb-12 rounded-md border border-primary/25 bg-primary/5 p-6">
           <Typography variant="overline" className="text-primary mb-1 block">
             The short version
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
           </Typography>
         </div>
 
-        {/* Body sections */}
+        {}
         <div className="space-y-10">
           <Section title="1. What Cutline does">
             Cutline is a client-side web application. When you record your

@@ -37,7 +37,7 @@ export default function ComingSoonSection() {
 
   return (
     <section className="relative py-24 md:py-36 overflow-hidden" ref={ref}>
-      {/* Background */}
+      {}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="absolute bottom-0 left-1/4 h-[400px] w-[600px] rounded-full blur-[150px] opacity-8"
@@ -46,7 +46,7 @@ export default function ComingSoonSection() {
       </div>
 
       <div className="mx-auto max-w-5xl px-6">
-        {/* Section header */}
+        {}
         <div className="mx-auto max-w-2xl text-center">
           <div
             className={`inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 mb-4 transition-all duration-700 ${
@@ -92,12 +92,12 @@ export default function ComingSoonSection() {
                 }`}
                 style={{ transitionDelay: `${400 + i * 150}ms` }}
               >
-                {/* Icon */}
+                {}
                 <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 text-primary/60 transition-all duration-300 group-hover:bg-primary/10 group-hover:text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
 
-                {/* Status badge */}
+                {}
                 <div
                   className="mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1"
                   style={{ background: bg, color: text }}
@@ -121,7 +121,7 @@ export default function ComingSoonSection() {
                   {item.description}
                 </Typography>
 
-                {/* Decorative corner line */}
+                {}
                 <div className="absolute top-0 right-0 h-12 w-px bg-gradient-to-b from-primary/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="absolute top-0 right-0 h-px w-12 bg-gradient-to-l from-primary/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>

@@ -2,7 +2,6 @@ const TILE =
   "w-full h-full rounded-md overflow-hidden relative flex items-center justify-center";
 const BASE_STYLE = { background: "#222222" };
 
-/** px values used purely for the thumbnail visual */
 const BLUR_PX: Record<string, number> = {
   none: 0,
   subtle: 2,
@@ -19,7 +18,7 @@ export const BlurPreview = ({ variant }: BlurPreviewProps) => {
   return (
     <div className={TILE} style={BASE_STYLE}>
       <div className="relative translate-x-[38px] translate-y-[30px] h-[12vh] w-[11vw]">
-        {/* White card — blur amount reflects the variant */}
+        {}
         <div
           className="h-full w-full rounded-t-md bg-white"
           style={{ filter: px > 0 ? `blur(${px}px)` : "none" }}

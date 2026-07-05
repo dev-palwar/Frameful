@@ -1,10 +1,8 @@
 import React from "react";
 
 interface ButtonControlPreviewProps {
-  /** e.g. "all" | "close-only" | "min-max" | "none" */
-  variant: string;
-  /** macOS-style or Windows-style buttons */
-  style?: "macos" | "windows";
+    variant: string;
+    style?: "macos" | "windows";
 }
 
 const DOT_COLORS = {
@@ -123,7 +121,7 @@ export const ButtonControlPreview = ({
       className="w-full h-full rounded-md overflow-hidden flex flex-col"
       style={{ background: "#1e1e1e" }}
     >
-      {/* Titlebar strip */}
+      {}
       <div
         className="flex items-center px-2"
         style={{
@@ -138,7 +136,7 @@ export const ButtonControlPreview = ({
       >
         {renderButtons()}
       </div>
-      {/* Content */}
+      {}
       <div className="flex-1 bg-white/5 flex items-center justify-center">
         <div className="w-[55%] h-[50%] rounded bg-white/10 border border-white/8" />
       </div>

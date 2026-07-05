@@ -72,7 +72,7 @@ export default function StatsSection() {
     <section className="relative py-16 md:py-20" ref={ref}>
       <div className="mx-auto max-w-5xl px-6">
         <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm p-1">
-          {/* Gradient border effect */}
+          {}
           <div className="absolute inset-0 rounded-2xl" style={{ background: "linear-gradient(to right, color-mix(in srgb, var(--primary) 5%, transparent), transparent, color-mix(in srgb, var(--chart-4) 5%, transparent))" }} />
 
           <div className="relative grid grid-cols-2 gap-1 md:grid-cols-4">
@@ -104,7 +104,7 @@ export default function StatsSection() {
                   {stat.label}
                 </Typography>
 
-                {/* Divider — only between items, not after last */}
+                {}
                 {i < stats.length - 1 && (
                   <div className="absolute right-0 top-1/4 bottom-1/4 hidden w-px bg-border/50 md:block" />
                 )}

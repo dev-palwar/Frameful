@@ -1,7 +1,6 @@
 
 interface ButtonPositionPreviewProps {
-  /** "top-left" | "top-right" | "top-center" | "bottom-left" | "bottom-right" | "bottom-center" */
-  variant: string;
+    variant: string;
 }
 
 const DOT_ROW = (

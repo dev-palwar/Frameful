@@ -15,14 +15,14 @@ interface TimelineProps {
   isPlaying: boolean;
   onPlayPause: () => void;
   onSeek: (time: number) => void;
-  // Zoom
+  
   zoomEvents?: ZoomEvent[];
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
   onUpdateZoomTime?: (id: string, time: number) => void;
 }
 
-const MIN_TRIM_DURATION = 1; // seconds
+const MIN_TRIM_DURATION = 1; 
 
 export default function Timeline({
   duration,
@@ -103,7 +103,7 @@ export default function Timeline({
 
   const handleTrackClick = (e: React.MouseEvent) => {
     if (dragging) return;
-    // Deselect any zoom chip
+    
     setSelectedZoomId(null);
     const newTime = pixelToTime(e.clientX);
     onSeek(newTime);
@@ -116,7 +116,7 @@ export default function Timeline({
 
   return (
     <div className="w-full flex flex-col gap-3">
-      {/* Controls row */}
+      {}
       <div className="flex items-center gap-4">
         <button
           onClick={onPlayPause}
@@ -129,7 +129,7 @@ export default function Timeline({
           {formatTime(currentTime)} / {formatTime(duration)}
         </Typography>
 
-        {/* Zoom event count badge */}
+        {}
         {zoomEvents.length > 0 && (
           <div className="ml-auto flex items-center gap-1.5 text-[11px] text-muted-foreground select-none">
             <ZoomIn className="w-3 h-3" />
@@ -144,7 +144,7 @@ export default function Timeline({
         className="relative h-16 bg-muted/20 rounded-md overflow-visible cursor-pointer select-none border border-border/50"
         onMouseDown={handleTrackClick}
       >
-        {/* Dimmed regions outside trim */}
+        {}
         <div
           className="absolute top-0 bottom-0 left-0 bg-black/60 z-10 pointer-events-none rounded-l-md"
           style={{ width: `${startPercent}%` }}
@@ -154,16 +154,16 @@ export default function Timeline({
           style={{ width: `${100 - endPercent}%` }}
         />
 
-        {/* Selected region borders */}
+        {}
         <div
           className="absolute top-0 bottom-0 border-y-2 border-primary z-10 pointer-events-none"
           style={{ left: `${startPercent}%`, width: `${endPercent - startPercent}%` }}
         />
 
-        {/* Placeholder video thumbnail background */}
+        {}
         <div className="absolute inset-0 bg-gradient-to-r from-zinc-800 to-zinc-700 opacity-30 pointer-events-none rounded-md" />
 
-        {/* ── Zoom chips layer ───────────────────────────────────────────── */}
+        {}
         {zoomEvents.map((event) => (
           <ZoomChip
             key={event.id}
@@ -180,7 +180,7 @@ export default function Timeline({
           />
         ))}
 
-        {/* Playhead */}
+        {}
         <div
           className="absolute top-0 bottom-0 w-px bg-primary z-30 flex justify-center cursor-ew-resize group"
           style={{ left: `${playheadPercent}%` }}
@@ -194,10 +194,10 @@ export default function Timeline({
           }}
         >
           <div className="absolute -top-1 w-3 h-3 bg-primary rounded-full shadow-sm group-hover:scale-125 transition-transform" />
-          <div className="absolute inset-y-0 w-4 -ml-2" /> {/* Extended hit area */}
+          <div className="absolute inset-y-0 w-4 -ml-2" /> {}
         </div>
 
-        {/* Start handle */}
+        {}
         <div
           className="absolute top-0 bottom-0 w-4 bg-primary z-40 cursor-ew-resize flex items-center justify-center group rounded-l-sm"
           style={{ left: `calc(${startPercent}% - 8px)` }}
@@ -213,7 +213,7 @@ export default function Timeline({
           <div className="w-1 h-6 bg-primary-foreground/60 rounded-full group-hover:bg-primary-foreground transition-colors" />
         </div>
 
-        {/* End handle */}
+        {}
         <div
           className="absolute top-0 bottom-0 w-4 bg-primary z-40 cursor-ew-resize flex items-center justify-center group rounded-r-sm"
           style={{ left: `calc(${endPercent}% - 8px)` }}
@@ -230,14 +230,14 @@ export default function Timeline({
         </div>
       </div>
 
-      {/* ── Tools strip ──────────────────────────────────────────────────── */}
+      {}
       <div className="flex items-center gap-2 pt-0.5">
         <span className="text-[10px] font-semibold tracking-widest text-muted-foreground/50 uppercase select-none">
           Tools
         </span>
         <div className="w-px h-3 bg-border/60" />
 
-        {/* Add Zoom button */}
+        {}
         <button
           id="add-zoom-btn"
           onClick={handleAddZoom}
@@ -249,7 +249,7 @@ export default function Timeline({
           Add Zoom
         </button>
 
-        {/* Zoom factor display — shows default */}
+        {}
         <span className="text-[10px] text-muted-foreground/50 select-none">
           {DEFAULT_ZOOM_FACTOR}× · {DEFAULT_ZOOM_DURATION}s
         </span>

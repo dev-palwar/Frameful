@@ -1,13 +1,9 @@
-/**
- * background.js — Cutline Auto Zoom service worker
- */
 
-// ─── State ────────────────────────────────────────────────────────────────────
+
 let sessionActive = false;
 let sessionStartTime = 0;
 let clickEvents = [];
 
-// ─── Helper: broadcast session state to all content scripts ──────────────────
 async function broadcastToTabs(message) {
   const tabs = await chrome.tabs.query({});
   for (const tab of tabs) {
@@ -16,10 +12,6 @@ async function broadcastToTabs(message) {
   }
 }
 
-// ─── Messages from the Cutline web app (externally_connectable) ──────────────
-// IMPORTANT: The listener must return `true` synchronously to keep the
-// message channel open. Do NOT return from inside a switch block — the
-// `return true` must be the last statement in the listener function.
 chrome.runtime.onMessageExternal.addListener(
   (message, _sender, sendResponse) => {
     (async () => {
@@ -61,20 +53,17 @@ chrome.runtime.onMessageExternal.addListener(
       }
     })();
 
-    // Return true synchronously — keeps the channel open for async sendResponse
     return true;
   },
 );
 
-// ─── Messages from content scripts AND popup (onMessage, not onMessageExternal)
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  // Popup querying status
+  
   if (message.type === "GET_STATUS") {
     sendResponse({ active: sessionActive, eventCount: clickEvents.length });
     return false;
   }
 
-  // Click events from content scripts
   if (message.type === "CLICK_EVENT" && sessionActive) {
     const { x, y, timestamp } = message.payload;
     const time = (timestamp - sessionStartTime) / 1000;

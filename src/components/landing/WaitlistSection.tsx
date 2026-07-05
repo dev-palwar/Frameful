@@ -62,7 +62,7 @@ export default function WaitlistSection() {
 
   return (
     <section className="relative py-24 md:py-36 overflow-hidden" ref={ref}>
-      {/* Background Glow */}
+      {}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center -z-10">
         <div
           className="h-[400px] w-[600px] rounded-full blur-[120px] opacity-20 animate-pulse"
@@ -78,8 +78,8 @@ export default function WaitlistSection() {
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* Subtle animated border gradient overlay */}
-          {/* <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" /> */}
+          {}
+          {}
 
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 transition-colors group-hover:bg-primary/20">

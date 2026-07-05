@@ -30,11 +30,9 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
   const [recordingState, setRecordingState] = useState<RecordingState>("idle");
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Auto-zoom state
   const [zoomEvents, setZoomEvents] = useState<ZoomEvent[]>([]);
   const [extensionInstalled, setExtensionInstalled] = useState(false);
 
-  // Check extension presence on mount
   useEffect(() => {
     isExtensionInstalled().then((installed) => {
       console.log("[Cutline] Extension installed:", installed);
@@ -53,7 +51,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
     if (recorderRef.current?.state === "recording") {
       recorderRef.current.stop();
     }
-    // Stop all tracks to release the screen share
+    
     streamRef.current?.getTracks().forEach((track) => track.stop());
     clearTimer();
   }, []);
@@ -67,12 +65,10 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
 
       streamRef.current = stream;
 
-      // Tell the extension to start capturing clicks
       console.log("[Cutline] startSession called");
       await startSession();
       console.log("[Cutline] startSession done");
 
-      // MediaRecorder setup — collects chunks on dataavailable, builds blob on stop
       const recorder = new MediaRecorder(stream);
       recorderRef.current = recorder;
       chunksRef.current = [];
@@ -84,7 +80,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
       };
 
       recorder.onstop = async () => {
-        // Fetch click events from extension before doing anything else
+        
         console.log("[Cutline] Recording stopped, fetching clicks...");
         const clicks = await stopSession();
         console.log("[Cutline] Clicks received:", clicks.length, clicks);
@@ -99,7 +95,6 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
           type: "video/webm",
         });
 
-        // Revoke old object URL before creating a new one
         if (videoUrl) {
           URL.revokeObjectURL(videoUrl);
         }
@@ -110,11 +105,9 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
         setZoomEvents(detectedZooms);
         setRecordingState("preview");
 
-        // Navigate to studio page after recording stops
         navigate("/studio");
       };
 
-      // Handle user manually stopping screen sharing via browser UI
       stream.getVideoTracks()[0].onended = () => {
         stopRecording();
       };
@@ -141,13 +134,12 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
     setZoomEvents([]);
   }, [videoUrl]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       clearTimer();
       if (videoUrl) URL.revokeObjectURL(videoUrl);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   const setUploadedVideo = useCallback(
@@ -158,7 +150,7 @@ export function RecorderProvider({ children }: { children: ReactNode }) {
       const url = URL.createObjectURL(file);
       setBlob(file);
       setVideoUrl(url);
-      // Uploaded videos get no auto-zoom events
+      
       setZoomEvents([]);
       setRecordingState("preview");
       navigate("/studio");

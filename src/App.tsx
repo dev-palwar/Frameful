@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router";
-import { LandingPage, StudioPage, RecordingPage, PrivacyPage } from "@/pages";
+import { LandingPage, StudioPage, RecordingPage, PrivacyPage, ComingSoonExtPage } from "@/pages";
 
 export default function App() {
   return (
@@ -8,6 +8,7 @@ export default function App() {
       <Route path="/record" element={<RecordingPage />} />
       <Route path="/studio" element={<StudioPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/coming-soon-ext" element={<ComingSoonExtPage />} />
     </Routes>
   );
 }

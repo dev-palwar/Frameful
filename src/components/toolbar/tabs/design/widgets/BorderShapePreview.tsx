@@ -17,12 +17,12 @@ export const BorderShapePreview = ({ variant }: BorderShapePreviewProps) => {
   return (
     <div className={TILE} style={BASE_STYLE}>
       <div className="relative translate-x-4 translate-y-[22px]">
-        {/* White card — border-radius reflects the shape variant */}
+        {}
         <div
           className="w-[5vw] h-[8vh] bg-white"
           style={{ borderRadius: `${r} ${r} 0 0` }}
         />
-        {/* Border overlay — same radius as the card */}
+        {}
         <div
           className="absolute -inset-[3px] border border-white/30 pointer-events-none"
           style={{ borderRadius: `calc(${r} + 3px) calc(${r} + 3px) 0 0` }}

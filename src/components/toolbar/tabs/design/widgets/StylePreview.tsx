@@ -6,8 +6,7 @@ interface StylePreviewProps {
 }
 
 export const StylePreview = ({ variant }: StylePreviewProps) => {
-  // ── Default ──────────────────────────────────────────────────────────────
-  // Dark bg, plain white card — no border frame, clean.
+
   if (variant === "default") {
     return (
       <div className={TILE} style={{ background: "#2e2e2e" }}>
@@ -18,8 +17,6 @@ export const StylePreview = ({ variant }: StylePreviewProps) => {
     );
   }
 
-  // ── Glass Light ───────────────────────────────────────────────────────────
-  // Medium-dark bg, white card inside a visible border container.
   if (variant === "glass-light") {
     return (
       <div className={TILE} style={{ background: "#3a3a3a" }}>
@@ -31,8 +28,6 @@ export const StylePreview = ({ variant }: StylePreviewProps) => {
     );
   }
 
-  // ── Glass Dark ────────────────────────────────────────────────────────────
-  // Near-black bg, dark gray card inside a subtle border container.
   if (variant === "glass-dark") {
     return (
       <div className={TILE} style={{ background: "#1a1a1a" }}>
@@ -47,8 +42,6 @@ export const StylePreview = ({ variant }: StylePreviewProps) => {
     );
   }
 
-  // ── Outline ───────────────────────────────────────────────────────────────
-  // Dark bg, card is transparent — only the border stroke is visible.
   if (variant === "outline") {
     return (
       <div className={TILE} style={{ background: "#2e2e2e" }}>
@@ -65,8 +58,6 @@ export const StylePreview = ({ variant }: StylePreviewProps) => {
     );
   }
 
-  // ── Border ────────────────────────────────────────────────────────────────
-  // Light gray bg, white card with a thick gray border frame.
   if (variant === "border") {
     return (
       <div className={TILE} style={{ background: "#c8c8c8" }}>
@@ -78,8 +69,6 @@ export const StylePreview = ({ variant }: StylePreviewProps) => {
     );
   }
 
-  // ── Border Dark ───────────────────────────────────────────────────────────
-  // Near-black bg, white card with a thick dark border frame.
   if (variant === "border-dark") {
     return (
       <div className={TILE} style={{ background: "#c9c9cd" }}>

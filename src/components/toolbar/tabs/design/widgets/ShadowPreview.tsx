@@ -18,7 +18,7 @@ export const ShadowPreview = ({ variant }: ShadowPreviewProps) => {
   return (
     <div className={TILE} style={BASE_STYLE}>
       <div className="relative translate-x-[38px] translate-y-[30px] h-[12vh] w-[11vw]">
-        {/* White card — shadow intensity reflects the variant */}
+        {}
         <div
           className="h-full w-full rounded-t-md bg-white"
           style={{ boxShadow: shadow }}

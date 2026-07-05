@@ -1,4 +1,4 @@
-// popup.js — updates the popup UI based on current session state
+
 
 const dot = document.getElementById("dot");
 const statusText = document.getElementById("status-text");
@@ -22,7 +22,6 @@ function updateUI({ active, eventCount }) {
   }
 }
 
-// Poll status from background every second while popup is open
 async function poll() {
   const response = await chrome.runtime
     .sendMessage({ type: "GET_STATUS" })

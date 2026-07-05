@@ -2,43 +2,23 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-
 ::selection {
   background-color: white;
   color: #000;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   FRAMEFUL DESIGN SYSTEM  ·  index.css
-   Source of truth: this file + src/design-system/tokens.ts
-   Font: Plus Jakarta Sans (sole font, all weights via Google Fonts in index.html)
-   Theme: white-and-purple, flat UI — no gratuitous shadows or scale animations
-   ────────────────────────────────────────────────────────────────────────────── */
-
 @custom-variant dark (&:is(.dark *));
 
-/* ─── Tailwind theme bridge ──────────────────────────────────────────────────
-   Every Tailwind colour utility (bg-background, text-primary, etc.)
-   is wired to the CSS vars below. Never add raw hex values here.           */
 @theme inline {
-  /* ── Radius scale ── */
-  --radius-xs: calc(var(--radius) - 6px);
-  /* 4px  — tags, badges      */
-  --radius-sm: calc(var(--radius) - 4px);
-  /* 6px  — inputs, chips     */
-  --radius-md: calc(var(--radius) - 2px);
-  /* 8px  — cards, panels     */
-  --radius-lg: var(--radius);
-  /* 10px — default           */
-  --radius-xl: calc(var(--radius) + 4px);
-  /* 14px — modals            */
-  --radius-2xl: calc(var(--radius) + 8px);
-  /* 18px — large cards       */
-  --radius-3xl: calc(var(--radius) + 12px);
-  /* 22px — hero sections     */
-
-  /* ── Colour tokens → CSS vars ── */
-  --color-background: var(--background);
+    --radius-xs: calc(var(--radius) - 6px);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 12px);
+  
+    --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -70,136 +50,89 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* ── Typographic scale ──────────────────────────────────────────────────
-     All font-size/line-height combos are named semantically.
-     Use the Typography component or these utilities — never raw sizes.   */
-  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 
-  /* Display — hero headline */
-  --text-display: clamp(2.25rem, 5vw, 3.75rem);
-  /* 36–60px */
-  --leading-display: 1.05;
+    --text-display: clamp(2.25rem, 5vw, 3.75rem);
+    --leading-display: 1.05;
   --tracking-display: -0.03em;
 
-  /* H1 — page title */
-  --text-h1: clamp(1.875rem, 3.5vw, 2.75rem);
-  /* 30–44px */
-  --leading-h1: 1.1;
+    --text-h1: clamp(1.875rem, 3.5vw, 2.75rem);
+    --leading-h1: 1.1;
   --tracking-h1: -0.02em;
 
-  /* H2 — section heading */
-  --text-h2: clamp(1.5rem, 2.5vw, 2rem);
-  /* 24–32px */
-  --leading-h2: 1.2;
+    --text-h2: clamp(1.5rem, 2.5vw, 2rem);
+    --leading-h2: 1.2;
   --tracking-h2: -0.015em;
 
-  /* H3 — card / sub-section title */
-  --text-h3: 1.125rem;
-  /* 18px */
-  --leading-h3: 1.35;
+    --text-h3: 1.125rem;
+    --leading-h3: 1.35;
   --tracking-h3: -0.01em;
 
-  /* H4 — label-like headings */
-  --text-h4: 1rem;
-  /* 16px */
-  --leading-h4: 1.4;
+    --text-h4: 1rem;
+    --leading-h4: 1.4;
   --tracking-h4: -0.005em;
 
-  /* Body — default prose */
-  --text-body: 1rem;
-  /* 16px */
-  --leading-body: 1.625;
+    --text-body: 1rem;
+    --leading-body: 1.625;
   --tracking-body: 0em;
 
-  /* Body SM — secondary prose */
-  --text-body-sm: 0.9375rem;
-  /* 15px */
-  --leading-body-sm: 1.6;
+    --text-body-sm: 0.9375rem;
+    --leading-body-sm: 1.6;
   --tracking-body-sm: 0em;
 
-  /* Caption — supporting text */
-  --text-caption: 0.8125rem;
-  /* 13px */
-  --leading-caption: 1.5;
+    --text-caption: 0.8125rem;
+    --leading-caption: 1.5;
   --tracking-caption: 0em;
 
-  /* Label — form labels, tab labels */
-  --text-label: 0.75rem;
-  /* 12px */
-  --leading-label: 1.4;
+    --text-label: 0.75rem;
+    --leading-label: 1.4;
   --tracking-label: 0.01em;
 
-  /* Overline — section eyebrows, tags */
-  --text-overline: 0.75rem;
-  /* 12px */
-  --leading-overline: 1.4;
+    --text-overline: 0.75rem;
+    --leading-overline: 1.4;
   --tracking-overline: 0.08em;
 
-  /* Code — monospaced (timecodes, step numbers) */
-  --text-code: 0.8125rem;
-  /* 13px */
-  --leading-code: 1.5;
+    --text-code: 0.8125rem;
+    --leading-code: 1.5;
   --tracking-code: 0em;
   --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   LIGHT MODE TOKENS  (default)
-   ────────────────────────────────────────────────────────────────────────── */
-/*
- * Palette rationale:
- *   Primary gradient: violet #8b5cf6 → fuchsia #d946ef
- *   Background: near-white with the faintest violet tint (#faf8ff)
- *   Foreground: very dark violet (#1a0e2e) — softer than pure black
- *   Surfaces: pure white cards on a tinted ground
- *   Borders / inputs: light violet wash (#e4d8f8)
- *   Muted: even lighter violet wash (#f5f0ff) for quiet backgrounds
- */
 :root {
   --radius: 0.625rem;
-  /* 10px — base radius all relative variants derive from */
-
-  /* Surfaces */
-  --background: #faf8ff;
+  
+    --background: #faf8ff;
   --foreground: #1a0e2e;
   --card: #ffffff;
   --card-foreground: #1a0e2e;
   --popover: #ffffff;
   --popover-foreground: #1a0e2e;
 
-  /* Brand */
-  --primary: #8b5cf6;
+    --primary: #8b5cf6;
   --primary-foreground: #ffffff;
 
-  /* Tinted secondary surface */
-  --secondary: #f3e8ff;
+    --secondary: #f3e8ff;
   --secondary-foreground: #6b21a8;
 
-  /* Quiet backgrounds */
-  --muted: #f5f0ff;
+    --muted: #f5f0ff;
   --muted-foreground: #7c6a99;
 
-  /* Accent (active states, highlights) */
-  --accent: #ede5ff;
+    --accent: #ede5ff;
   --accent-foreground: #5b21b6;
 
-  /* Semantic */
-  --destructive: #ef4444;
+    --destructive: #ef4444;
 
-  /* Strokes */
-  --border: #e4d8f8;
+    --border: #e4d8f8;
   --input: #e4d8f8;
   --ring: #a78bfa;
 
-  /* Charts — violet-to-fuchsia range */
-  --chart-1: #8b5cf6;
+    --chart-1: #8b5cf6;
   --chart-2: #a855f7;
   --chart-3: #c026d3;
   --chart-4: #d946ef;
   --chart-5: #7c3aed;
 
-  /* Sidebar — barely-there violet tint */
-  --sidebar: #f9f5ff;
+    --sidebar: #f9f5ff;
   --sidebar-foreground: #1a0e2e;
   --sidebar-primary: #8b5cf6;
   --sidebar-primary-foreground: #ffffff;
@@ -209,179 +142,90 @@
   --sidebar-ring: #a78bfa;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   OXIDE DARK TOKENS  — Neutral Zinc + Vivid Orange
-   True neutral-dark base (zinc) with orange as the action/record accent.
-   The same palette logic used by DaVinci Resolve, Vercel, Linear:
-   one punchy colour against maximum contrast darkness.
-   bg:  #09090b → #18181b → #27272a → #3f3f46
-   fg:  #fafafa → #e4e4e7 → #a1a1aa
-   ────────────────────────────────────────────────────────────────────────── */
 .oxide {
-  /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --background: #18181b;
-  /* zinc-950 — true neutral near-black      */
-  --foreground: #fafafa;
-  /* zinc-50  — crisp white text             */
-  --card: #18181b;
-  /* zinc-900 — elevated panel               */
-  --card-foreground: #fafafa;
+    --background: #18181b;
+    --foreground: #fafafa;
+    --card: #18181b;
+    --card-foreground: #fafafa;
   --popover: #27272a;
-  /* zinc-800 — dropdown / tooltip layer     */
-  --popover-foreground: #fafafa;
+    --popover-foreground: #fafafa;
 
-  /* ── Primary — vivid orange (record / action energy) ───────────────────── */
-  --primary: #f97316;
-  /* orange-500 — CTAs, active states        */
-  --primary-foreground: #09090b;
-  /* near-black on orange                    */
-
-  /* ── Secondary surface ─────────────────────────────────────────────────── */
-  --secondary: #27272a;
-  /* zinc-800                                */
-  --secondary-foreground: #e4e4e7;
-  /* zinc-200                               */
-
-  /* ── Muted ─────────────────────────────────────────────────────────────── */
-  --muted: #18181b;
-  /* zinc-900                                */
-  --muted-foreground: #71717a;
-  /* zinc-500 — supporting text              */
-
-  /* ── Accent — electric cyan (links, highlights) ────────────────────────── */
-  --accent: #27272a;
-  /* zinc-800 accent surface                 */
-  --accent-foreground: #06b6d4;
-  /* cyan-500 — links / selected states      */
-
-  /* ── Semantic ──────────────────────────────────────────────────────────── */
-  --destructive: #ef4444;
-  /* red-500                                 */
-
-  /* ── Strokes ───────────────────────────────────────────────────────────── */
-  --border: rgba(255, 255, 255, 0.08);
-  /* clean white ghost      */
-  --input: rgba(255, 255, 255, 0.10);
+    --primary: #f97316;
+    --primary-foreground: #09090b;
+  
+    --secondary: #27272a;
+    --secondary-foreground: #e4e4e7;
+  
+    --muted: #18181b;
+    --muted-foreground: #71717a;
+  
+    --accent: #27272a;
+    --accent-foreground: #06b6d4;
+  
+    --destructive: #ef4444;
+  
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.10);
   --ring: #f97316;
-  /* orange focus ring — on-brand            */
-
-  /* ── Charts — warm → cool spectrum ────────────────────────────────────── */
-  --chart-1: #f97316;
-  /* orange     */
-  --chart-2: #06b6d4;
-  /* cyan       */
-  --chart-3: #a78bfa;
-  /* violet     */
-  --chart-4: #facc15;
-  /* yellow     */
-  --chart-5: #4ade80;
-  /* green      */
-
-  /* ── Sidebar ───────────────────────────────────────────────────────────── */
-  --sidebar: #18181b;
-  /* zinc-900                      */
-  --sidebar-foreground: #fafafa;
+  
+    --chart-1: #f97316;
+    --chart-2: #06b6d4;
+    --chart-3: #a78bfa;
+    --chart-4: #facc15;
+    --chart-5: #4ade80;
+  
+    --sidebar: #18181b;
+    --sidebar-foreground: #fafafa;
   --sidebar-primary: #f97316;
-  /* orange                        */
-  --sidebar-primary-foreground: #09090b;
+    --sidebar-primary-foreground: #09090b;
   --sidebar-accent: #27272a;
   --sidebar-accent-foreground: #06b6d4;
-  /* cyan                          */
-  --sidebar-border: rgba(255, 255, 255, 0.08);
+    --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #f97316;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   GRUVBOX DARK TOKENS
-   Retro warm palette — exact Gruvbox Dark hex values.
-   bg0=#282828  bg1=#3c3836  bg2=#504945  bg3=#665c54
-   fg0=#fbf1c7  fg1=#ebdbb2  fg2=#d5c4a1  fg3=#bdae93
-   Accents: red=#fb4934 green=#b8bb26 yellow=#fabd2f
-            blue=#83a598 purple=#d3869b aqua=#8ec07c orange=#fe8019
-   ────────────────────────────────────────────────────────────────────────── */
 .gruvbox-dark {
-  /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --background: #282828;
-  /* bg0 — main page background              */
-  --foreground: #ebdbb2;
-  /* fg1 — primary readable text             */
-  --card: #3c3836;
-  /* bg1 — cards, panels, sections           */
-  --card-foreground: #ebdbb2;
-  /* fg1                                     */
-  --popover: #3c3836;
-  /* bg1 — dropdowns, tooltips               */
-  --popover-foreground: #ebdbb2;
-  /* fg1                                     */
-
-  /* ── Primary — Gruvbox Blue (links, interactive elements) ────────────── */
-  --primary: #83a598;
+    --background: #282828;
+    --foreground: #ebdbb2;
+    --card: #3c3836;
+    --card-foreground: #ebdbb2;
+    --popover: #3c3836;
+    --popover-foreground: #ebdbb2;
+  
+    --primary: #83a598;
   --primary-foreground: #282828;
-  /* bg0 — dark text on blue                 */
-
-  /* ── Secondary surface — bg2 ─────────────────────────────────────────── */
-  --secondary: #504945;
-  /* bg2                                     */
-  --secondary-foreground: #d5c4a1;
-  /* fg2                                    */
-
-  /* ── Muted — bg1 / fg3 ───────────────────────────────────────────────── */
-  --muted: #3c3836;
-  /* bg1                                     */
-  --muted-foreground: #bdae93;
-  /* fg3 — lowest contrast text              */
-
-  /* ── Accent — Aqua highlight ─────────────────────────────────────────── */
-  --accent: #504945;
-  /* bg2 — accent surface                    */
-  --accent-foreground: #8ec07c;
-  /* aqua — highlighted text on accent bg    */
-
-  /* ── Semantic ────────────────────────────────────────────────────────── */
-  --destructive: #fb4934;
-  /* bright red                              */
-
-  /* ── Strokes ─────────────────────────────────────────────────────────── */
-  --border: rgba(189, 174, 147, 0.20);
-  /* fg3 at 20% opacity    */
-  --input: rgba(189, 174, 147, 0.25);
-  /* fg3 at 25% opacity    */
-  --ring: #fabd2f;
-  /* yellow — focus rings / CTAs             */
-
-  /* ── Charts — full Gruvbox accent palette ────────────────────────────── */
-  --chart-1: #fabd2f;
-  /* yellow  */
-  --chart-2: #b8bb26;
-  /* green   */
-  --chart-3: #83a598;
-  /* blue    */
-  --chart-4: #d3869b;
-  /* purple  */
-  --chart-5: #fe8019;
-  /* orange  */
-
-  /* ── Sidebar — bg1 base ──────────────────────────────────────────────── */
-  --sidebar: #3c3836;
-  /* bg1                           */
-  --sidebar-foreground: #ebdbb2;
-  /* fg1                           */
-  --sidebar-primary: #83a598;
-  /* blue                          */
-  --sidebar-primary-foreground: #282828;
-  /* bg0                           */
-  --sidebar-accent: #504945;
-  /* bg2                           */
-  --sidebar-accent-foreground: #8ec07c;
-  /* aqua                          */
-  --sidebar-border: rgba(189, 174, 147, 0.20);
+  
+    --secondary: #504945;
+    --secondary-foreground: #d5c4a1;
+  
+    --muted: #3c3836;
+    --muted-foreground: #bdae93;
+  
+    --accent: #504945;
+    --accent-foreground: #8ec07c;
+  
+    --destructive: #fb4934;
+  
+    --border: rgba(189, 174, 147, 0.20);
+    --input: rgba(189, 174, 147, 0.25);
+    --ring: #fabd2f;
+  
+    --chart-1: #fabd2f;
+    --chart-2: #b8bb26;
+    --chart-3: #83a598;
+    --chart-4: #d3869b;
+    --chart-5: #fe8019;
+  
+    --sidebar: #3c3836;
+    --sidebar-foreground: #ebdbb2;
+    --sidebar-primary: #83a598;
+    --sidebar-primary-foreground: #282828;
+    --sidebar-accent: #504945;
+    --sidebar-accent-foreground: #8ec07c;
+    --sidebar-border: rgba(189, 174, 147, 0.20);
   --sidebar-ring: #fabd2f;
-  /* yellow                        */
-}
+  }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   BASE LAYER
-   ────────────────────────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -407,16 +251,11 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
-  /* Remove user-agent button cursor reset since we handle it per-component */
-  button {
+    button {
     cursor: pointer;
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   TYPOGRAPHIC UTILITIES
-   Named after semantic roles so components never use raw size values.
-   ────────────────────────────────────────────────────────────────────────── */
 @layer utilities {
   .type-display {
     font-size: var(--text-display);
@@ -497,24 +336,18 @@
     font-weight: 600;
   }
 
-  /* Brand gradient as a text clip — canonical utility */
-  .text-brand-gradient {
+    .text-brand-gradient {
     background: linear-gradient(135deg, var(--primary) 0%, #d946ef 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Brand gradient as a background — canonical utility */
-  .bg-brand-gradient {
+    .bg-brand-gradient {
     background: linear-gradient(135deg, var(--primary) 0%, #d946ef 100%);
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ANIMATIONS
-   Kept minimal — purposeful motion only, no gratuitous scale effects.
-   ────────────────────────────────────────────────────────────────────────── */
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -580,7 +413,6 @@
   animation: shimmer 2.5s linear infinite;
 }
 
-/* Staggered entrance delays */
 .delay-100 {
   animation-delay: 100ms;
 }
@@ -601,7 +433,6 @@
   animation-delay: 500ms;
 }
 
-/* ── ZoomFocusPicker animations ─────────────────────────────────────────── */
 @keyframes Cutline-spin {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
@@ -638,11 +469,6 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   LANDING PAGE — PREMIUM ANIMATIONS
-   ────────────────────────────────────────────────────────────────────────── */
-
-/* Animated gradient mesh background */
 @keyframes mesh-rotate {
   0% {
     transform: rotate(0deg) scale(1);
@@ -856,7 +682,6 @@
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
-/* Staggered reveal delays for landing sections */
 .delay-600 {
   animation-delay: 600ms;
 }
@@ -877,7 +702,6 @@
   animation-delay: 1000ms;
 }
 
-/* Glass card base style — reusable */
 .glass-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(139, 92, 246, 0.12);
@@ -895,7 +719,6 @@
     0 0 0 1px rgba(139, 92, 246, 0.05);
 }
 
-/* Noise texture overlay for grain effect */
 .noise-overlay::after {
   content: '';
   position: absolute;

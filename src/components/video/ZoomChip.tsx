@@ -1,10 +1,3 @@
-/**
- * ZoomChip.tsx — A single zoom event marker on the timeline.
- *
- * Renders as a pill positioned at the event's time on the track.
- * Clicking selects it and shows a delete popover.
- * Auto-detected chips are amber, manual chips are violet.
- */
 
 import { useRef, useEffect } from "react";
 import { ZoomIn, Trash2 } from "lucide-react";
@@ -31,7 +24,6 @@ export function ZoomChip({
 }: ZoomChipProps) {
   const chipRef = useRef<HTMLDivElement>(null);
 
-  // Deselect when clicking outside this chip
   useEffect(() => {
     if (!isSelected) return;
 
@@ -47,7 +39,6 @@ export function ZoomChip({
 
   if (duration === 0) return null;
 
-  // Chip spans the full zoom duration on the timeline
   const halfDur = event.duration / 2;
   const startPct = Math.max(0, ((event.time - halfDur) / duration) * 100);
   const widthPct = (event.duration / duration) * 100;
@@ -74,7 +65,7 @@ export function ZoomChip({
         onDragStart(event.id);
       }}
     >
-      {/* Chip body */}
+      {}
       <div
         className="relative h-full w-full flex items-center justify-center cursor-ew-resize"
         style={{
@@ -104,7 +95,7 @@ export function ZoomChip({
         </div>
       </div>
 
-      {/* Delete popover — appears above chip when selected */}
+      {}
       {isSelected && (
         <div
           className="absolute -top-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-2 py-1 rounded-md shadow-lg border border-border/80"

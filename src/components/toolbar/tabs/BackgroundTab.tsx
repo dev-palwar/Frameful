@@ -23,7 +23,7 @@ const BackgroundThumb = ({ bg, onClick }: { bg: string; onClick: () => void }) =
           backgroundImage: !isGradient ? `url(${bg})` : undefined,
         }}
       />
-      {/* Hover overlay with icon */}
+      {}
       <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors" />
       <div className="absolute bottom-1 right-1 p-1 rounded-sm bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
         <ImageIcon className="w-3 h-3 text-white" />
@@ -39,8 +39,6 @@ const BG_CONFIG = {
   mesh: [] as string[],
   raycast: [] as string[],
 };
-
-
 
 const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
   const [backgrounds, setBackgrounds] =
@@ -66,7 +64,7 @@ const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
 
   return (
     <div className="grid grid-cols-1 gap-3">
-      {/* Upload button */}
+      {}
       <button
         id="toolbar-upload-bg-btn"
         onClick={handleUploadClick}
@@ -88,7 +86,7 @@ const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
       </button>
 
       <div className="flex flex-col gap-4 mt-2">
-        {/* MACOS (Wallpapers) */}
+        {}
         <Section title="MACOS" defaultOpen>
           <div className="grid grid-cols-4 gap-2">
             {backgrounds.map((bg, i) => (
@@ -101,7 +99,7 @@ const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
           </div>
         </Section>
 
-        {/* RADIANT */}
+        {}
         <Section title="RADIANT" defaultOpen>
           {BG_CONFIG.radiant.length > 0 ? (
             <div className="grid grid-cols-4 gap-2">
@@ -120,7 +118,7 @@ const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
           )}
         </Section>
 
-        {/* MESH */}
+        {}
         <Section title="MESH" defaultOpen>
           {BG_CONFIG.mesh.length > 0 ? (
             <div className="grid grid-cols-4 gap-2">
@@ -139,7 +137,7 @@ const BackgroundTab: React.FC<ToolBarProps> = ({ onBackgroundSelect }) => {
           )}
         </Section>
 
-        {/* RAYCAST */}
+        {}
         <Section title="RAYCAST" defaultOpen>
           {BG_CONFIG.raycast.length > 0 ? (
             <div className="grid grid-cols-4 gap-2">

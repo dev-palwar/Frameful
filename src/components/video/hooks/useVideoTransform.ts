@@ -13,11 +13,6 @@ interface VideoTransformState {
   startResize: (e: React.MouseEvent, dx: number, dy: number) => void;
 }
 
-/**
- * Manages the video's interactive transform state.
- * Owns: scale, posX, posY, isSelected.
- * Handles: drag-to-move, 8-handle resize, deselect-on-outside-click.
- */
 export function useVideoTransform(): VideoTransformState {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef   = useRef<HTMLDivElement>(null);
@@ -27,7 +22,6 @@ export function useVideoTransform(): VideoTransformState {
   const [posX,  setPosX]  = useState(0);
   const [posY,  setPosY]  = useState(0);
 
-  // Deselect when clicking outside the wrapper
   useEffect(() => {
     if (!isSelected) return;
     const onDown = (e: MouseEvent) => {

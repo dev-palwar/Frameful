@@ -61,9 +61,9 @@ function ScreenCaptureAnimation() {
 function BackgroundsAnimation() {
   return (
     <div className="relative h-48 w-full rounded-xl overflow-hidden mb-6 border border-border/40 group-hover:border-chart-2/30 transition-colors flex bg-card/20 p-4 gap-4">
-      {/* LEFT: Video Preview Area */}
+      {}
       <div className="flex-1 relative rounded-lg border border-border/50 overflow-hidden shadow-inner flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
-        {/* Background Layers */}
+        {}
         <div
           className="absolute inset-0 bg-gradient-to-br from-chart-1/80 to-chart-2/80"
           style={{ animation: "bgFade1 9s infinite" }}
@@ -77,7 +77,7 @@ function BackgroundsAnimation() {
           style={{ animation: "bgFade3 9s infinite" }}
         />
 
-        {/* The "Video" mockup */}
+        {}
         <div className="relative w-[75%] h-[65%] bg-background/90 backdrop-blur-md rounded border border-border/50 shadow-2xl flex flex-col overflow-hidden">
           <div className="h-3 bg-foreground/5 w-full flex items-center px-2 gap-1.5 border-b border-border/50">
             <div className="w-1.5 h-1.5 rounded-full bg-destructive/60" />
@@ -92,23 +92,23 @@ function BackgroundsAnimation() {
         </div>
       </div>
 
-      {/* RIGHT: Background Swatches */}
+      {}
       <div className="w-12 shrink-0 flex flex-col gap-3 justify-center">
-        {/* Swatch 1 */}
+        {}
         <div className="relative w-full aspect-square rounded-md bg-gradient-to-br from-chart-1 to-chart-2 shadow-sm border border-border/20">
           <div
             className="absolute -inset-1 border-2 border-chart-2 rounded-lg"
             style={{ animation: "bgFade1 9s infinite" }}
           />
         </div>
-        {/* Swatch 2 */}
+        {}
         <div className="relative w-full aspect-square rounded-md bg-gradient-to-br from-chart-3 to-chart-4 shadow-sm border border-border/20">
           <div
             className="absolute -inset-1 border-2 border-chart-2 rounded-lg"
             style={{ animation: "bgFade2 9s infinite" }}
           />
         </div>
-        {/* Swatch 3 */}
+        {}
         <div className="relative w-full aspect-square rounded-md bg-gradient-to-br from-chart-5 to-primary shadow-sm border border-border/20">
           <div
             className="absolute -inset-1 border-2 border-chart-2 rounded-lg"
@@ -158,22 +158,22 @@ function PrivateAnimation() {
 function TrimmingAnimation() {
   return (
     <div className="relative h-48 w-full bg-card/20 rounded-xl flex flex-col items-center justify-center overflow-hidden mb-6 border border-border/40 group-hover:border-chart-4/30 transition-colors p-4">
-      {/* Background glow */}
+      {}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--chart-4)_0%,transparent_70%)] opacity-5" />
 
-      {/* Container for Video & Timeline */}
+      {}
       <div className="relative w-full max-w-[220px] flex flex-col gap-2">
-        {/* TOP: Video Mockup */}
+        {}
         <div className="w-full aspect-video bg-background/90 rounded border border-border/50 shadow-lg flex flex-col overflow-hidden">
-          {/* Chrome */}
+          {}
           <div className="h-2.5 bg-foreground/5 w-full flex items-center px-1.5 gap-1 border-b border-border/50">
             <div className="w-1.5 h-1.5 rounded-full bg-destructive/60" />
             <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
           </div>
-          {/* Video Content */}
+          {}
           <div className="flex-1 relative flex items-center justify-center overflow-hidden bg-black/30">
-            {/* Scrubbing visual */}
+            {}
             <div
               className="absolute w-12 h-12 rounded-lg border-2 border-dashed border-chart-4/60 opacity-60"
               style={{
@@ -191,9 +191,9 @@ function TrimmingAnimation() {
           </div>
         </div>
 
-        {/* BOTTOM: Timeline Mockup */}
+        {}
         <div className="relative h-8 w-full bg-background rounded-md border border-border/50 shadow-sm flex items-center overflow-hidden">
-          {/* Waveform */}
+          {}
           <div className="absolute inset-x-1 h-5 flex gap-[2px] items-end opacity-20">
             {[...Array(30)].map((_, i) => (
               <div
@@ -206,7 +206,7 @@ function TrimmingAnimation() {
             ))}
           </div>
 
-          {/* Unselected overlays */}
+          {}
           <div
             className="absolute top-0 bottom-0 left-0 bg-background/70 backdrop-blur-[1px] border-r border-chart-4/40 z-10"
             style={{
@@ -216,7 +216,7 @@ function TrimmingAnimation() {
           />
           <div className="absolute top-0 bottom-0 right-0 w-[10%] bg-background/70 backdrop-blur-[1px] border-l border-chart-4/40 z-10" />
 
-          {/* Active Highlighted Region */}
+          {}
           <div
             className="absolute top-0 bottom-0 bg-chart-4/10 border-y-2 border-chart-4/60 z-0"
             style={{
@@ -225,7 +225,7 @@ function TrimmingAnimation() {
             }}
           />
 
-          {/* Left Handle */}
+          {}
           <div
             className="absolute top-0 bottom-0 w-2 bg-chart-4 border-x border-background/20 rounded-sm z-20 flex items-center justify-center shadow-lg -ml-1"
             style={{
@@ -236,19 +236,19 @@ function TrimmingAnimation() {
             <div className="w-[1px] h-3 bg-background/60 rounded-full" />
           </div>
 
-          {/* Right Handle */}
+          {}
           <div className="absolute top-0 bottom-0 w-2 bg-chart-4 border-x border-background/20 rounded-sm z-20 left-[90%] flex items-center justify-center -ml-1">
             <div className="w-[1px] h-3 bg-background/60 rounded-full" />
           </div>
 
-          {/* Playhead */}
+          {}
           <div
             className="absolute top-0 bottom-0 w-[1.5px] bg-foreground z-30 shadow-[0_0_5px_var(--foreground)] -ml-[0.75px]"
             style={{ animation: "trimPlayhead 8s ease-in-out infinite" }}
           />
         </div>
 
-        {/* Mouse cursor dragging */}
+        {}
         <div
           className="absolute z-50 drop-shadow-md"
           style={{
@@ -308,34 +308,33 @@ function TrimmingAnimation() {
 function AutoZoomAnimation() {
   return (
     <div className="relative h-48 w-full rounded-xl overflow-hidden mb-6 border border-border/40 group-hover:border-chart-5/30 transition-colors flex items-center justify-center bg-card/20 p-4">
-      {/* Video Frame */}
+      {}
       <div className="relative w-full max-w-[240px] aspect-video rounded-lg border border-border/50 shadow-2xl overflow-hidden flex flex-col bg-black/40">
-        {/* The video background (this represents the "background already applied" to the canvas) */}
-        {/* We place it INSIDE the zoom layer so the background zooms too,
-            which accurately mimics zooming into a framed video! */}
+        {}
+        {}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
             animation: "autoZoom 7s cubic-bezier(0.4, 0, 0.2, 1) infinite",
           }}
         >
-          {/* Background applied to video */}
+          {}
           <div className="absolute inset-0 bg-gradient-to-br from-chart-4/30 to-chart-5/30" />
 
-          {/* Fake Window inside the video (the actual screen recording) */}
+          {}
           <div className="absolute inset-3 bg-background/95 rounded border border-border/50 shadow-lg flex flex-col overflow-hidden">
-            {/* Window Chrome */}
+            {}
             <div className="h-3 bg-foreground/5 w-full flex items-center px-1.5 gap-1 border-b border-border/50">
               <div className="w-1.5 h-1.5 rounded-full bg-destructive/60" />
               <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/60" />
             </div>
-            {/* Content */}
+            {}
             <div className="flex-1 p-2 flex flex-col gap-1.5 relative">
               <div className="w-16 h-1 bg-foreground/10 rounded-full" />
               <div className="w-10 h-1 bg-foreground/10 rounded-full" />
 
-              {/* Button to click */}
+              {}
               <div className="absolute bottom-1 right-1 w-10 h-3.5 bg-chart-5/20 border border-chart-5/30 rounded flex items-center justify-center">
                 <div className="w-4 h-0.5 bg-chart-5/60 rounded-full" />
               </div>
@@ -343,9 +342,9 @@ function AutoZoomAnimation() {
           </div>
         </div>
 
-        {/* Cursor & Effects Layer (outside zoom layer so they don't scale) */}
+        {}
 
-        {/* Zoom Ring pinging on click */}
+        {}
         <div
           className="absolute w-6 h-6 rounded-full border-2 border-chart-5/60 pointer-events-none -ml-3 -mt-3"
           style={{
@@ -355,7 +354,7 @@ function AutoZoomAnimation() {
           }}
         />
 
-        {/* Mouse cursor */}
+        {}
         <div
           className="absolute z-20 drop-shadow-md pointer-events-none"
           style={{
@@ -474,7 +473,7 @@ export default function FeaturesSection() {
 
   return (
     <section className="relative py-24 md:py-36 overflow-hidden" ref={ref}>
-      {/* Background */}
+      {}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="absolute top-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full blur-[150px] opacity-8"
@@ -485,7 +484,7 @@ export default function FeaturesSection() {
       </div>
 
       <div className="mx-auto max-w-6xl px-6">
-        {/* Header */}
+        {}
         <div className="mx-auto max-w-2xl text-center mb-16">
           <div
             className={`inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 mb-4 transition-all duration-700 ${
@@ -518,7 +517,7 @@ export default function FeaturesSection() {
           </Typography>
         </div>
 
-        {/* Bento grid */}
+        {}
         <div className="grid gap-6 md:grid-cols-3">
           {features.map((feature, i) => (
             <div
@@ -532,12 +531,12 @@ export default function FeaturesSection() {
                 }`}
               style={{ transitionDelay: `${300 + i * 100}ms` }}
             >
-              {/* Animation Component */}
+              {}
               <feature.Animation />
 
-              {/* Content */}
+              {}
               <div className="relative z-10 flex items-start gap-4">
-                {/* Icon */}
+                {}
                 <div
                   className="mt-1 shrink-0 inline-flex h-10 w-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                   style={{

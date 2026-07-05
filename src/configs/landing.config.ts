@@ -10,10 +10,8 @@ import {
   STEP_COLORS,
 } from "@/design-system/tokens";
 
-// Re-export so callers that already import from here don't break.
 export { GRADIENT, GRADIENT_REVERSE, VIOLET, PURPLE, FUCHSIA };
 
-/* ── Hero ── */
 export const HERO_CONFIG = {
   badge: "Free to use · No account needed",
   headlineStatic: "Record your screen.",
@@ -27,7 +25,6 @@ export const HERO_CONFIG = {
   mockLabels: ["Custom Background", "Trim & Export", "1080p"] as const,
 };
 
-/* ── How It Works ── */
 export interface Step {
   number: string;
   title: string;
@@ -72,7 +69,6 @@ export const HOW_IT_WORKS_CONFIG = {
   ] satisfies Step[],
 };
 
-/* ── Coming Soon ── */
 export type ItemStatus = "In Development" | "Planned";
 
 export interface UpcomingItem {
@@ -109,7 +105,6 @@ export const COMING_SOON_CONFIG = {
   statusColors: STATUS_COLORS,
 };
 
-/* ── Waitlist ── */
 export const WAITLIST_CONFIG = {
   formspreeEndpoint: "https://formspree.io/f/xpqjynpw",
   badgeLabel: "Don't be late to the party",
@@ -123,12 +118,10 @@ export const WAITLIST_CONFIG = {
   disclaimer: "We hate spam as much as you do. Only the good stuff, promise.",
 };
 
-/* ── Footer ── */
 export interface FooterLink {
   label: string;
   href: string;
-  /** true → rendered as <Link>, false → plain <a> */
-  internal: boolean;
+    internal: boolean;
 }
 
 export const FOOTER_CONFIG = {

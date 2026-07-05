@@ -37,7 +37,7 @@ export const OsFramePreview = ({ variant, theme = "dark" }: OsFramePreviewProps)
         className={TILE}
         style={{ background: isLight ? "#ffffff" : "#1e1e1e" }}
       >
-        {/* macOS titlebar */}
+        {}
         <div
           className="flex items-center justify-between px-1.5 w-full shrink-0"
           style={{
@@ -52,9 +52,9 @@ export const OsFramePreview = ({ variant, theme = "dark" }: OsFramePreviewProps)
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#28c840" }} />
           </div>
           <div className={`w-1/2 h-[50%] rounded ${isLight ? 'bg-white border border-black/5' : 'bg-[#242426] border border-white/5'}`} />
-          <div className="w-4" /> {/* spacer for balance */}
+          <div className="w-4" /> {}
         </div>
-        {/* Content area */}
+        {}
         <div className={`flex-1 ${isLight ? 'bg-black/5' : 'bg-white/5'} flex items-center justify-center`}>
           <div className={`w-[55%] h-[55%] rounded ${isLight ? 'bg-black/8 border border-black/10' : 'bg-white/10 border border-white/10'}`} />
         </div>
@@ -110,8 +110,6 @@ export const OsFramePreview = ({ variant, theme = "dark" }: OsFramePreviewProps)
       </div>
     );
   }
-
-
 
   return null;
 };

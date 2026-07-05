@@ -1,4 +1,3 @@
-/** 8 resize handle descriptors for the VideoPlayer selection UI. */
 export const HANDLES = [
   { id: "nw", cursor: "nwse-resize", top: -5,      left:   -5,    dx: -1, dy: -1 },
   { id: "n",  cursor: "ns-resize",   top: -5,      left: "50%",   dx:  0, dy: -1 },

@@ -22,7 +22,6 @@ export const FrameWrapper = ({
 
   const { osFrame, theme, url, buttonControls, buttonPosition } = settings;
 
-  // If no frame selected, just return children
   if (osFrame === "none") {
     return <>{children}</>;
   }
@@ -70,7 +69,7 @@ export const FrameWrapper = ({
   const isTop = buttonPosition.startsWith("top");
   const isLeft = buttonPosition.endsWith("left");
   const isRight = buttonPosition.endsWith("right");
-  // Theme and OS Frames
+  
   const isLightOS = theme === "light";
   const iconColor = isLightOS ? "#8a8a8c" : "#98989a";
 
@@ -208,7 +207,7 @@ export const FrameWrapper = ({
       }}
     >
       <div className="flex items-center w-full justify-between">
-        {/* Left area */}
+        {}
         <div className="flex items-center gap-4 flex-1">
           {isLeft && (
             <div className="flex items-center gap-2">{renderMacDots()}</div>
@@ -230,7 +229,7 @@ export const FrameWrapper = ({
           </div>
         </div>
 
-        {/* Center area */}
+        {}
         <div
           className="flex items-center justify-center gap-3 shrink-0"
           style={{ width: "50%", maxWidth: "500px" }}
@@ -282,7 +281,7 @@ export const FrameWrapper = ({
           </div>
         </div>
 
-        {/* Right area */}
+        {}
         <div
           className="flex items-center justify-end gap-4 flex-1"
           style={{ color: iconColor }}

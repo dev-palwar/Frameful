@@ -1,12 +1,5 @@
 import type { ExportOptions, CanvasLayout } from "../types";
 
-/**
- * Converts the user-space layout fractions (from VideoPlayer.getExportLayout)
- * into exact canvas pixel coordinates for the FFmpeg filter graph.
- *
- * Replicates the same object-contain → scale → translate logic that the
- * VideoPlayer CSS transform does, ensuring export matches the preview.
- */
 export function computeLayout(
   opts: ExportOptions,
   videoDuration: number,
@@ -21,7 +14,6 @@ export function computeLayout(
 
   const videoAR = opts.videoNativeWidth / (opts.videoNativeHeight || 1);
 
-  // Object-contain sizing
   let vw: number;
   let vh: number;
   if (videoAR > aW / aH) {
@@ -32,11 +24,9 @@ export function computeLayout(
     vw = Math.round(aH * videoAR);
   }
 
-  // User scale applied around canvas centre
   const svw = Math.round(vw * opts.scale);
   const svh = Math.round(vh * opts.scale);
 
-  // User position offset (fraction → canvas pixels)
   const canvasPosX = Math.round(opts.posX_frac * W);
   const canvasPosY = Math.round(opts.posY_frac * H);
 

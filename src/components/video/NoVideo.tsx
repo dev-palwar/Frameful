@@ -7,19 +7,19 @@ const NoVideo = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
-      {/* Decorative background blobs — muted, no animate-pulse */}
+      {}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-chart-4/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-6 max-w-md text-center">
-        {/* Icon */}
+        {}
         <div className="w-20 h-20 rounded-xl border border-border bg-muted flex items-center justify-center">
           <Monitor className="w-9 h-9 text-primary" />
         </div>
 
-        {/* Copy */}
+        {}
         <div>
           <Typography variant="h2" as="h2" className="text-foreground mb-2">
             No recording found
@@ -30,7 +30,7 @@ const NoVideo = () => {
           </Typography>
         </div>
 
-        {/* CTA */}
+        {}
         <button
           id="go-back-btn"
           onClick={() => navigate("/record")}

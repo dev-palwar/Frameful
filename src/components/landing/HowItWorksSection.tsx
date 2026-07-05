@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-/* ─── InView hook ──────────────────────────────────────────────────────────── */
 function useInView(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -25,15 +24,14 @@ function useInView(threshold = 0.12) {
   return { ref, inView };
 }
 
-/* ─── Step data ────────────────────────────────────────────────────────────── */
 interface WorkflowStep {
   number: string;
   title: string;
   tagline: string;
   description: string;
   icon: LucideIcon;
-  accent: string;        // HSL main accent
-  accentMuted: string;   // lower-opacity tint for backgrounds
+  accent: string;        
+  accentMuted: string;   
 }
 
 const STEPS: WorkflowStep[] = [
@@ -79,19 +77,17 @@ const STEPS: WorkflowStep[] = [
   },
 ];
 
-/* ─── Animated illustrations for the preview area ──────────────────────────── */
-
 function InstallScene() {
   return (
     <div className="relative flex flex-col items-center justify-center h-full w-full gap-4">
-      {/* Extension popup mockup */}
+      {}
       <div className="relative w-56 rounded-lg overflow-hidden border border-border shadow-2xl bg-card">
-        {/* Header */}
+        {}
         <div className="flex items-center gap-2 bg-foreground/5 px-3 py-2 border-b border-border">
           <Puzzle className="h-3.5 w-3.5 text-primary" />
           <div className="h-2 w-20 rounded bg-foreground/10" />
         </div>
-        {/* Content */}
+        {}
         <div className="p-4 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -107,7 +103,7 @@ function InstallScene() {
           </div>
         </div>
       </div>
-      {/* Floating particles for installation */}
+      {}
       <div
         className="absolute -right-4 top-1/4 h-3 w-3 rounded-full bg-chart-2/40 animate-ping"
         style={{ animationDuration: "2s" }}
@@ -123,9 +119,9 @@ function InstallScene() {
 function RecordScene() {
   return (
     <div className="relative flex items-center justify-center h-full w-full">
-      {/* Screen outline */}
+      {}
       <div className="relative w-52 h-36 rounded-lg border-2 border-border/50 bg-foreground/5">
-        {/* Screen content - fake UI */}
+        {}
         <div className="absolute inset-3 flex flex-col gap-2">
           <div className="h-2 w-16 rounded-full bg-foreground/10" />
           <div className="h-2 w-24 rounded-full bg-foreground/5" />
@@ -137,19 +133,19 @@ function RecordScene() {
             </div>
           </div>
         </div>
-        {/* Red record dot */}
+        {}
         <div className="absolute -top-2 -right-2 flex items-center justify-center">
           <div className="h-5 w-5 rounded-full bg-destructive/20 flex items-center justify-center animate-pulse">
             <div className="h-2.5 w-2.5 rounded-full bg-destructive" />
           </div>
         </div>
-        {/* Selection border animation */}
+        {}
         <div
           className="absolute -inset-1 rounded-xl border-2 border-dashed animate-spin"
           style={{ borderColor: "color-mix(in srgb, var(--chart-1) 30%, transparent)", animationDuration: "8s" }}
         />
       </div>
-      {/* Cursor */}
+      {}
       <div
         className="absolute animate-pulse"
         style={{ bottom: "28%", right: "30%", animationDuration: "2s" }}
@@ -173,16 +169,16 @@ function EditScene() {
   ];
   return (
     <div className="relative flex items-center justify-center h-full w-full">
-      {/* Video frame in centre */}
+      {}
       <div className="relative w-40 h-24 rounded-lg bg-foreground/5 border border-border shadow-2xl flex items-center justify-center overflow-hidden">
         <div className="absolute inset-2 rounded bg-gradient-to-br from-foreground/10 to-transparent" />
         
-        {/* Fake timeline at bottom */}
+        {}
         <div className="absolute bottom-2 inset-x-3 h-1.5 rounded-full bg-foreground/10">
           <div className="absolute left-1/4 right-1/4 h-full rounded-full bg-primary/40" />
         </div>
       </div>
-      {/* Swatches orbiting */}
+      {}
       <div className="absolute inset-0 flex items-center justify-center">
         {swatches.map((bg, i) => {
           const angle = (360 / swatches.length) * i;
@@ -206,17 +202,15 @@ function EditScene() {
   );
 }
 
-
-
 function ExportScene() {
   return (
     <div className="relative flex flex-col items-center justify-center h-full w-full gap-4">
-      {/* File icon */}
+      {}
       <div className="relative">
         <div className="w-14 h-18 rounded-lg bg-foreground/5 border border-border flex items-center justify-center">
           <div className="text-[10px] font-mono font-bold text-muted-foreground tracking-wide">.webm</div>
         </div>
-        {/* Corner fold */}
+        {}
         <div
           className="absolute -top-px -right-px w-4 h-4"
           style={{
@@ -224,14 +218,14 @@ function ExportScene() {
             borderRadius: "0 6px 0 4px",
           }}
         />
-        {/* Checkmark */}
+        {}
         <div className="absolute -bottom-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
           <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
             <path d="M1 4L3.5 6.5L9 1" className="stroke-primary" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
-      {/* Progress bar */}
+      {}
       <div className="w-28">
         <div className="h-1 w-full rounded-full bg-foreground/10 overflow-hidden">
           <div
@@ -251,7 +245,6 @@ function ExportScene() {
 
 const SCENES = [InstallScene, RecordScene, EditScene, ExportScene];
 
-/* ─── Progress ring (SVG) ──────────────────────────────────────────────────── */
 function ProgressRing({ progress, accent }: { progress: number; accent: string }) {
   const r = 11;
   const circ = 2 * Math.PI * r;
@@ -274,10 +267,6 @@ function ProgressRing({ progress, accent }: { progress: number; accent: string }
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════════
-   MAIN COMPONENT
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
 const CYCLE_MS = 5000;
 
 export default function HowItWorksSection() {
@@ -288,7 +277,6 @@ export default function HowItWorksSection() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startRef = useRef(Date.now());
 
-  // Auto-cycle through steps
   const tick = useCallback(() => {
     if (paused) return;
     const elapsed = Date.now() - startRef.current;
@@ -307,7 +295,6 @@ export default function HowItWorksSection() {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [inView, tick]);
 
-  // Manual step selection
   const selectStep = (i: number) => {
     setActive(i);
     setProgress(0);
@@ -323,7 +310,7 @@ export default function HowItWorksSection() {
       className="relative py-24 md:py-36 overflow-hidden"
       ref={sectionRef}
     >
-      {/* Background blobs */}
+      {}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="absolute top-1/3 left-1/4 h-[500px] w-[500px] rounded-full blur-[180px] opacity-[0.06] transition-colors duration-1000"
@@ -332,7 +319,7 @@ export default function HowItWorksSection() {
       </div>
 
       <div className="mx-auto max-w-6xl px-6">
-        {/* Header */}
+        {}
         <div
           className={`text-center mb-16 transition-all duration-700 ${
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
@@ -354,13 +341,13 @@ export default function HowItWorksSection() {
           </Typography>
         </div>
 
-        {/* ── Main layout: preview + step list ─────────────────────────────── */}
+        {}
         <div
           className={`grid gap-8 lg:grid-cols-[1fr_380px] items-start transition-all duration-700 delay-200 ${
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* ── Left: Interactive Preview ──────────────────────────────────── */}
+          {}
           <div
             className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden"
             style={{
@@ -369,7 +356,7 @@ export default function HowItWorksSection() {
               transition: "background 0.8s ease, border-color 0.8s ease",
             }}
           >
-            {/* Grid dots */}
+            {}
             <div
               className="absolute inset-0 opacity-[0.04]"
               style={{
@@ -379,12 +366,12 @@ export default function HowItWorksSection() {
               }}
             />
 
-            {/* Scene content */}
+            {}
             <div className="relative z-10 h-full w-full">
               <ActiveScene />
             </div>
 
-            {/* Bottom label bar */}
+            {}
             <div className="absolute bottom-0 inset-x-0 z-20 flex items-center justify-between px-5 py-3 bg-gradient-to-t from-background/80 to-transparent">
               <div className="flex items-center gap-2">
                 <span
@@ -402,14 +389,14 @@ export default function HowItWorksSection() {
               </span>
             </div>
 
-            {/* Edge glow */}
+            {}
             <div
               className="absolute top-0 left-0 w-full h-px transition-colors duration-800"
               style={{ background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${step.accent} 30%, transparent), transparent)` }}
             />
           </div>
 
-          {/* ── Right: Step List ───────────────────────────────────────────── */}
+          {}
           <div
             className="flex flex-col gap-1"
             onMouseEnter={() => setPaused(true)}
@@ -432,7 +419,7 @@ export default function HowItWorksSection() {
                     }`}
                 >
                   <div className="flex items-start gap-3">
-                    {/* Progress ring / step indicator */}
+                    {}
                     <div className="mt-0.5">
                       {isActive ? (
                         <ProgressRing progress={progress} accent={s.accent} />
@@ -445,7 +432,7 @@ export default function HowItWorksSection() {
                       )}
                     </div>
 
-                    {/* Text content */}
+                    {}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <Icon
@@ -471,7 +458,7 @@ export default function HowItWorksSection() {
                         </span>
                       </div>
 
-                      {/* Description - only visible on active */}
+                      {}
                       <div
                         className="overflow-hidden transition-all duration-400 ease-out"
                         style={{
@@ -487,7 +474,7 @@ export default function HowItWorksSection() {
                     </div>
                   </div>
 
-                  {/* Active indicator bar on the left */}
+                  {}
                   <div
                     className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full transition-all duration-300"
                     style={{

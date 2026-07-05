@@ -2,7 +2,7 @@
 
 Cutline is a video editor and screen recorder designed for seamless zooming and professional exports.
 
-## 🧩 Shipping the Auto-Zoom Extension
+## Self hosting the Cutline - Auto-Zoom Extension
 
 The Cutline Auto-Zoom extension is a JavaScript extension located in the `extension/` directory. It requires no build step.
 

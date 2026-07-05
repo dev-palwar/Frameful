@@ -8,7 +8,7 @@ import { Typography } from "@/design-system/Typography";
 function GradientMeshBg() {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {/* Animated gradient blobs */}
+      {}
       <div
         className="absolute -top-1/4 -left-1/4 h-[800px] w-[800px] rounded-full blur-[120px] opacity-30 animate-mesh-float"
         style={{
@@ -32,7 +32,7 @@ function GradientMeshBg() {
         }}
       />
 
-      {/* Grid pattern overlay */}
+      {}
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -42,7 +42,7 @@ function GradientMeshBg() {
         }}
       />
 
-      {/* Floating particles */}
+      {}
       {[...Array(6)].map((_, i) => (
         <div
           key={i}
@@ -56,7 +56,7 @@ function GradientMeshBg() {
         />
       ))}
 
-      {/* Radial gradient fade at bottom */}
+      {}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent" />
     </div>
   );
@@ -89,7 +89,7 @@ export default function Hero() {
       <GradientMeshBg />
 
       <div className="mx-auto max-w-5xl px-6 text-center">
-        {/* Badge */}
+        {}
         <div className="animate-text-reveal mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 py-2 backdrop-blur-sm">
           <div className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
@@ -100,7 +100,7 @@ export default function Hero() {
           </Typography>
         </div>
 
-        {/* Headline — staggered reveal with blur effect */}
+        {}
         <Typography
           variant="display"
           as="h1"
@@ -116,7 +116,7 @@ export default function Hero() {
           <span className="text-brand-gradient">{cfg.headlineGradient}</span>
         </Typography>
 
-        {/* Subtext */}
+        {}
         <Typography
           variant="body"
           className="animate-text-reveal delay-300 mx-auto mt-6 max-w-2xl text-muted-foreground leading-relaxed"
@@ -125,7 +125,7 @@ export default function Hero() {
           {cfg.subtext}
         </Typography>
 
-        {/* CTAs */}
+        {}
         <div className="animate-text-reveal delay-500 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link to={"/record"}>
             <Button
@@ -158,12 +158,12 @@ export default function Hero() {
           </Button>
         </div>
 
-        {/* Trust bar */}
+        {}
         <TrustBar />
 
-        {/* Hero product showcase */}
+        {}
         <div className="animate-text-reveal delay-800 relative mx-auto mt-20 max-w-4xl">
-          {/* Glow behind the showcase */}
+          {}
           <div
             className="absolute -inset-4 rounded-2xl opacity-50 blur-2xl animate-glow-pulse"
             style={{
@@ -172,15 +172,15 @@ export default function Hero() {
             }}
           />
 
-          {/* Orbit rings — decorative */}
+          {}
           <div
             className="absolute -inset-8 rounded-2xl border border-primary/5 animate-orbit-reverse"
             style={{ borderRadius: "24px" }}
           />
 
-          {/* Browser chrome mockup */}
+          {}
           <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl shadow-primary/5">
-            {/* Title bar */}
+            {}
             <div className="flex items-center gap-3 border-b border-border/50 bg-muted/30 px-5 py-3.5 backdrop-blur-sm">
               <div className="flex gap-2">
                 <div className="h-3 w-3 rounded-full bg-destructive/50 transition-colors hover:bg-destructive" />
@@ -198,10 +198,10 @@ export default function Hero() {
                   </Typography>
                 </div>
               </div>
-              <div className="w-[52px]" /> {/* Balance spacer */}
+              <div className="w-[52px]" /> {}
             </div>
 
-            {/* Feature pills floating on the video */}
+            {}
             <div className="relative">
               <video
                 src={demoVideo}
@@ -213,7 +213,7 @@ export default function Hero() {
                 className="w-full"
               />
 
-              {/* Floating feature badges */}
+              {}
               <div className="absolute top-4 right-4 flex flex-col gap-2">
                 {(["Custom Background", "Trim & Export", "1080p"] as const).map(
                   (label, i) => (

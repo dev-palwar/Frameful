@@ -12,7 +12,7 @@ const ToolBar: React.FC<ToolBarProps> = (props) => {
 
   return (
     <aside className="w-full lg:w-80 xl:w-96 border-t lg:border-t-0 lg:border-l border-border bg-card shrink-0 flex flex-col overflow-hidden">
-      {/* Tab strip */}
+      {}
       <div className="flex items-center gap-0 border-b border-border shrink-0">
         {TABS.map(
           (tab: {
@@ -76,7 +76,7 @@ const ToolBar: React.FC<ToolBarProps> = (props) => {
         )}
       </div>
 
-      {/* Panel area */}
+      {}
       <div className="flex-1 overflow-y-auto p-5">
         <div className="mb-5">
           <Typography variant="h4" as="h2" className="text-foreground">

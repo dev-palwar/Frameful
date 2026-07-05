@@ -15,7 +15,6 @@ export const ASPECT_RATIOS = [
   { key: "9:16",   label: "9 : 16",  ratio: 9 / 16 },
 ] as const;
 
-/** Returns the numeric ratio for a given key, or null for "native". */
 export function resolveRatio(key: string): number | null {
   const entry = ASPECT_RATIOS.find((r) => r.key === key);
   return entry ? entry.ratio : null;
@@ -56,7 +55,7 @@ export const AspectRatioSelect = ({ value, onChange }: AspectRatioSelectProps) =
           ))}
         </select>
 
-        {/* Custom chevron */}
+        {}
         <ChevronDown
           className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground"
         />

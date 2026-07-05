@@ -9,12 +9,12 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
   if (variant === "chrome") {
     return (
       <div className={TILE} style={{ background: "#202124" }}>
-        {/* Chrome tab bar */}
+        {}
         <div
           className="flex items-end px-1 pt-1 gap-0.5"
           style={{ height: "30%", background: "#35363a" }}
         >
-          {/* Active tab */}
+          {}
           <div
             className="flex items-center gap-0.5 px-1.5 rounded-t-md text-[6px] text-white/80 shrink-0"
             style={{ height: "70%", background: "#202124", minWidth: "42%", maxWidth: "42%" }}
@@ -22,7 +22,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
             <div className="w-1.5 h-1.5 rounded-full bg-blue-400/60 shrink-0" />
             <span className="truncate text-[5px]">Tab</span>
           </div>
-          {/* Inactive tab */}
+          {}
           <div
             className="flex items-center gap-0.5 px-1 rounded-t-md shrink-0 opacity-40"
             style={{ height: "60%", background: "#2d2e31", minWidth: "30%" }}
@@ -30,7 +30,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
             <div className="w-1 h-1 rounded-full bg-white/30 shrink-0" />
           </div>
         </div>
-        {/* Address bar */}
+        {}
         <div
           className="flex items-center gap-1 px-2"
           style={{ height: "20%", background: "#202124", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
@@ -38,7 +38,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
           <div className="w-1 h-1 rounded-full bg-white/20" />
           <div className="flex-1 h-[5px] rounded-full bg-white/10" />
         </div>
-        {/* Content */}
+        {}
         <div className="flex-1 bg-white/5 flex items-center justify-center">
           <div className="w-[55%] h-[55%] rounded bg-white/10" />
         </div>
@@ -49,18 +49,18 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
   if (variant === "safari") {
     return (
       <div className={TILE} style={{ background: "#1c1c1e" }}>
-        {/* Safari toolbar */}
+        {}
         <div
           className="flex flex-col"
           style={{ height: "35%", background: "linear-gradient(180deg, #2c2c2e 0%, #252527 100%)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
         >
-          {/* Traffic lights + title */}
+          {}
           <div className="flex items-center gap-1 px-2 pt-1" style={{ height: "45%" }}>
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#ff5f57" }} />
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#ffbd2e" }} />
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#28c840" }} />
           </div>
-          {/* Address / search bar */}
+          {}
           <div className="flex items-center justify-center px-2" style={{ height: "55%" }}>
             <div
               className="flex items-center gap-1 px-2 rounded-md"
@@ -70,7 +70,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
             </div>
           </div>
         </div>
-        {/* Content */}
+        {}
         <div className="flex-1 bg-white flex items-center justify-center">
           <div className="w-[55%] h-[55%] rounded bg-black/10" />
         </div>
@@ -81,7 +81,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
   if (variant === "firefox") {
     return (
       <div className={TILE} style={{ background: "#1d1b20" }}>
-        {/* Firefox tab bar */}
+        {}
         <div
           className="flex items-end px-1 pt-1 gap-0.5"
           style={{ height: "28%", background: "#2b2a33" }}
@@ -100,7 +100,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
             <div className="w-1 h-1 rounded-full bg-white/30 shrink-0" />
           </div>
         </div>
-        {/* Address bar */}
+        {}
         <div
           className="flex items-center gap-1.5 px-2"
           style={{ height: "18%", background: "#1d1b20", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
@@ -109,7 +109,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
           <div className="flex-1 h-[4px] rounded-md bg-white/10" />
           <div className="w-1 h-1 rounded-full bg-white/20" />
         </div>
-        {/* Content */}
+        {}
         <div className="flex-1 bg-white/5 flex items-center justify-center">
           <div className="w-[55%] h-[55%] rounded bg-white/10" />
         </div>
@@ -120,7 +120,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
   if (variant === "arc") {
     return (
       <div className={TILE} style={{ background: "linear-gradient(135deg, #0f0a1e 0%, #1a0d35 100%)" }}>
-        {/* Arc sidebar */}
+        {}
         <div className="flex h-full">
           <div
             className="flex flex-col items-center py-1.5 gap-1"
@@ -136,7 +136,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
               <div key={i} className="w-3 h-1 rounded-sm bg-white/10" />
             ))}
           </div>
-          {/* Content */}
+          {}
           <div className="flex-1 bg-white/5 flex items-center justify-center">
             <div className="w-[60%] h-[55%] rounded bg-white/10 border border-purple-400/10" />
           </div>
@@ -148,7 +148,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
   if (variant === "edge") {
     return (
       <div className={TILE} style={{ background: "#202020" }}>
-        {/* Edge tab bar */}
+        {}
         <div
           className="flex items-end px-1 pt-1 gap-0.5"
           style={{ height: "28%", background: "#2d2d2d" }}
@@ -167,7 +167,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
             <div className="w-1 h-1 rounded-full bg-white/30" />
           </div>
         </div>
-        {/* Address bar */}
+        {}
         <div
           className="flex items-center gap-1 px-2"
           style={{ height: "18%", background: "#202020", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
@@ -175,7 +175,7 @@ export const BrowserFramePreview = ({ variant }: BrowserFramePreviewProps) => {
           <div className="w-1 h-1 rounded-full bg-cyan-400/40" />
           <div className="flex-1 h-[4px] rounded-md bg-white/10" />
         </div>
-        {/* Content */}
+        {}
         <div className="flex-1 bg-white/5 flex items-center justify-center">
           <div className="w-[55%] h-[55%] rounded bg-white/10" />
         </div>

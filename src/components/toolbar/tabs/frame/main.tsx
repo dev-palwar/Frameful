@@ -8,7 +8,6 @@ import {
   ButtonPositionPreview,
 } from "./widgets";
 
-// ── OS Frame variants ──────────────────────────────────────────────────────────
 const OS_FRAME_VARIANTS = ["none", "macos", "arc", "firefox"] as const;
 const OS_FRAME_LABELS: Record<(typeof OS_FRAME_VARIANTS)[number], string> = {
   none: "None",
@@ -17,14 +16,12 @@ const OS_FRAME_LABELS: Record<(typeof OS_FRAME_VARIANTS)[number], string> = {
   firefox: "Firefox",
 };
 
-// ── Theme variants ─────────────────────────────────────────────────────────────
 const THEME_VARIANTS = ["dark", "light"] as const;
 const THEME_LABELS: Record<(typeof THEME_VARIANTS)[number], string> = {
   dark: "Dark Mode",
   light: "Light Mode",
 };
 
-// ── Button Control variants ──────────────────────────────────────────────────
 const BUTTON_CONTROL_VARIANTS = [
   "all",
   "close-only",
@@ -41,7 +38,6 @@ const BUTTON_CONTROL_LABELS: Record<
   none: "None",
 };
 
-// ── Button Position variants ─────────────────────────────────────────────────
 const BUTTON_POSITION_VARIANTS = [
   "top-left",
   "top-center",
@@ -71,12 +67,11 @@ const FrameTab: React.FC<ToolBarProps> = ({
 
   const { osFrame, buttonControls, buttonPosition } = frameSettings;
 
-  // Determine if we should show button controls / position (only when an OS frame is active)
   const showButtonControls = osFrame !== "none";
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      {/* ── OS Frames ── */}
+      {}
       <Section title="OS Frame">
         <div className="grid grid-cols-3 gap-x-4 gap-y-4">
           {OS_FRAME_VARIANTS.map((v) => (
@@ -94,7 +89,7 @@ const FrameTab: React.FC<ToolBarProps> = ({
         </div>
       </Section>
 
-      {/* ── Theme Toggle ── */}
+      {}
       <Section title="Theme" defaultOpen={osFrame !== "none"}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-4">
           {THEME_VARIANTS.map((v) => (
@@ -110,7 +105,7 @@ const FrameTab: React.FC<ToolBarProps> = ({
         </div>
       </Section>
 
-      {/* ── URL Input ── */}
+      {}
       <Section title="Website URL" defaultOpen={osFrame !== "none"}>
         <div className="flex px-1">
           <input
@@ -123,7 +118,7 @@ const FrameTab: React.FC<ToolBarProps> = ({
         </div>
       </Section>
 
-      {/* ── Button Controls (only for OS frames) ── */}
+      {}
       <Section title="Button Controls" defaultOpen={showButtonControls}>
         <div className="grid grid-cols-2 gap-x-4 gap-y-4">
           {BUTTON_CONTROL_VARIANTS.map((v) => (
@@ -139,7 +134,7 @@ const FrameTab: React.FC<ToolBarProps> = ({
         </div>
       </Section>
 
-      {/* ── Button Position ── */}
+      {}
       <Section title="Button Position" defaultOpen={showButtonControls}>
         <div className="grid grid-cols-3 gap-x-4 gap-y-4">
           {BUTTON_POSITION_VARIANTS.map((v) => (

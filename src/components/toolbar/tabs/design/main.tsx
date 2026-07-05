@@ -41,7 +41,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      {/* ── Aspect Ratio ── */}
+      {}
       <Section title="Canvas">
         <AspectRatioSelect
           value={aspectRatio}
@@ -49,7 +49,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
         />
       </Section>
 
-      {/* ── Style ── */}
+      {}
       <Section title="Style">
         <div className="grid grid-cols-3 gap-x-4 gap-y-4 mb-4">
           {STYLE_VARIANTS.map((v) => (
@@ -86,7 +86,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
         </div>
       </Section>
 
-      {/* ── Border ── */}
+      {}
       <Section title="Border">
         <div className="grid grid-cols-3 gap-x-4 gap-y-4 mb-4">
           {BORDER_VARIANTS.map((v) => (
@@ -114,7 +114,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
         </div>
       </Section>
 
-      {/* ── Shadow ── */}
+      {}
       <Section title="Shadow">
         <div className="grid grid-cols-2 gap-x-4 gap-y-4 mb-4">
           {SHADOW_VARIANTS.map((v) => (
@@ -140,7 +140,7 @@ const DesignTab: React.FC<ToolBarProps> = ({ designSettings, setDesignSettings }
         />
       </Section>
 
-      {/* ── Blur ── */}
+      {}
       <Section title="Blur">
         <div className="grid grid-cols-2 gap-x-4 gap-y-4 mb-4">
           {BLUR_VARIANTS.map((v) => (

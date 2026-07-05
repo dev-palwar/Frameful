@@ -8,10 +8,8 @@ export interface ExportLayout {
   paddingY_frac: number;
   videoNativeWidth: number;
   videoNativeHeight: number;
-  /** Reserved for Design tab — border radius in px (0 = sharp). */
-  borderRadius: number;
-  /** Reserved for Design tab — shadow preset. */
-  shadow: "none" | "hug" | "soft" | "strong";
+    borderRadius: number;
+    shadow: "none" | "hug" | "soft" | "strong";
 }
 
 interface UseExportLayoutOptions {
@@ -23,12 +21,6 @@ interface UseExportLayoutOptions {
   posY:  number;
 }
 
-/**
- * Returns a stable `getExportLayout()` function that performs live DOM
- * measurements at call time. Uses offsetWidth/offsetHeight which are
- * unaffected by CSS transforms, giving the wrapper's natural (pre-scale)
- * dimensions — the only accurate way to derive the CSS padding fraction.
- */
 export function useExportLayout({
   containerRef,
   wrapperRef,
@@ -57,7 +49,7 @@ export function useExportLayout({
 
     const containerW = container.clientWidth;
     const containerH = container.clientHeight;
-    // offsetWidth/offsetHeight ignore CSS transform — gives the natural size
+    
     const wrapperNaturalW = wrapper.offsetWidth;
     const wrapperNaturalH = wrapper.offsetHeight;
 

@@ -135,17 +135,15 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       blurAmount = 50,
     } = designSettings || {};
 
-    // Resolve the numeric w/h ratio → CSS paddingBottom percentage
     const numericRatio = resolveRatio(aspectRatio);
     const paddingBottom = numericRatio
       ? `${(1 / numericRatio) * 100}%`
       : "56.25%";
 
-    // Blur: map preset to base px, then scale by blurAmount/100
     const getBlurValue = (): string => {
       if (blur === "none") return "none";
       const t = blurAmount / 100;
-      const base = blur === "subtle" ? 4 : blur === "medium" ? 10 : 20; // heavy = 20px
+      const base = blur === "subtle" ? 4 : blur === "medium" ? 10 : 20; 
       return `blur(${(base * t).toFixed(1)}px)`;
     };
 
@@ -196,16 +194,16 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
     return (
       <div className="flex-1 flex flex-col w-full h-full min-h-0">
-        {/* Preview Area */}
+        {}
         <div className="flex-1 flex items-center justify-center p-6 lg:p-10 min-h-0">
           <div className="w-full max-w-5xl">
-            {/* 16:9 Cinematic Preview */}
+            {}
             <div
               ref={containerRef}
               className="relative w-full overflow-hidden rounded-lg border border-border bg-black/40"
               style={{ paddingBottom }}
             >
-              {/* Blurred background layer */}
+              {}
               <div
                 className="absolute inset-0 bg-center opacity-80 bg-cover"
                 style={{
@@ -221,7 +219,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                 }}
               />
 
-              {/* Video layer */}
+              {}
               <div
                 className={`absolute inset-0 flex items-center justify-center p-3 sm:p-5 lg:p-8 overflow-hidden ${className}`}
               >
@@ -269,18 +267,17 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                             frameSettings && frameSettings.osFrame !== "none"
                               ? 0
                               : innerRadius,
-                          // Auto-zoom transform
+                          
                           transform: activeTransform
                             ? `scale(${activeTransform.scale})`
                             : undefined,
                           transformOrigin: activeTransform
                             ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
                             : "center center",
-                          // No CSS transition here! The rAF loop in useZoomTransform handles 60fps interpolation.
-                          // A CSS transition here would fight the JS loop and cause stuttering.
+
                         }}
                       />
-                      {/* Interactive focus picker overlay */}
+                      {}
                       {placingZoom &&
                         onFocusChange &&
                         onConfirmZoom &&
@@ -296,7 +293,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                     </FrameWrapper>
                   </div>
 
-                  {/* Selection ring + resize handles */}
+                  {}
                   {isSelected && (
                     <>
                       <div
@@ -309,7 +306,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                         }}
                       />
 
-                      {/* Scale badge */}
+                      {}
                       <div
                         style={{
                           position: "absolute",
@@ -330,7 +327,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                         {scalePercent}%
                       </div>
 
-                      {/* 8 resize handles */}
+                      {}
                       {HANDLES.map((h) => (
                         <div
                           key={h.id}
@@ -364,7 +361,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
           </div>
         </div>
 
-        {/* Timeline */}
+        {}
         {duration > 0 && (
           <div className="w-full shrink-0 border-t border-border bg-card p-6">
             <Timeline

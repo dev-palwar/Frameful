@@ -1,18 +1,11 @@
-/**
- * ZoomFocusPicker — Interactive overlay for placing a zoom focus point.
- *
- * Renders as an absolute overlay on the video container. The user can
- * click anywhere or drag the circular focus indicator to set the zoom
- * origin. The parent applies a live zoom on the video as the focus moves.
- */
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Check, X } from "lucide-react";
 import { DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
 interface ZoomFocusPickerProps {
-  originX: number; // 0–1
-  originY: number; // 0–1
+  originX: number; 
+  originY: number; 
   onFocusChange: (x: number, y: number) => void;
   onConfirm: () => void;
   onCancel: () => void;
@@ -29,7 +22,6 @@ export function ZoomFocusPicker({
   const [isDragging, setIsDragging] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Trigger fade-in on mount
   useEffect(() => {
     requestAnimationFrame(() => setMounted(true));
   }, []);
@@ -43,7 +35,6 @@ export function ZoomFocusPicker({
     };
   }, []);
 
-  // Global drag handlers
   useEffect(() => {
     if (!isDragging) return;
     const onMove = (e: MouseEvent) => {
@@ -59,7 +50,6 @@ export function ZoomFocusPicker({
     };
   }, [isDragging, getRelativePos, onFocusChange]);
 
-  // Click on overlay → move focus there
   const handleOverlayClick = (e: React.MouseEvent) => {
     const { x, y } = getRelativePos(e.clientX, e.clientY);
     onFocusChange(x, y);
@@ -74,14 +64,14 @@ export function ZoomFocusPicker({
       className="absolute inset-0 z-50 select-none"
       style={{
         cursor: isDragging ? "grabbing" : "crosshair",
-        // Spotlight: translucent everywhere except a soft circle at focus
+        
         background: `radial-gradient(circle 72px at ${leftPct} ${topPct}, transparent 0%, transparent 36px, rgba(0,0,0,0.58) 80px)`,
         opacity: mounted ? 1 : 0,
         transition: "opacity 0.2s ease-out",
       }}
       onClick={handleOverlayClick}
     >
-      {/* Crosshair lines */}
+      {}
       <div
         className="absolute inset-y-0 pointer-events-none"
         style={{
@@ -101,7 +91,7 @@ export function ZoomFocusPicker({
         }}
       />
 
-      {/* ── Focus indicator ─────────────────────────────────────────── */}
+      {}
       <div
         className="absolute"
         style={{
@@ -118,7 +108,7 @@ export function ZoomFocusPicker({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Outer rotating dashed ring */}
+        {}
         <div
           style={{
             position: "absolute",
@@ -132,7 +122,7 @@ export function ZoomFocusPicker({
             animation: "Cutline-spin 5s linear infinite",
           }}
         />
-        {/* Pulsing inner ring */}
+        {}
         <div
           style={{
             position: "absolute",
@@ -149,7 +139,7 @@ export function ZoomFocusPicker({
             animation: "Cutline-pulse 2s ease-in-out infinite",
           }}
         />
-        {/* Center dot */}
+        {}
         <div
           style={{
             position: "absolute",
@@ -163,7 +153,7 @@ export function ZoomFocusPicker({
             transform: "translate(-50%,-50%)",
           }}
         />
-        {/* Zoom factor badge */}
+        {}
         <div
           style={{
             position: "absolute",
@@ -186,7 +176,7 @@ export function ZoomFocusPicker({
         </div>
       </div>
 
-      {/* ── Instructions pill ───────────────────────────────────────── */}
+      {}
       <div
         style={{
           position: "absolute",
@@ -209,7 +199,7 @@ export function ZoomFocusPicker({
         Click or drag to set the zoom focus point
       </div>
 
-      {/* ── Confirm / Cancel ────────────────────────────────────────── */}
+      {}
       <div
         style={{
           position: "absolute",

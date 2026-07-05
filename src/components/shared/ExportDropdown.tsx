@@ -1,6 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { Download, ChevronDown, Film, Zap, Star, Cpu, FileVideo } from "lucide-react";
+import {
+  Download,
+  ChevronDown,
+  Film,
+  Zap,
+  Star,
+  Cpu,
+  FileVideo,
+} from "lucide-react";
 import { Typography } from "@/design-system";
+import { DarkModeToggle } from "../DarkModeToggle";
 
 export interface ExportPreset {
   id: string;
@@ -8,7 +17,7 @@ export interface ExportPreset {
   description: string;
   badge?: string;
   badgeColor?: string;
-  widthMultiplier: number; // relative to base 1280
+  widthMultiplier: number;
   crf: number;
   icon: React.ReactNode;
   isRaw?: boolean;
@@ -76,7 +85,8 @@ export function ExportDropdown({ onExport, disabled }: ExportDropdownProps) {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -84,38 +94,50 @@ export function ExportDropdown({ onExport, disabled }: ExportDropdownProps) {
 
   return (
     <div ref={ref} className="relative">
-      {/* Trigger button */}
-      <button
-        id="export-dropdown-btn"
-        disabled={disabled}
-        onClick={() => setOpen((p) => !p)}
-        className="flex items-center gap-2 py-1.5 pl-4 pr-3 bg-brand-gradient text-primary-foreground cursor-pointer rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed select-none"
-      >
-        <Download className="w-3.5 h-3.5" />
-        <Typography variant="label" as="span">Export Video</Typography>
-        <div className="w-px h-3.5 bg-white/25 mx-0.5" />
-        <ChevronDown
-          className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
-      </button>
+      {}
+      <div className="flex justify-between items-center gap-4">
+        {" "}
+        <button
+          id="export-dropdown-btn"
+          disabled={disabled}
+          onClick={() => setOpen((p) => !p)}
+          className="flex items-center gap-2 py-1.5 pl-4 pr-3 bg-brand-gradient text-primary-foreground cursor-pointer rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed select-none"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <Typography variant="label" as="span">
+            Export Video
+          </Typography>
+          <div className="w-px h-3.5 bg-white/25 mx-0.5" />
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+        <DarkModeToggle />
+      </div>
 
-      {/* Dropdown panel */}
+      {}
       {open && (
         <div
           className="absolute right-0 top-full mt-2 w-72 rounded-xl border border-border bg-card shadow-2xl shadow-black/40 overflow-hidden z-50"
           style={{ animation: "dropdownIn 0.15s ease-out" }}
         >
-          {/* Quality presets */}
+          {}
           <div className="p-2">
             <div className="px-2 py-1.5 mb-1">
-              <Typography variant="caption" className="text-muted-foreground uppercase tracking-wider font-semibold text-[10px]">
+              <Typography
+                variant="caption"
+                className="text-muted-foreground uppercase tracking-wider font-semibold text-[10px]"
+              >
                 Export Quality
               </Typography>
             </div>
             {EXPORT_PRESETS.map((preset) => (
               <button
                 key={preset.id}
-                onClick={() => { setOpen(false); onExport(preset); }}
+                onClick={() => {
+                  setOpen(false);
+                  onExport(preset);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted/60 transition-colors cursor-pointer group text-left"
               >
                 <span className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
@@ -123,31 +145,46 @@ export function ExportDropdown({ onExport, disabled }: ExportDropdownProps) {
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <Typography variant="label" className="text-foreground">{preset.label}</Typography>
+                    <Typography variant="label" className="text-foreground">
+                      {preset.label}
+                    </Typography>
                     {preset.badge && (
-                      <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${preset.badgeColor}`}>
+                      <span
+                        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${preset.badgeColor}`}
+                      >
                         {preset.badge}
                       </span>
                     )}
                   </div>
-                  <Typography variant="caption" className="text-muted-foreground">{preset.description}</Typography>
+                  <Typography
+                    variant="caption"
+                    className="text-muted-foreground"
+                  >
+                    {preset.description}
+                  </Typography>
                 </div>
               </button>
             ))}
           </div>
 
-          {/* Divider */}
+          {}
           <div className="mx-3 border-t border-border" />
 
-          {/* Raw file section */}
+          {}
           <div className="p-2">
             <div className="px-2 py-1.5 mb-1">
-              <Typography variant="caption" className="text-muted-foreground uppercase tracking-wider font-semibold text-[10px]">
+              <Typography
+                variant="caption"
+                className="text-muted-foreground uppercase tracking-wider font-semibold text-[10px]"
+              >
                 Original File
               </Typography>
             </div>
             <button
-              onClick={() => { setOpen(false); onExport(RAW_PRESET); }}
+              onClick={() => {
+                setOpen(false);
+                onExport(RAW_PRESET);
+              }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted/60 transition-colors cursor-pointer group text-left"
             >
               <span className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
@@ -155,12 +192,18 @@ export function ExportDropdown({ onExport, disabled }: ExportDropdownProps) {
               </span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <Typography variant="label" className="text-foreground">{RAW_PRESET.label}</Typography>
-                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${RAW_PRESET.badgeColor}`}>
+                  <Typography variant="label" className="text-foreground">
+                    {RAW_PRESET.label}
+                  </Typography>
+                  <span
+                    className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${RAW_PRESET.badgeColor}`}
+                  >
                     {RAW_PRESET.badge}
                   </span>
                 </div>
-                <Typography variant="caption" className="text-muted-foreground">{RAW_PRESET.description}</Typography>
+                <Typography variant="caption" className="text-muted-foreground">
+                  {RAW_PRESET.description}
+                </Typography>
               </div>
             </button>
           </div>

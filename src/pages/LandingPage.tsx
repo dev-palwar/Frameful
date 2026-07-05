@@ -17,7 +17,7 @@ export default function LandingPage() {
         <StatsSection />
         <FeaturesSection />
         <HowItWorksSection />
-        {/* <ComingSoonSection /> */}
+        {}
         <WaitlistSection />
         <Footer />
       </main>

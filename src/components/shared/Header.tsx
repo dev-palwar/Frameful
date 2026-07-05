@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { DarkModeToggle } from "../DarkModeToggle";
+import { GithubIcon } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -27,13 +28,17 @@ const Header = () => {
             : "bg-background/40 backdrop-blur-md border-border/30 shadow-lg translate-y-2"
         }`}
       >
-        {/* LEFT: Brand */}
+        {}
         <div
           id="header-brand"
           onClick={() => navigate("/")}
           className="cursor-pointer flex items-center gap-3 group"
         >
-          <img src="/cutline-logo.png" alt="Cutline Logo" className="h-8 w-auto object-contain" />
+          <img
+            src="/cutline-logo.png"
+            alt="Cutline Logo"
+            className="h-8 w-auto object-contain"
+          />
           <span className="font-extrabold tracking-tight text-lg bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 hidden sm:inline-block">
             Cutline
           </span>
@@ -42,13 +47,17 @@ const Header = () => {
           </span>
         </div>
 
-        {/* RIGHT: Actions */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          <div className="flex items-center gap-1 sm:gap-2 mr-2 border-r border-border/50 pr-4">
-            <div className="scale-90">
-              <ThemeToggle />
-            </div>
-          </div>
+        {}
+        <div className="flex items-center gap-8">
+          <DarkModeToggle />
+          <a
+            href="https://github.com/dev-palwar/Cutline"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <GithubIcon className="size-6" />
+          </a>
         </div>
       </nav>
     </div>
