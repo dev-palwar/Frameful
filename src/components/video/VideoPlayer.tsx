@@ -33,10 +33,10 @@ interface VideoPlayerProps {
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
   onUpdateZoomTime?: (id: string, time: number) => void;
-  placingZoom?: { time: number; originX: number; originY: number } | null;
+  onSelectZoom?: (id: string | null) => void;
+  placingZoom?: { id: string; time: number; originX: number; originY: number } | null;
   onFocusChange?: (x: number, y: number) => void;
   onConfirmZoom?: () => void;
-  onCancelZoom?: () => void;
 }
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
@@ -51,10 +51,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       onAddZoom,
       onDeleteZoom,
       onUpdateZoomTime,
+      onSelectZoom,
       placingZoom,
       onFocusChange,
       onConfirmZoom,
-      onCancelZoom,
     },
     ref,
   ) {
@@ -120,6 +120,88 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
           originY: placingZoom.originY,
         }
       : zoomTransform;
+
+    let originX_pct = 50;
+    let originY_pct = 50;
+
+    if (activeTransform && containerRef.current) {
+      const W = 100;
+      const ratio = containerRef.current.clientHeight / containerRef.current.clientWidth;
+      const H = W * ratio;
+      
+      const layout = getExportLayout();
+
+      const PADDING_X = layout.paddingX_frac * W;
+      const PADDING_Y = layout.paddingY_frac * H;
+
+      const aW = W - PADDING_X * 2;
+      const aH = H - PADDING_Y * 2;
+
+      const svw = aW * layout.scale;
+      const svh = aH * layout.scale;
+
+      const canvasPosX = layout.posX_frac * W;
+      const canvasPosY = layout.posY_frac * H;
+
+      const vx = W / 2 + canvasPosX - svw / 2;
+      const vy = H / 2 + canvasPosY - svh / 2;
+
+      const dsScale = designSettings?.scale ?? 1.0;
+      const conW = svw * dsScale;
+      const conH = svh * dsScale;
+      const conX = vx + (svw - conW) / 2;
+      const conY = vy + (svh - conH) / 2;
+
+      const pad = designSettings?.padding ?? 0;
+      const scaleFactor = W / 1280;
+      const padPx = pad * 16 * scaleFactor;
+      
+      const vidX = conX + padPx;
+      const vidY = conY + padPx;
+      const vidW = conW - padPx * 2;
+      const vidH = conH - padPx * 2;
+
+      const focalX = vidX + activeTransform.originX * vidW;
+      const focalY = vidY + activeTransform.originY * vidH;
+
+      originX_pct = (focalX / W) * 100;
+      originY_pct = (focalY / H) * 100;
+    }
+
+    const handlePickerFocusChange = (cx: number, cy: number) => {
+      if (!onFocusChange || !containerRef.current) return;
+      const W = 100;
+      const ratio = containerRef.current.clientHeight / containerRef.current.clientWidth;
+      const H = W * ratio;
+      const layout = getExportLayout();
+      const PADDING_X = layout.paddingX_frac * W;
+      const PADDING_Y = layout.paddingY_frac * H;
+      const aW = W - PADDING_X * 2;
+      const aH = H - PADDING_Y * 2;
+      const svw = aW * layout.scale;
+      const svh = aH * layout.scale;
+      const canvasPosX = layout.posX_frac * W;
+      const canvasPosY = layout.posY_frac * H;
+      const vx = W / 2 + canvasPosX - svw / 2;
+      const vy = H / 2 + canvasPosY - svh / 2;
+      const dsScale = designSettings?.scale ?? 1.0;
+      const conW = svw * dsScale;
+      const conH = svh * dsScale;
+      const conX = vx + (svw - conW) / 2;
+      const conY = vy + (svh - conH) / 2;
+      const pad = designSettings?.padding ?? 0;
+      const scaleFactor = W / 1280;
+      const padPx = pad * 16 * scaleFactor;
+      const vidX = conX + padPx;
+      const vidY = conY + padPx;
+      const vidW = conW - padPx * 2;
+      const vidH = conH - padPx * 2;
+      const focalX = cx * W;
+      const focalY = cy * H;
+      const ox = (focalX - vidX) / vidW;
+      const oy = (focalY - vidY) / vidH;
+      onFocusChange(ox, oy);
+    };
 
     useImperativeHandle(ref, () => ({ trimStart, trimEnd, getExportLayout }), [
       trimStart,
@@ -209,8 +291,17 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               className="relative w-full overflow-hidden rounded-lg border border-border bg-black/40"
               style={{ paddingBottom }}
             >
-              {}
               <div
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  transform: activeTransform && activeTransform.scale > 1
+                    ? `scale(${activeTransform.scale})`
+                    : undefined,
+                  transformOrigin: `${originX_pct}% ${originY_pct}%`,
+                }}
+              >
+                {}
+                <div
                 className="absolute inset-0 bg-center opacity-80 bg-cover"
                 style={{
                   background: background.includes("gradient(")
@@ -292,27 +383,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                             style={{
                               pointerEvents: "none",
                               display: "block",
-                              transform: activeTransform
-                                ? `scale(${activeTransform.scale})`
-                                : undefined,
-                              transformOrigin: activeTransform
-                                ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
-                                : "center center",
                             }}
                           />
                           {}
-                          {placingZoom &&
-                            onFocusChange &&
-                            onConfirmZoom &&
-                            onCancelZoom && (
-                              <ZoomFocusPicker
-                                originX={placingZoom.originX}
-                                originY={placingZoom.originY}
-                                onFocusChange={onFocusChange}
-                                onConfirm={onConfirmZoom}
-                                onCancel={onCancelZoom}
-                              />
-                            )}
+                          {/* Picker moved to canvas level */}
                         </div>
                       </div>
                     </FrameWrapper>
@@ -398,6 +472,19 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                 </div>
                 </div>
               </div>
+              </div>
+              
+              {/* Canvas-level picker */}
+              {placingZoom && onFocusChange && onConfirmZoom && (
+                <div className="absolute inset-0 z-50">
+                  <ZoomFocusPicker
+                    originX={originX_pct / 100}
+                    originY={originY_pct / 100}
+                    onFocusChange={handlePickerFocusChange}
+                    onConfirm={onConfirmZoom}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -419,6 +506,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               onAddZoom={onAddZoom}
               onDeleteZoom={onDeleteZoom}
               onUpdateZoomTime={onUpdateZoomTime}
+              onSelectZoom={onSelectZoom}
             />
           </div>
         )}

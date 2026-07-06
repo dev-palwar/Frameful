@@ -34,11 +34,24 @@ export function drawFrame(
 
   ctx.clearRect(0, 0, W, H);
 
+  const zoom = resolveZoomTransform(videoEl.currentTime, zoomEvents);
+  ctx.save();
+  
+  if (zoom && zoom.scale > 1) {
+    const focalX = geo.vidX + zoom.originX * geo.vidW;
+    const focalY = geo.vidY + zoom.originY * geo.vidH;
+    ctx.translate(focalX, focalY);
+    ctx.scale(zoom.scale, zoom.scale);
+    ctx.translate(-focalX, -focalY);
+  }
+
   drawBackground(ctx, bgImg, W, H, blurPx);
   drawShadowLayer(ctx, shadow, shadowBlur, shadowAlpha, shadowOffset, geo);
   drawStyleFrame(ctx, style, geo);
-  drawVideoLayer(ctx, videoEl, geo, opacity, zoomEvents);
+  drawVideoLayer(ctx, videoEl, geo, opacity);
   drawStyleBorder(ctx, style, geo);
+  
+  ctx.restore();
 }
 
 function drawBackground(
@@ -112,13 +125,10 @@ function drawVideoLayer(
   videoEl: HTMLVideoElement,
   geo: FrameGeometry,
   opacity: number,
-  zoomEvents: ZoomEvent[],
 ) {
   const innerRadius = geo.borderRadius > 0
     ? Math.max(0, geo.borderRadius - geo.padding * 16) * geo.scaleFactor
     : 0;
-
-  const zoom = resolveZoomTransform(videoEl.currentTime, zoomEvents);
 
   ctx.save();
   ctx.globalAlpha = opacity;
@@ -130,14 +140,6 @@ function drawVideoLayer(
     ctx.rect(geo.vidX, geo.vidY, geo.vidW, geo.vidH);
   }
   ctx.clip();
-
-  if (zoom && zoom.scale > 1) {
-    const focalX = geo.vidX + zoom.originX * geo.vidW;
-    const focalY = geo.vidY + zoom.originY * geo.vidH;
-    ctx.translate(focalX, focalY);
-    ctx.scale(zoom.scale, zoom.scale);
-    ctx.translate(-focalX, -focalY);
-  }
 
   drawVideoCover(ctx, videoEl, geo.vidX, geo.vidY, geo.vidW, geo.vidH);
   ctx.restore();

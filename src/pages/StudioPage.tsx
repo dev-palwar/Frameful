@@ -15,6 +15,7 @@ import { ExportDropdown } from "@/components/shared/ExportDropdown";
 import type { ExportPreset } from "@/components/shared/ExportDropdown";
 
 interface PlacingZoom {
+  id: string;
   time: number;
   originX: number;
   originY: number;
@@ -62,29 +63,52 @@ export default function StudioPage() {
   const [placingZoom, setPlacingZoom] = useState<PlacingZoom | null>(null);
 
   const handleAddZoom = useCallback((time: number) => {
-    setPlacingZoom({ time, originX: 0.5, originY: 0.5 });
-  }, []);
+    const newId = crypto.randomUUID();
+    const newEvent: ZoomEvent = {
+      id: newId,
+      time,
+      duration: DEFAULT_ZOOM_DURATION,
+      zoomFactor: DEFAULT_ZOOM_FACTOR,
+      originX: 0.5,
+      originY: 0.5,
+      source: "manual",
+    };
+    setZoomEvents((prev) => [...prev, newEvent]);
+    setPlacingZoom({ id: newId, time, originX: 0.5, originY: 0.5 });
+  }, [setZoomEvents]);
+
+  const handleSelectZoom = useCallback((id: string | null) => {
+    if (id) {
+      const event = zoomEvents.find((e) => e.id === id);
+      if (event) {
+        setPlacingZoom({
+          id: event.id,
+          time: event.time,
+          originX: event.originX,
+          originY: event.originY,
+        });
+      }
+    } else {
+      setPlacingZoom(null);
+    }
+  }, [zoomEvents]);
 
   const handleFocusChange = useCallback((x: number, y: number) => {
     setPlacingZoom((prev) =>
       prev ? { ...prev, originX: x, originY: y } : null,
     );
-  }, []);
+    setZoomEvents((prev) =>
+      prev.map((e) =>
+        placingZoom && e.id === placingZoom.id
+          ? { ...e, originX: x, originY: y }
+          : e,
+      ),
+    );
+  }, [placingZoom, setZoomEvents]);
 
   const handleConfirmZoom = useCallback(() => {
-    if (!placingZoom) return;
-    const newEvent: ZoomEvent = {
-      id: crypto.randomUUID(),
-      time: placingZoom.time,
-      duration: DEFAULT_ZOOM_DURATION,
-      zoomFactor: DEFAULT_ZOOM_FACTOR,
-      originX: placingZoom.originX,
-      originY: placingZoom.originY,
-      source: "manual",
-    };
-    setZoomEvents([...zoomEvents, newEvent]);
     setPlacingZoom(null);
-  }, [placingZoom, zoomEvents, setZoomEvents]);
+  }, []);
 
   const handleCancelZoom = useCallback(() => setPlacingZoom(null), []);
 
@@ -229,10 +253,10 @@ export default function StudioPage() {
             onAddZoom={handleAddZoom}
             onDeleteZoom={handleDeleteZoom}
             onUpdateZoomTime={handleUpdateZoomTime}
+            onSelectZoom={handleSelectZoom}
             placingZoom={placingZoom}
             onFocusChange={handleFocusChange}
             onConfirmZoom={handleConfirmZoom}
-            onCancelZoom={handleCancelZoom}
           />
         </div>
 
