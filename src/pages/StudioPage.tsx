@@ -15,6 +15,7 @@ import { ExportDropdown } from "@/components/shared/ExportDropdown";
 import type { ExportPreset } from "@/components/shared/ExportDropdown";
 
 interface PlacingZoom {
+  id: string;
   time: number;
   originX: number;
   originY: number;
@@ -56,37 +57,70 @@ export default function StudioPage() {
   } = useRecorder();
   const { exportVideo, isExporting, loadingWasm, progress } = useExport();
 
-  const [dismissedExtensionBanner, setDismissedExtensionBanner] = useState(false);
+  const [dismissedExtensionBanner, setDismissedExtensionBanner] =
+    useState(false);
   const isRecorded = recordingState === "preview" && blob !== null;
 
   const [placingZoom, setPlacingZoom] = useState<PlacingZoom | null>(null);
 
-  const handleAddZoom = useCallback((time: number) => {
-    setPlacingZoom({ time, originX: 0.5, originY: 0.5 });
-  }, []);
+  const handleAddZoom = useCallback(
+    (time: number) => {
+      const newId = crypto.randomUUID();
+      const newEvent: ZoomEvent = {
+        id: newId,
+        time,
+        duration: DEFAULT_ZOOM_DURATION,
+        zoomFactor: DEFAULT_ZOOM_FACTOR,
+        originX: 0.5,
+        originY: 0.5,
+        source: "manual",
+      };
+      setZoomEvents([...zoomEvents, newEvent]);
+      setPlacingZoom({ id: newId, time, originX: 0.5, originY: 0.5 });
+    },
+    [setZoomEvents, zoomEvents],
+  );
 
-  const handleFocusChange = useCallback((x: number, y: number) => {
-    setPlacingZoom((prev) =>
-      prev ? { ...prev, originX: x, originY: y } : null,
-    );
-  }, []);
+  const handleSelectZoom = useCallback(
+    (id: string | null) => {
+      if (id) {
+        const event = zoomEvents.find((e) => e.id === id);
+        if (event) {
+          setPlacingZoom({
+            id: event.id,
+            time: event.time,
+            originX: event.originX,
+            originY: event.originY,
+          });
+        }
+      } else {
+        setPlacingZoom(null);
+      }
+    },
+    [zoomEvents],
+  );
+
+  const handleFocusChange = useCallback(
+    (x: number, y: number) => {
+      setPlacingZoom((prev) =>
+        prev ? { ...prev, originX: x, originY: y } : null,
+      );
+      setZoomEvents(
+        zoomEvents.map((e) =>
+          placingZoom && e.id === placingZoom.id
+            ? { ...e, originX: x, originY: y }
+            : e,
+        ),
+      );
+    },
+    [placingZoom, setZoomEvents, zoomEvents],
+  );
 
   const handleConfirmZoom = useCallback(() => {
-    if (!placingZoom) return;
-    const newEvent: ZoomEvent = {
-      id: crypto.randomUUID(),
-      time: placingZoom.time,
-      duration: DEFAULT_ZOOM_DURATION,
-      zoomFactor: DEFAULT_ZOOM_FACTOR,
-      originX: placingZoom.originX,
-      originY: placingZoom.originY,
-      source: "manual",
-    };
-    setZoomEvents([...zoomEvents, newEvent]);
     setPlacingZoom(null);
-  }, [placingZoom, zoomEvents, setZoomEvents]);
+  }, []);
 
-  const handleCancelZoom = useCallback(() => setPlacingZoom(null), []);
+
 
   const handleDeleteZoom = useCallback(
     (id: string) => {
@@ -134,13 +168,13 @@ export default function StudioPage() {
 
     const BASE_W = 1280;
     const scaledW = Math.round(BASE_W * preset.widthMultiplier);
-    
+
     const outputWidth = scaledW % 2 === 0 ? scaledW : scaledW + 1;
     const numericRatio = resolveRatio(designSettings.aspectRatio);
     const outputHeight = numericRatio
       ? Math.round(outputWidth / numericRatio)
       : Math.round((outputWidth * 9) / 16);
-    
+
     const finalHeight =
       outputHeight % 2 === 0 ? outputHeight : outputHeight + 1;
 
@@ -229,10 +263,10 @@ export default function StudioPage() {
             onAddZoom={handleAddZoom}
             onDeleteZoom={handleDeleteZoom}
             onUpdateZoomTime={handleUpdateZoomTime}
+            onSelectZoom={handleSelectZoom}
             placingZoom={placingZoom}
             onFocusChange={handleFocusChange}
             onConfirmZoom={handleConfirmZoom}
-            onCancelZoom={handleCancelZoom}
           />
         </div>
 
@@ -241,10 +275,13 @@ export default function StudioPage() {
           <div className="absolute bottom-24 left-6 z-50 pointer-events-none max-w-sm">
             <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg border border-amber-500/20 bg-amber-500/5 backdrop-blur-sm">
               <ZoomIn className="w-4 h-4 text-amber-500 shrink-0" />
-              <Typography variant="caption" className="text-amber-500/80 flex-1">
+              <Typography
+                variant="caption"
+                className="text-amber-500/80 flex-1"
+              >
                 Install the{" "}
                 <a
-                  href="http://localhost:5173/coming-soon-ext"
+                  href="https://chromewebstore.google.com/detail/cutline-%E2%80%94-auto-zoom/aedjplkmogphloannjfdbomnpnokpdbe?authuser=1&hl=en-GB"
                   target="_blank"
                   className="underline underline-offset-2 pointer-events-auto hover:text-amber-400 transition-colors"
                 >

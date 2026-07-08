@@ -1,5 +1,5 @@
 import { ArrowRight, Play, Sparkles, Shield, Zap } from "lucide-react";
-import demoVideo from "@/assets/display/frameful-edited-2026-02-22(1).webm";
+import demoVideo from "@/assets/display/Cutline-2026-07-06.mp4";
 import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { HERO_CONFIG } from "@/configs/landing.config";
@@ -173,10 +173,6 @@ export default function Hero() {
           />
 
           {}
-          <div
-            className="absolute -inset-8 rounded-2xl border border-primary/5 animate-orbit-reverse"
-            style={{ borderRadius: "24px" }}
-          />
 
           {}
           <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl shadow-primary/5">

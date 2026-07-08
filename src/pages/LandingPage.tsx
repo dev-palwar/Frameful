@@ -1,6 +1,5 @@
 import {
   FeaturesSection,
-  HowItWorksSection,
   StatsSection,
   WaitlistSection,
 } from "@/components/landing";
@@ -16,7 +15,6 @@ export default function LandingPage() {
         <Hero />
         <StatsSection />
         <FeaturesSection />
-        <HowItWorksSection />
         {}
         <WaitlistSection />
         <Footer />

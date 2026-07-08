@@ -1,6 +1,5 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Check, X } from "lucide-react";
 import { DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
 interface ZoomFocusPickerProps {
@@ -8,7 +7,6 @@ interface ZoomFocusPickerProps {
   originY: number; 
   onFocusChange: (x: number, y: number) => void;
   onConfirm: () => void;
-  onCancel: () => void;
 }
 
 export function ZoomFocusPicker({
@@ -16,7 +14,6 @@ export function ZoomFocusPicker({
   originY,
   onFocusChange,
   onConfirm,
-  onCancel,
 }: ZoomFocusPickerProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -30,8 +27,8 @@ export function ZoomFocusPicker({
     if (!overlayRef.current) return { x: 0.5, y: 0.5 };
     const rect = overlayRef.current.getBoundingClientRect();
     return {
-      x: Math.max(0.05, Math.min(0.95, (clientX - rect.left) / rect.width)),
-      y: Math.max(0.05, Math.min(0.95, (clientY - rect.top) / rect.height)),
+      x: Math.max(0, Math.min(1, (clientX - rect.left) / rect.width)),
+      y: Math.max(0, Math.min(1, (clientY - rect.top) / rect.height)),
     };
   }, []);
 
@@ -41,7 +38,10 @@ export function ZoomFocusPicker({
       const { x, y } = getRelativePos(e.clientX, e.clientY);
       onFocusChange(x, y);
     };
-    const onUp = () => setIsDragging(false);
+    const onUp = () => {
+      setIsDragging(false);
+      onConfirm();
+    };
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
     return () => {
@@ -51,8 +51,10 @@ export function ZoomFocusPicker({
   }, [isDragging, getRelativePos, onFocusChange]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     const { x, y } = getRelativePos(e.clientX, e.clientY);
     onFocusChange(x, y);
+    onConfirm();
   };
 
   const leftPct = `${originX * 100}%`;
@@ -69,7 +71,7 @@ export function ZoomFocusPicker({
         opacity: mounted ? 1 : 0,
         transition: "opacity 0.2s ease-out",
       }}
-      onClick={handleOverlayClick}
+      onMouseDown={handleOverlayClick}
     >
       {}
       <div
@@ -197,78 +199,6 @@ export function ZoomFocusPicker({
         }}
       >
         Click or drag to set the zoom focus point
-      </div>
-
-      {}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 16,
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: 8,
-          animation: "Cutline-fadein 0.3s ease-out 0.15s both",
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={onCancel}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-            padding: "7px 14px",
-            borderRadius: 8,
-            background: "rgba(9,9,11,0.8)",
-            backdropFilter: "blur(10px)",
-            color: "#a1a1aa",
-            border: "1px solid rgba(255,255,255,0.1)",
-            cursor: "pointer",
-            fontSize: 12,
-            fontWeight: 500,
-            transition: "color 0.15s, border-color 0.15s",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#e4e4e7";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#a1a1aa";
-          }}
-        >
-          <X style={{ width: 12, height: 12 }} />
-          Cancel
-        </button>
-
-        <button
-          onMouseDown={(e) => e.stopPropagation()}
-          onClick={onConfirm}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 5,
-            padding: "7px 16px",
-            borderRadius: 8,
-            background: "linear-gradient(135deg, #a855f7, #ec4899)",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            fontSize: 12,
-            fontWeight: 600,
-            boxShadow: "0 0 18px rgba(168,85,247,0.4)",
-            transition: "opacity 0.15s, box-shadow 0.15s",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.opacity = "0.88";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.opacity = "1";
-          }}
-        >
-          <Check style={{ width: 12, height: 12 }} />
-          Set Zoom Here
-        </button>
       </div>
     </div>
   );

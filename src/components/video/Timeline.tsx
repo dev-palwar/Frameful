@@ -20,6 +20,7 @@ interface TimelineProps {
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
   onUpdateZoomTime?: (id: string, time: number) => void;
+  onSelectZoom?: (id: string | null) => void;
 }
 
 const MIN_TRIM_DURATION = 1; 
@@ -38,6 +39,7 @@ export default function Timeline({
   onAddZoom,
   onDeleteZoom,
   onUpdateZoomTime,
+  onSelectZoom,
 }: TimelineProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<{ type: "start" | "end" | "playhead" | "zoom"; id?: string } | null>(null);
@@ -105,6 +107,7 @@ export default function Timeline({
     if (dragging) return;
     
     setSelectedZoomId(null);
+    onSelectZoom?.(null);
     const newTime = pixelToTime(e.clientX);
     onSeek(newTime);
   };
@@ -170,10 +173,17 @@ export default function Timeline({
             event={event}
             duration={duration}
             isSelected={selectedZoomId === event.id}
-            onSelect={setSelectedZoomId}
-            onDeselect={() => setSelectedZoomId(null)}
+            onSelect={(id) => {
+              setSelectedZoomId(id);
+              onSelectZoom?.(id);
+            }}
+            onDeselect={() => {
+              setSelectedZoomId(null);
+              onSelectZoom?.(null);
+            }}
             onDelete={(id) => {
               setSelectedZoomId(null);
+              onSelectZoom?.(null);
               onDeleteZoom?.(id);
             }}
             onDragStart={(id) => setDragging({ type: "zoom", id })}

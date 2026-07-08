@@ -33,10 +33,10 @@ interface VideoPlayerProps {
   onAddZoom?: (time: number) => void;
   onDeleteZoom?: (id: string) => void;
   onUpdateZoomTime?: (id: string, time: number) => void;
-  placingZoom?: { time: number; originX: number; originY: number } | null;
+  onSelectZoom?: (id: string | null) => void;
+  placingZoom?: { id: string; time: number; originX: number; originY: number } | null;
   onFocusChange?: (x: number, y: number) => void;
   onConfirmZoom?: () => void;
-  onCancelZoom?: () => void;
 }
 
 const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
@@ -51,10 +51,10 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       onAddZoom,
       onDeleteZoom,
       onUpdateZoomTime,
+      onSelectZoom,
       placingZoom,
       onFocusChange,
       onConfirmZoom,
-      onCancelZoom,
     },
     ref,
   ) {
@@ -78,6 +78,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
     const {
       containerRef,
+      boundsRef,
       wrapperRef,
       scale,
       posX,
@@ -87,6 +88,11 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       setIsSelected,
       startDrag,
       startResize,
+      startCrop,
+      cropTop,
+      cropRight,
+      cropBottom,
+      cropLeft,
     } = useVideoTransform();
 
     const { getExportLayout } = useExportLayout({
@@ -114,6 +120,88 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
           originY: placingZoom.originY,
         }
       : zoomTransform;
+
+    let originX_pct = 50;
+    let originY_pct = 50;
+
+    if (activeTransform && containerRef.current) {
+      const W = 100;
+      const ratio = containerRef.current.clientHeight / containerRef.current.clientWidth;
+      const H = W * ratio;
+      
+      const layout = getExportLayout();
+
+      const PADDING_X = layout.paddingX_frac * W;
+      const PADDING_Y = layout.paddingY_frac * H;
+
+      const aW = W - PADDING_X * 2;
+      const aH = H - PADDING_Y * 2;
+
+      const svw = aW * layout.scale;
+      const svh = aH * layout.scale;
+
+      const canvasPosX = layout.posX_frac * W;
+      const canvasPosY = layout.posY_frac * H;
+
+      const vx = W / 2 + canvasPosX - svw / 2;
+      const vy = H / 2 + canvasPosY - svh / 2;
+
+      const dsScale = designSettings?.scale ?? 1.0;
+      const conW = svw * dsScale;
+      const conH = svh * dsScale;
+      const conX = vx + (svw - conW) / 2;
+      const conY = vy + (svh - conH) / 2;
+
+      const pad = designSettings?.padding ?? 0;
+      const scaleFactor = W / 1280;
+      const padPx = pad * 16 * scaleFactor;
+      
+      const vidX = conX + padPx;
+      const vidY = conY + padPx;
+      const vidW = conW - padPx * 2;
+      const vidH = conH - padPx * 2;
+
+      const focalX = vidX + activeTransform.originX * vidW;
+      const focalY = vidY + activeTransform.originY * vidH;
+
+      originX_pct = (focalX / W) * 100;
+      originY_pct = (focalY / H) * 100;
+    }
+
+    const handlePickerFocusChange = (cx: number, cy: number) => {
+      if (!onFocusChange || !containerRef.current) return;
+      const W = 100;
+      const ratio = containerRef.current.clientHeight / containerRef.current.clientWidth;
+      const H = W * ratio;
+      const layout = getExportLayout();
+      const PADDING_X = layout.paddingX_frac * W;
+      const PADDING_Y = layout.paddingY_frac * H;
+      const aW = W - PADDING_X * 2;
+      const aH = H - PADDING_Y * 2;
+      const svw = aW * layout.scale;
+      const svh = aH * layout.scale;
+      const canvasPosX = layout.posX_frac * W;
+      const canvasPosY = layout.posY_frac * H;
+      const vx = W / 2 + canvasPosX - svw / 2;
+      const vy = H / 2 + canvasPosY - svh / 2;
+      const dsScale = designSettings?.scale ?? 1.0;
+      const conW = svw * dsScale;
+      const conH = svh * dsScale;
+      const conX = vx + (svw - conW) / 2;
+      const conY = vy + (svh - conH) / 2;
+      const pad = designSettings?.padding ?? 0;
+      const scaleFactor = W / 1280;
+      const padPx = pad * 16 * scaleFactor;
+      const vidX = conX + padPx;
+      const vidY = conY + padPx;
+      const vidW = conW - padPx * 2;
+      const vidH = conH - padPx * 2;
+      const focalX = cx * W;
+      const focalY = cy * H;
+      const ox = (focalX - vidX) / vidW;
+      const oy = (focalY - vidY) / vidH;
+      onFocusChange(ox, oy);
+    };
 
     useImperativeHandle(ref, () => ({ trimStart, trimEnd, getExportLayout }), [
       trimStart,
@@ -203,8 +291,17 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               className="relative w-full overflow-hidden rounded-lg border border-border bg-black/40"
               style={{ paddingBottom }}
             >
-              {}
               <div
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  transform: activeTransform && activeTransform.scale > 1
+                    ? `scale(${activeTransform.scale})`
+                    : undefined,
+                  transformOrigin: `${originX_pct}% ${originY_pct}%`,
+                }}
+              >
+                {}
+                <div
                 className="absolute inset-0 bg-center opacity-80 bg-cover"
                 style={{
                   background: background.includes("gradient(")
@@ -221,26 +318,31 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
 
               {}
               <div
+                ref={boundsRef}
                 className={`absolute inset-0 flex items-center justify-center p-3 sm:p-5 lg:p-8 overflow-hidden ${className}`}
               >
-                <div
-                  ref={wrapperRef}
-                  id="video-resize-wrapper"
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    transform: `translate(${posX}px, ${posY}px) scale(${scale})`,
-                    transformOrigin: "center center",
-                    cursor: isSelected ? "move" : "default",
-                    userSelect: "none",
-                  }}
-                  onMouseDown={startDrag}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsSelected(true);
-                  }}
-                >
+                <div className="relative w-full h-full" style={{ pointerEvents: "none", containerType: "size" }}>
+                  <div
+                    ref={wrapperRef}
+                    id="video-resize-wrapper"
+                    style={{
+                      position: "absolute",
+                      top: `${cropTop}%`,
+                      bottom: `${cropBottom}%`,
+                      left: `${cropLeft}%`,
+                      right: `${cropRight}%`,
+                      transform: `translate(${posX}px, ${posY}px) scale(${scale})`,
+                      transformOrigin: "center center",
+                      cursor: isSelected ? "move" : "default",
+                      userSelect: "none",
+                      pointerEvents: "auto",
+                    }}
+                    onMouseDown={startDrag}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsSelected(true);
+                    }}
+                  >
                   <div
                     className={`w-full h-full flex items-center justify-center transition-all overflow-hidden ${getStyleClasses()}`}
                     style={{
@@ -255,41 +357,38 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                       settings={frameSettings}
                       innerRadius={innerRadius}
                     >
-                      <video
-                        ref={videoRef}
-                        id="studio-video-player"
-                        src={videoUrl}
-                        className="w-full h-full object-cover"
+                      <div
+                        className="w-full h-full overflow-hidden relative"
                         style={{
-                          pointerEvents: "none",
-                          display: "block",
                           borderRadius:
                             frameSettings && frameSettings.osFrame !== "none"
                               ? 0
                               : innerRadius,
-                          
-                          transform: activeTransform
-                            ? `scale(${activeTransform.scale})`
-                            : undefined,
-                          transformOrigin: activeTransform
-                            ? `${activeTransform.originX * 100}% ${activeTransform.originY * 100}%`
-                            : "center center",
-
                         }}
-                      />
-                      {}
-                      {placingZoom &&
-                        onFocusChange &&
-                        onConfirmZoom &&
-                        onCancelZoom && (
-                          <ZoomFocusPicker
-                            originX={placingZoom.originX}
-                            originY={placingZoom.originY}
-                            onFocusChange={onFocusChange}
-                            onConfirm={onConfirmZoom}
-                            onCancel={onCancelZoom}
+                      >
+                        <div
+                          className="absolute"
+                          style={{
+                            width: `calc(100% + ${cropLeft + cropRight}cqw)`,
+                            height: `calc(100% + ${cropTop + cropBottom}cqh)`,
+                            left: `calc(-${cropLeft}cqw)`,
+                            top: `calc(-${cropTop}cqh)`,
+                          }}
+                        >
+                          <video
+                            ref={videoRef}
+                            id="studio-video-player"
+                            src={videoUrl}
+                            className="w-full h-full object-cover"
+                            style={{
+                              pointerEvents: "none",
+                              display: "block",
+                            }}
                           />
-                        )}
+                          {}
+                          {/* Picker moved to canvas level */}
+                        </div>
+                      </div>
                     </FrameWrapper>
                   </div>
 
@@ -328,35 +427,64 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                       </div>
 
                       {}
-                      {HANDLES.map((h) => (
-                        <div
-                          key={h.id}
-                          onMouseDown={(e) => startResize(e, h.dx, h.dy)}
-                          style={{
-                            position: "absolute",
-                            width: 10,
-                            height: 10,
-                            background: "hsl(var(--brand, 265 80% 65%))",
-                            border: "2px solid #fff",
-                            borderRadius: 2,
-                            cursor: h.cursor,
-                            zIndex: 10,
-                            ...("top" in h && { top: h.top }),
-                            ...("left" in h && { left: h.left }),
-                            ...("right" in h && { right: h.right }),
-                            ...("bottom" in h && { bottom: h.bottom }),
-                            transform:
-                              ("left" in h && h.left === "50%") ||
-                              ("top" in h && h.top === "50%")
-                                ? "translate(-50%, -50%)"
-                                : undefined,
-                          }}
-                        />
-                      ))}
+                      {HANDLES.map((h) => {
+                        const isCropHandle = h.id === "n" || h.id === "s" || h.id === "e" || h.id === "w";
+                        
+                        let hTop, hBottom, hLeft, hRight, hTransform;
+                        if (h.id.includes("n")) hTop = -5;
+                        if (h.id.includes("s")) hBottom = -5;
+                        if (h.id.includes("w")) hLeft = -5;
+                        if (h.id.includes("e")) hRight = -5;
+
+                        if (h.id === "n" || h.id === "s") {
+                          hLeft = "50%";
+                          hTransform = "translateX(-50%)";
+                        }
+                        if (h.id === "w" || h.id === "e") {
+                          hTop = "50%";
+                          hTransform = "translateY(-50%)";
+                        }
+
+                        return (
+                          <div
+                            key={h.id}
+                            onMouseDown={(e) => isCropHandle ? startCrop(e, h.dx, h.dy) : startResize(e, h.dx, h.dy)}
+                            style={{
+                              position: "absolute",
+                              width: 10,
+                              height: 10,
+                              background: "hsl(var(--brand, 265 80% 65%))",
+                              border: "2px solid #fff",
+                              borderRadius: 2,
+                              cursor: h.cursor,
+                              zIndex: 10,
+                              top: hTop,
+                              bottom: hBottom,
+                              left: hLeft,
+                              right: hRight,
+                              transform: hTransform,
+                            }}
+                          />
+                        );
+                      })}
                     </>
                   )}
                 </div>
+                </div>
               </div>
+              </div>
+              
+              {/* Canvas-level picker */}
+              {placingZoom && onFocusChange && onConfirmZoom && (
+                <div className="absolute inset-0 z-50">
+                  <ZoomFocusPicker
+                    originX={originX_pct / 100}
+                    originY={originY_pct / 100}
+                    onFocusChange={handlePickerFocusChange}
+                    onConfirm={onConfirmZoom}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -378,6 +506,7 @@ const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               onAddZoom={onAddZoom}
               onDeleteZoom={onDeleteZoom}
               onUpdateZoomTime={onUpdateZoomTime}
+              onSelectZoom={onSelectZoom}
             />
           </div>
         )}
