@@ -75,10 +75,10 @@ export default function StudioPage() {
         originY: 0.5,
         source: "manual",
       };
-      setZoomEvents((prev) => [...prev, newEvent]);
+      setZoomEvents([...zoomEvents, newEvent]);
       setPlacingZoom({ id: newId, time, originX: 0.5, originY: 0.5 });
     },
-    [setZoomEvents],
+    [setZoomEvents, zoomEvents],
   );
 
   const handleSelectZoom = useCallback(
@@ -105,22 +105,22 @@ export default function StudioPage() {
       setPlacingZoom((prev) =>
         prev ? { ...prev, originX: x, originY: y } : null,
       );
-      setZoomEvents((prev) =>
-        prev.map((e) =>
+      setZoomEvents(
+        zoomEvents.map((e) =>
           placingZoom && e.id === placingZoom.id
             ? { ...e, originX: x, originY: y }
             : e,
         ),
       );
     },
-    [placingZoom, setZoomEvents],
+    [placingZoom, setZoomEvents, zoomEvents],
   );
 
   const handleConfirmZoom = useCallback(() => {
     setPlacingZoom(null);
   }, []);
 
-  const handleCancelZoom = useCallback(() => setPlacingZoom(null), []);
+
 
   const handleDeleteZoom = useCallback(
     (id: string) => {

@@ -1,6 +1,5 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Check, X } from "lucide-react";
 import { DEFAULT_ZOOM_FACTOR } from "@/lib/zoom";
 
 interface ZoomFocusPickerProps {

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Cutline — Auto Zoom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Captures click events during screen recording to enable auto-zoom in Cutline Studio.",
   "permissions": [
     "tabs",
@@ -27,8 +27,8 @@
   "externally_connectable": {
     "matches": [
       "http://localhost:*/*",
-      "https://trycutline.devpalwar.me/*",
-      "https://*.trycutline.devpalwar.me/*"
+      "https://cutline-opal.vercel.app/*",
+      "https://*.cutline-opal.vercel.app/*"
     ]
   },
   "action": {

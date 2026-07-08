@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://trycutline.devpalwar.me/sitemap.xml
+Sitemap: https://cutline-opal.vercel.app/sitemap.xml
